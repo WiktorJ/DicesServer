@@ -4,7 +4,7 @@ project(DicesServer)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES main.cpp)
-find_package(Boost 1.57.0 COMPONENTS system filesystem REQUIRED)
+find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED)
 
 if(Boost_FOUND)
 
