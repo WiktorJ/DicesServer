@@ -1,11 +1,10 @@
 #include <iostream>
-#include <boost/thread.hpp>
+#include <boost/array.hpp>
 
 using namespace std;
 
-int main() {
-
-
-    cout << "Hello, World!" << endl;
+int main(){
+    boost::array<int, 4> arr = {{1,2,3,4}};
+    cout << "hi" << arr[0];
     return 0;
 }
