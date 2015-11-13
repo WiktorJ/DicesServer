@@ -3,6 +3,8 @@ project(DicesServer)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+set(MISCELLANOUS Miscellanous/DateTime/Time/LocalTime.cpp Miscellanous/DateTime/Time/LocalTime.h Miscellanous/DateTime/Date/LocalDate.cpp Miscellanous/DateTime/Date/LocalDate.h Miscellanous/DateTime/LocalDateTime.cpp Miscellanous/DateTime/LocalDateTime.h)
+
 set(SOURCE_FILES main.cpp)
 find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED)
 
@@ -20,7 +22,7 @@ else()
 endif()
 
 
-add_executable(DicesServer ${SOURCE_FILES})
+add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS})
 
 if(Boost_FOUND)
 
