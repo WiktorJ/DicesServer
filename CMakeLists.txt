@@ -7,6 +7,16 @@ set(MISCELLANOUS Miscellanous/DateTime/Time/LocalTime.cpp Miscellanous/DateTime/
 
 set(SOURCE_FILES main.cpp)
 find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED)
+find_package(JNI)
+
+if (JNI_FOUND)
+    message (STATUS "JNI_INCLUDE_DIRS=${JNI_INCLUDE_DIRS}")
+    message (STATUS "JNI_LIBRARIES=${JNI_LIBRARIES}")
+
+    include_directories(${JNI_INCLUDE_DIRS})
+else()
+    message(WARNING "JNI Not found")
+endif()
 
 if(Boost_FOUND)
 
@@ -22,7 +32,7 @@ else()
 endif()
 
 
-add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS})
+add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h)
 
 if(Boost_FOUND)
 
