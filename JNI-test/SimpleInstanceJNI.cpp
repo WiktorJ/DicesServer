@@ -13,7 +13,7 @@ SimpleInstanceJNI::SimpleInstanceJNI() {
     JavaVMInitArgs vm_args;                        // Initialization arguments
     JavaVMOption* options = new JavaVMOption[1];   // JVM invocation options
 
-    options[0].optionString =(char *) "-Djava.class.path=~/IdeaProjects/DiceServerAPI/out/production/DiceServerAPI/.";   // where to find java .class
+    options[0].optionString =(char *) "-Djava.class.path=/home/wiktor/ClionProjects/DicesServer/JavaTest/out/production/JavaTest/.";   // where to find java .class
 
     vm_args.version = JNI_VERSION_1_6;             // minimum Java version
     vm_args.nOptions = 1;                          // number of options
@@ -40,6 +40,7 @@ void SimpleInstanceJNI::close(){
 void SimpleInstanceJNI::runSimpleWriter(const char* fileName) {
     jclass cls2 = env->FindClass("Main");  // try to find the class
     if(cls2 == nullptr) {
+        env->ExceptionDescribe();
         std::cerr << "ERROR: class not found !";
     }
     else {                                  // if class found, continue
@@ -52,7 +53,7 @@ void SimpleInstanceJNI::runSimpleWriter(const char* fileName) {
                 jobjectArray arr = env->NewObjectArray(5,      // constructs java array of 5
                                                        env->FindClass("java/lang/String"),    // Strings
                                                        env->NewStringUTF("str"));   // each initialized with value "str"
-                env->SetObjectArrayElement( arr, 1, env->NewStringUTF(fileName));  // change an element
+                env->SetObjectArrayElement( arr, 0, env->NewStringUTF(fileName));  // change an element
 
             env->CallStaticVoidMethod(cls2, mid, arr);                      // call method
             std::cout << "SUCCES" << std::endl;

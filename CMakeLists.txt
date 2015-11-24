@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 3.2)
+find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED)
+find_package(JNI REQUIRED)
+find_package(Java REQUIRED)
+include(UseJava)
 project(DicesServer)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g")
+set(CMAKE_EXE_LINKER_FLAGS  -I/usr/lib/jvm/java-7-oracle/include/ -I/usr/lib/jvm/java-7-oracle/include/linux/ -L/usr/bin/java -L/usr/lib/jvm/java-7-oracle/jre/lib/amd64/server/ -ljvm)
 
 set(MISCELLANOUS Miscellanous/DateTime/Time/LocalTime.cpp Miscellanous/DateTime/Time/LocalTime.h Miscellanous/DateTime/Date/LocalDate.cpp Miscellanous/DateTime/Date/LocalDate.h Miscellanous/DateTime/LocalDateTime.cpp Miscellanous/DateTime/LocalDateTime.h)
 
 set(SOURCE_FILES main.cpp)
-find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED)
-find_package(JNI)
 
 if (JNI_FOUND)
     message (STATUS "JNI_INCLUDE_DIRS=${JNI_INCLUDE_DIRS}")
@@ -37,5 +40,10 @@ add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstan
 if(Boost_FOUND)
 
     target_link_libraries(DicesServer ${Boost_LIBRARIES})
+
+endif()
+
+if(JNI_FOUND)
+    target_link_libraries(DicesServer ${JNI_LIBRARIES})
 
 endif()
