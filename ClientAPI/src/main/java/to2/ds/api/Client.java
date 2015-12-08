@@ -1,16 +1,18 @@
 package to2.ds.api;
 
+import java.io.IOException;
+
 /**
  * Created by wiktor on 07.12.15.
  */
 public interface Client {
 
-    String getActiveGames();
-    void requestCreate(String JSON);
-    void requestJoinAsPlayer(Integer gameID);
-    void requestJoinAsObserver(Integer gameID);
-    void requestMove(String JSON);
-    void requestQuiteGame();
-    String listen();
+    String getActiveGames() throws InterruptedException, IOException;
+    void requestCreate(String JSON) throws IOException;
+    void requestJoinAsPlayer(Integer gameID) throws IOException;
+    void requestJoinAsObserver(Integer gameID) throws IOException;
+    void requestMove(String JSON) throws IOException;
+    void requestQuiteGame() throws IOException;
+    String listen() throws InterruptedException;
 
 }

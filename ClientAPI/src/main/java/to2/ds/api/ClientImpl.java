@@ -1,39 +1,89 @@
 package to2.ds.api;
 
-import java.net.URI;
+
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by wiktor on 07.12.15.
  */
 public class ClientImpl implements Client {
-    public ClientImpl(URI uri, String nickname) {
+
+    private BlockingQueue<String> statesQueue = new LinkedBlockingQueue<>();
+    private BlockingQueue<String> activeGamesQueue= new LinkedBlockingQueue<>();
+
+    private final Map<String, Queue> myMap;
+
+
+
+    private String nickname;
+    private ConnectorImpl socket;
+
+    public ClientImpl(String nickname, ConnectorImpl socket) {
+        this.nickname = nickname;
+        this.socket = socket;
+        Map<String, Queue> aMap = new HashMap<>();
+        aMap.put("activeGames", activeGamesQueue);
+        aMap.put("gameState", statesQueue);
+        myMap = Collections.unmodifiableMap(aMap);
     }
 
-    public String getActiveGames() {
-        return null;
+    public String getActiveGames() throws InterruptedException, IOException {
+        socket.sendMessage(TargetSerializer.serialize("getActiveGames", ""));
+        return activeGamesQueue.take();
     }
 
-    public void requestCreate(String JSON) {
+    public void requestCreate(String JSON) throws IOException {
+        String createGame = TargetSerializer.serialize("createGame", JSON);
+        socket.sendMessage(createGame);
+    }
+
+    public void requestJoinAsPlayer(Integer gameID) throws IOException {
+        String jsonString = new JSONObject()
+                            .put("gameId", gameID)
+                            .put("clientId", nickname)
+                            .toString();
+
+        socket.sendMessage(TargetSerializer.serialize("createGame", jsonString));
+    }
+
+    public void requestJoinAsObserver(Integer gameID) throws IOException {
+        String jsonString = new JSONObject()
+                .put("gameId", gameID)
+                .put("clientId", nickname)
+                .toString();
+
+        socket.sendMessage(TargetSerializer.serialize("joinAsObserver", jsonString));
 
     }
 
-    public void requestJoinAsPlayer(Integer gameID) {
-
+    public void requestMove(String JSON) throws IOException {
+        socket.sendMessage(TargetSerializer.serialize("requestMove", JSON));
     }
 
-    public void requestJoinAsObserver(Integer gameID) {
-
+    public void requestQuiteGame() throws IOException {
+        socket.sendMessage(TargetSerializer.serialize("quitGame", ""));
     }
 
-    public void requestMove(String JSON) {
-
+    public String listen() throws InterruptedException {
+        return statesQueue.take();
     }
 
-    public void requestQuiteGame() {
 
+    public void stateUpdateAndNotify(String message) {
+        JSONObject jsonObject = new JSONObject(message);
+        Queue queue = myMap.get((String) jsonObject.get("type"));
+        queue.add(message);
     }
 
-    public String listen() {
-        return null;
+    public String getId() {
+        return nickname;
     }
 }

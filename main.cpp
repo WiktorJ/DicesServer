@@ -15,3 +15,21 @@ int main(){
     instanceJNI.close();
     return 0;
 }
+
+//
+//SimpleInstanceJNI* instanceJNI[10];
+//
+//for(int i = 0; i < 10; i++) {
+//try{
+//instanceJNI[i] = new SimpleInstanceJNI;
+//}catch(const char* e){
+//printf("%d : %s", i , e);
+//return 1;
+//}
+//
+//instanceJNI[i]->runSimpleWriter("/home/wiktor/Documents/try_jni" + i);
+//}
+//
+//
+//for(int i = 0; i < 10; i++)
+//instanceJNI[i]->close();
