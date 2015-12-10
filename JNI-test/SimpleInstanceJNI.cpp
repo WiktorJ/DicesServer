@@ -55,7 +55,8 @@ void SimpleInstanceJNI::runSimpleWriter(const char* fileName) {
                                                        env->NewStringUTF("str"));   // each initialized with value "str"
                 env->SetObjectArrayElement( arr, 0, env->NewStringUTF(fileName));  // change an element
 
-            env->CallStaticVoidMethod(cls2, mid, arr);                      // call method
+            env->CallStaticVoidMethod(cls2, mid, arr);
+            env->
             std::cout << "SUCCES" << std::endl;
         }
     }
