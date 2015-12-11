@@ -2,6 +2,8 @@
 #include <boost/array.hpp>
 #include <jni.h>
 #include "JNI-test/SimpleInstanceJNI.h"
+#include "GameServer/JNIInstance.h"
+#include "GameServer/Observer.h"
 
 using namespace std;
 
@@ -10,8 +12,12 @@ int main(){
 
     //boost::array<int, 4> arr = {{1,2,3,4}};
     //cout << "hi" << arr[0];
-    SimpleInstanceJNI instanceJNI;
-    instanceJNI.runSimpleWriter("/home/wiktor/Documents/try_jni");
+    JNIInstance instanceJNI ("xd");
+    Observer o (&instanceJNI);
+    Observer o2 (&instanceJNI);
+    o.listen(1);
+    o2.listen(2);
+//    instanceJNI.runSimpleWriter("/home/wiktor/Documents/try_jni");
     instanceJNI.close();
     return 0;
 }

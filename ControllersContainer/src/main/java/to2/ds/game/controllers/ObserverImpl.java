@@ -7,13 +7,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
+
 /**
- * Created by marcinsendera on 08.12.2015.
- **/
+ * Created by marcinsendera on 10.12.2015.
+ */
 
-
-public class ObserverImpl extends Thread implements Observer {
-
+public class ObserverImpl implements Observer{
 
     private JSONObject state;
 
@@ -21,108 +20,92 @@ public class ObserverImpl extends Thread implements Observer {
 
     private boolean otherOperation = false;
 
+
     private final Lock lock = new ReentrantLock();
     private final Condition noOtherOp = lock.newCondition();
     private final Condition someOtherOp = lock.newCondition();
+    private int id;
 
-
-    private ObserverImpl(){
+    public ObserverImpl(int id){
+        this.id = id;
     }
-    public void stateUpdated(JSONObject state) throws InterruptedException {
-        lock.lock();
+
+    @Override
+    public synchronized void stateUpdated(JSONObject state) throws InterruptedException {
+        while(otherOperation){
+            try{
+                wait();
+            } catch (InterruptedException e) {
+            }
+        }
+        //doing sth
+        this.state = state;
+        operation = "update";
         otherOperation = true;
+        notifyAll();
 
-        try{
-            while(otherOperation){
-                noOtherOp.await();
-            }
-
-            //doing sth
-            this.state = state;
-            operation = "update";
-            otherOperation = true;
-            someOtherOp.signal();
-        } finally {
-            lock.unlock();
-        }
     }
 
 
-    public void gameEnded() throws InterruptedException {
+    @Override
+    public synchronized void gameEnded() throws InterruptedException {
 
-        lock.lock();
+        while(otherOperation){
+            try{
+                wait();
+            } catch (InterruptedException e) {
+            }
+        }
+        //doing sth
+        String end = new String("end");
+        JSONObject endJSON = new JSONObject();
+        endJSON.put("action", end);
+
+        //prześlij JSONa dalej
+
+        operation = "end";
         otherOperation = true;
+        notifyAll();
 
-        try{
-            while(otherOperation){
-                noOtherOp.await();
-            }
-
-            //doing sth
-            String end = new String("end");
-            JSONObject endJSON = new JSONObject();
-            endJSON.put("action", end);
-            //prześlij JSONa dalej
-            operation = "end";
-
-            otherOperation = true;
-            someOtherOp.signal();
-        } finally {
-            lock.unlock();
-        }
     }
 
-    public void removePlayer(String nickname) throws InterruptedException {
+    @Override
+    public synchronized void removePlayer(String nickname) throws InterruptedException {
 
-        lock.lock();
+        while(otherOperation){
+            try{
+                wait();
+            } catch (InterruptedException e) {
+            }
+        }
+        //doing sth
+//        JSONObject removePlayer = new JSONObject();
+//        removePlayer.put("remove", nickname);
+        operation = "remove";
+        //prześlij tego JSONa dalej
+
         otherOperation = true;
+        notifyAll();
 
-        try{
-            while(otherOperation){
-                noOtherOp.await();
+    }
+
+    public synchronized void notifyWaitUntil() throws InterruptedException {
+
+        while (!otherOperation){
+            try {
+                wait();
+            } catch (InterruptedException e) {
             }
-
-            //doing sth
-
-            JSONObject removePlayer = new JSONObject();
-            removePlayer.put("remove", nickname);
-            operation = "remove";
-            //prześlij tego JSONa dalej
-
-            otherOperation = true;
-            someOtherOp.signal();
-        } finally {
-            lock.unlock();
         }
-
+        otherOperation = false;
+        notifyAll();
     }
 
-    public void notifyWaitUntil() throws InterruptedException {
-
-        lock.lock();
-
-        try{
-            while (!otherOperation) {
-                someOtherOp.await();
-            }
-
-            //doing nothing
-            otherOperation = false;
-            noOtherOp.signal();
-
-        } finally {
-            lock.unlock();
-        }
-
+    public String getLastOperation(){
+//        JSONObject lastOperation = new JSONObject();
+//        lastOperation.put("operation", operation);
+//        return lastOperation.toString();
+        return "sth" + id + "\n";
 
     }
-
-    public JSONObject getLastOperation(){
-        JSONObject lastOperation = new JSONObject();
-        lastOperation.put("operation", operation);
-        return lastOperation;
-    }
-
 }
-
-

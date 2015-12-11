@@ -36,7 +36,8 @@ else()
 endif()
 
 
-add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h)
+add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h
+        GameServer/JNIInstance.cpp GameServer/JNIInstance.h GameServer/Observer.cpp GameServer/Observer.h)
 if(Boost_FOUND)
 
     target_link_libraries(DicesServer ${Boost_LIBRARIES})

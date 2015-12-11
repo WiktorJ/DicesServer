@@ -6,16 +6,16 @@
 #define DICESSERVER_OBSERVER_H
 
 
+#include "JNIInstance.h"
 
-
-class SimpleInstanceJNI {
+class Observer {
 private:
-    JavaVM *jvm;                      // Pointer to the JVM (Java Virtual Machine)
-    JNIEnv *env;                      // Pointer to native interface
+    JNIInstance* jniInstance;
 public:
-    SimpleInstanceJNI();
-    void close();
-    void runSimpleWriter(const char* fileName);
+    Observer(JNIInstance *jniI);
+    void listen(int a);
+    char* getMessage();
+
 };
 
 
