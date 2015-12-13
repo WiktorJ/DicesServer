@@ -4,14 +4,14 @@
 
 #include "ClientMovement.h"
 
-ClientMovement::ClientMovement(std::string Username, bool Player, std::string Move) : Username(Username), Player(Player), Move(Move){ }
+ClientMovement::ClientMovement(std::string Username, bool Player, boost::property_tree::ptree Move) : Username(Username), Player(Player), Move(Move){ }
 
 
 std::string ClientMovement::getUsername() {
     return Username;
 }
 
-std::string ClientMovement::getMove() {
+boost::property_tree::ptree ClientMovement::getMove() {
     return Move;
 }
 

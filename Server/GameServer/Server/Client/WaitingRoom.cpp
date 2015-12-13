@@ -20,6 +20,8 @@ Client *WaitingRoom::removeClient(std::string username) {
             Clients.erase(it);
             return result;
         }
+    //TODO
+    return NULL;
 }
 
 std::vector<ClientMovement> WaitingRoom::getRequests() {

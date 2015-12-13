@@ -7,16 +7,17 @@
 
 
 #include <string>
+#include <boost/property_tree/ptree.hpp>
 
 class ClientMovement {
 private:
     std::string Username;
     bool Player;
-    std::string Move;
+    boost::property_tree::ptree Move;
 public:
-    ClientMovement(std::string Username, bool Player, std::string Move);
+    ClientMovement(std::string Username, bool Player, boost::property_tree::ptree Move);
     std::string getUsername();
-    std::string getMove();
+    boost::property_tree::ptree getMove();
     bool isPlayer();
 };
 

@@ -8,7 +8,7 @@ std::vector<ClientMovement> ClientReader::getPlayerMoves(std::vector<Client *> c
     std::vector<ClientMovement> result;
 
     for(std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++){
-        std::string request = (*it)->getRequest();
+        boost::property_tree::ptree request = (*it)->getRequest();
         //TODO EXCEPTION HANDLE
 
         ClientMovement move((*it)->getUsername(), (*it)->isPlayer(), request);

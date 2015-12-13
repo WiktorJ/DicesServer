@@ -10,16 +10,18 @@ std::string Client::getUsername() {
     return "";
 }
 
-void Client::addRequest(std::string Request) {
+void Client::addRequest(boost::property_tree::ptree Request){
+    //TODO
 
+    this->Request = Request;
 }
 
 void Client::sendData(std::string data) {
 
 }
 
-std::string Client::getRequest() {
-    return "";
+boost::property_tree::ptree Client::getRequest() {
+    return this->Request;
 }
 
 void Client::setPlayer() {
