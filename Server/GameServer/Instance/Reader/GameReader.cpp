@@ -5,7 +5,7 @@
 #include "GameReader.h"
 #include "GameCmdDeseriallizer.h"
 
-GameReader::GameReader(ClientGroup &Clients, GameController Controller) : Clients(Clients), Controller(Controller){
+GameReader::GameReader(ClientGroup &Clients, GameController* Controller) : Clients(Clients), Controller(Controller){
 
 }
 
@@ -18,18 +18,18 @@ void GameReader::readMovement() {
 
         if(command == "quit"){
             Clients.removeSubscriber((*it).getUsername());
-            if((*it).isPlayer()) Controller.removePlayer((*it).getUsername());
+            if((*it).isPlayer()) Controller->removePlayer((*it).getUsername());
 
         } else if(command == "disconnect"){
             Clients.removeClient((*it).getUsername());
-            if((*it).isPlayer()) Controller.removePlayer((*it).getUsername());
+            if((*it).isPlayer()) Controller->removePlayer((*it).getUsername());
 
         } else if(command == "join"){
-            Controller.addPlayer((*it).getUsername());
+            Controller->addPlayer((*it).getUsername());
 
         } else if(command == "move"){
-            if((*it).isPlayer())Controller.makeMove(data);
-            else true;//TODO THROW EXCEPTION
+            if((*it).isPlayer())Controller->makeMove(data);
+            else 1==1;//TODO THROW EXCEPTION
         } else{
             //TODO THROW EXCEPTION
         }

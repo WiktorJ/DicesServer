@@ -13,13 +13,13 @@
 
 class GameReader {
 private:
-    ClientGroup Clients;
+    ClientGroup& Clients;
     boost::thread thread;
-    GameController Controller;
+    GameController* Controller;
     
     void readMovement();
 public:
-    GameReader(ClientGroup& Clients, GameController Controller);
+    GameReader(ClientGroup& Clients, GameController* Controller);
     void start();
     void stop();
     void run();

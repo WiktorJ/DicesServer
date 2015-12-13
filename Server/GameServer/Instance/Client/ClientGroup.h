@@ -17,7 +17,7 @@
 class ClientGroup {
 private:
     std::vector<Client *> Subscribers;
-    WaitingRoom WaitingRoom_;
+    WaitingRoom &WaitingRoom_;
 public:
     ClientGroup(WaitingRoom &WaitingRoom_);
     ClientGroup(const ClientGroup &other);
