@@ -14,7 +14,14 @@ void GameReader::readMovement() {
     for(std::vector<ClientMovement>::iterator it = requests.begin(); it != requests.end(); it++){
         boost::property_tree::ptree data = (*it).getMove();
 
-        std::string command = GameCmdDeseriallizer::readCommand(data);
+        std::string command;
+        try {
+            command = GameCmdDeseriallizer::readCommand(data);
+        } catch(const boost::property_tree::ptree_error &exception){
+            std::cout << "Invalid json" << std::endl;
+            //TODO
+            break;
+        }
 
         if(command == "quit"){
             Clients.removeSubscriber((*it).getUsername());
@@ -29,7 +36,7 @@ void GameReader::readMovement() {
 
         } else if(command == "move"){
             if((*it).isPlayer())Controller->makeMove(data);
-            else 1==1;//TODO THROW EXCEPTION
+            else true;//TODO THROW EXCEPTION
         } else{
             //TODO THROW EXCEPTION
         }

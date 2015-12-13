@@ -8,7 +8,7 @@ ClientGroup &GameInstance::getClientGroup() {
     return Clients;
 }
 
-GameInstance::GameInstance(GameController *Controller, WaitingRoom &WaitingRoom_) : Controller(Controller), Clients(WaitingRoom_), Reader(Clients, Controller), Observer_(Clients){
+GameInstance::GameInstance(GameController *Controller, WaitingRoom &WaitingRoom_) : Controller(Controller), Clients(WaitingRoom_), Reader(Clients, Controller), Observer_(Clients), end(false){
 
 }
 
@@ -21,15 +21,24 @@ void GameInstance::start() {
 }
 
 void GameInstance::stop() {
-    Thread.interrupt();
+    end = true;
+    Reader.stop();
 
+    Thread.interrupt();
     Thread.join();
 }
 
 void GameInstance::run() {
-    while(true){
-        Observer_.listen();
+    Observer_.listen(); //TODO remember to add break points
 
-        boost::this_thread::interruption_point();
-    }
+    Reader.stop();
+    end = true;
+}
+
+bool GameInstance::ended() {
+    return end;
+}
+
+boost::property_tree::ptree GameInstance::getInfo() {
+    return Controller->getGameInfo();
 }

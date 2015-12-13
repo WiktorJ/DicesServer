@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <boost/thread/pthread/mutex.hpp>
 #include "../../../ConnectionServer/ClientServer/Client/Client.h"
 #include "../../Instance/Client/ClientMovement.h"
 
@@ -14,6 +15,7 @@
 
 class WaitingRoom {
 private:
+    boost::mutex Mutex;
     std::vector<Client *> Clients;
 public:
     WaitingRoom();

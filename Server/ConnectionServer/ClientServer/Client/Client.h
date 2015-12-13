@@ -21,6 +21,7 @@ private:
     bool Free;
     bool Player;
 public:
+    Client(std::string Username);
     std::string getUsername();
     void addRequest(boost::property_tree::ptree Request);
     void sendData(std::string data);

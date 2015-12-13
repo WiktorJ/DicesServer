@@ -7,7 +7,7 @@
 //TODO
 
 std::string Client::getUsername() {
-    return "";
+    return Username;
 }
 
 void Client::addRequest(boost::property_tree::ptree Request){
@@ -34,4 +34,8 @@ void Client::setObserver() {
 
 bool Client::isPlayer() {
     return Player;
+}
+
+Client::Client(std::string Username) : Username(Username){
+
 }

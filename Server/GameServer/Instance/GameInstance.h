@@ -17,12 +17,15 @@ private:
     GameReader Reader;
     GameController* Controller;
 
+    bool end;
     boost::thread Thread;
     void run();
 public:
     GameInstance(GameController* Controller, WaitingRoom& WaitingRoom_);
     ~GameInstance();
+    bool ended();
     void start();
+    boost::property_tree::ptree getInfo();
     ClientGroup& getClientGroup();
     void stop();
 };
