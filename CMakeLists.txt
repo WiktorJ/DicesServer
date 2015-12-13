@@ -32,7 +32,7 @@ else()
 endif()
 
 
-add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h)
+add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp Server/ConnectionServer/Connector/Network/Sender.h)
 
 if(Boost_FOUND)
 
