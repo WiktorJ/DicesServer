@@ -13,8 +13,21 @@ GameHolder::~GameHolder() {
     }
 }
 
+void GameHolder::update(){
+
+    for(std::vector<GameInstance *>::iterator iterator = Games.begin(); iterator != Games.end();)
+        if((*iterator)->ended()){
+            delete (*iterator);
+            iterator = Games.erase(iterator);
+        } else { iterator++;}
+
+
+}
+
 void GameHolder::remove(int GameId) {
     Mutex.lock();
+
+    update();
 
     for(std::vector<GameInstance *>::iterator iterator = Games.begin(); iterator != Games.end(); iterator++)
         if((*iterator)->getId() == GameId){
@@ -31,6 +44,8 @@ void GameHolder::remove(int GameId) {
 void GameHolder::add(GameInstance *Game) {
     Mutex.lock();
 
+    update();
+
     Games.push_back(Game);
 
     Mutex.unlock();
@@ -38,6 +53,8 @@ void GameHolder::add(GameInstance *Game) {
 
 GameInstance *GameHolder::get(int GameId) {
     Mutex.lock();
+
+    update();
 
     for(std::vector<GameInstance *>::iterator iterator = Games.begin(); iterator != Games.end(); iterator++)
         if((*iterator)->getId() == GameId){
@@ -56,6 +73,8 @@ GameHolder::GameHolder() {
 
 std::vector<GameInstance *> GameHolder::getGames() {
     Mutex.lock();
+
+    update();
 
     std::vector<GameInstance *> result = Games;
 

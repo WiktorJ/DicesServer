@@ -12,6 +12,7 @@ class GameHolder {
 private:
     std::vector<GameInstance *> Games;
     boost::mutex Mutex;
+    void update();
 public:
     GameHolder();
     ~GameHolder();
