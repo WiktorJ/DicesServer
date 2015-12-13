@@ -32,7 +32,7 @@ else()
 endif()
 
 
-add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp Server/ConnectionServer/Connector/Network/Sender.h)
+add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp Server/ConnectionServer/Connector/Network/Sender.h Server/ConnectionServer/ClientServer/Client/Client.cpp Server/ConnectionServer/ClientServer/Client/Client.h Server/GameServer/Instance/Client/ClientGroup.cpp Server/GameServer/Instance/Client/ClientGroup.h Server/GameServer/Instance/Client/ClientMovement.cpp Server/GameServer/Instance/Client/ClientMovement.h Server/GameServer/Instance/Client/ClientReader.cpp Server/GameServer/Instance/Client/ClientReader.h Server/GameServer/Server/Client/WaitingRoom.cpp Server/GameServer/Server/Client/WaitingRoom.h)
 
 if(Boost_FOUND)
 

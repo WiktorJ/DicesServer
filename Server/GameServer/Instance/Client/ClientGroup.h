@@ -1,0 +1,29 @@
+//
+// Created by Wojciech Grabis on 13.12.15.
+//
+
+#ifndef DICESSERVER_CLIENTGROUP_H
+#define DICESSERVER_CLIENTGROUP_H
+
+
+#include <vector>
+#include <string>
+#include "../../../ConnectionServer/ClientServer/Client/Client.h"
+#include "ClientMovement.h"
+#include "../../Server/Client/WaitingRoom.h"
+
+class ClientGroup {
+private:
+    std::vector<Client *> Subscribers;
+    WaitingRoom WaitingRoom_;
+public:
+    ClientGroup(WaitingRoom &WaitingRoom_);
+    void sendData(std::string data);
+    void addSubscriber(Client* client);
+    void removeSubscriber(std::string username);
+    void removeClient(std::string username);
+    std::vector<ClientMovement> getRequests();
+};
+
+
+#endif //DICESSERVER_CLIENTGROUP_H
