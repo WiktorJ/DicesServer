@@ -16,18 +16,21 @@ private:
     Observer Observer_;
     GameReader Reader;
     GameController* Controller;
+    //GameHolder& Holder_;
 
+    int GameId_;
     bool end;
     boost::thread Thread;
     void run();
 public:
-    GameInstance(GameController* Controller, WaitingRoom& WaitingRoom_);
+    GameInstance(GameController* Controller, WaitingRoom& WaitingRoom_, int GameId_/*, GameHolder& Holder_*/);
     ~GameInstance();
     bool ended();
     void start();
     boost::property_tree::ptree getInfo();
     ClientGroup& getClientGroup();
     void stop();
+    int getId();
 };
 
 

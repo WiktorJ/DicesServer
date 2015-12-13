@@ -34,6 +34,8 @@ void GameReader::readMovement() {
         } else if(command == "join"){
             Controller->addPlayer((*it).getUsername());
 
+        } else if(command == "observe") {
+            //do nothing
         } else if(command == "move"){
             if((*it).isPlayer())Controller->makeMove(data);
             else true;//TODO THROW EXCEPTION

@@ -8,11 +8,13 @@ ClientGroup &GameInstance::getClientGroup() {
     return Clients;
 }
 
-GameInstance::GameInstance(GameController *Controller, WaitingRoom &WaitingRoom_) : Controller(Controller), Clients(WaitingRoom_), Reader(Clients, Controller), Observer_(Clients), end(false){
+GameInstance::GameInstance(GameController *Controller, WaitingRoom &WaitingRoom_, int GameId_/*, GameHolder& Holder_*/) : Controller(Controller), Clients(WaitingRoom_), Reader(Clients, Controller), Observer_(Clients), end(false), GameId_(GameId_)/*, Holder_(Holder_)*/{
 
 }
 
 GameInstance::~GameInstance() {
+    if(!end)stop();
+
     delete Controller;
 }
 
@@ -26,6 +28,8 @@ void GameInstance::stop() {
 
     Thread.interrupt();
     Thread.join();
+
+    //Holder_.remove(GameId_);
 }
 
 void GameInstance::run() {
@@ -36,9 +40,15 @@ void GameInstance::run() {
 }
 
 bool GameInstance::ended() {
+    //Holder_.remove(GameId_);
+
     return end;
 }
 
 boost::property_tree::ptree GameInstance::getInfo() {
     return Controller->getGameInfo();
+}
+
+int GameInstance::getId() {
+    return GameId_;
 }

@@ -9,15 +9,16 @@
 #include <vector>
 #include "../Instance/GameInstance.h"
 #include "Factory/GameFactory.h"
+#include "GameHolder.h"
 
 class GameServer {
 private:
-    std::vector<GameInstance*> Games;
+    GameHolder Games;
     WaitingRoom WaitingRoom_;
     GameFactory Factory;
-    boost::mutex Mutex;
+    boost::thread Thread;
 
-    void refreshGameList();
+    void readRequests();
     void run();
 private:
     void start();

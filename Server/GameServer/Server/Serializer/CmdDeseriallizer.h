@@ -11,7 +11,7 @@
 
 class CmdDeseriallizer {
 public:
-
+    static std::string readCommand(boost::property_tree::ptree& data, int* gameId);
 };
 
 
