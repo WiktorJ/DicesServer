@@ -7,7 +7,7 @@
 
 
 #include "JNIInstance.h"
-
+#include "jni.h"
 class Observer {
 private:
     JNIInstance* jniInstance;
