@@ -10,6 +10,8 @@
 
 #include <string>
 
+//TODO MONITOR
+
 class Client {
 private:
     //Sender

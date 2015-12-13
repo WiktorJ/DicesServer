@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(MISCELLANOUS Miscellanous/DateTime/Time/LocalTime.cpp Miscellanous/DateTime/Time/LocalTime.h Miscellanous/DateTime/Date/LocalDate.cpp Miscellanous/DateTime/Date/LocalDate.h Miscellanous/DateTime/LocalDateTime.cpp Miscellanous/DateTime/LocalDateTime.h)
 
 set(SOURCE_FILES main.cpp)
-find_package(Boost 1.54.0 COMPONENTS system filesystem REQUIRED)
+find_package(Boost 1.54.0 COMPONENTS system filesystem thread REQUIRED)
 find_package(JNI)
 
 if (JNI_FOUND)
@@ -32,7 +32,7 @@ else()
 endif()
 
 
-add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp Server/ConnectionServer/Connector/Network/Sender.h Server/ConnectionServer/ClientServer/Client/Client.cpp Server/ConnectionServer/ClientServer/Client/Client.h Server/GameServer/Instance/Client/ClientGroup.cpp Server/GameServer/Instance/Client/ClientGroup.h Server/GameServer/Instance/Client/ClientMovement.cpp Server/GameServer/Instance/Client/ClientMovement.h Server/GameServer/Instance/Client/ClientReader.cpp Server/GameServer/Instance/Client/ClientReader.h Server/GameServer/Server/Client/WaitingRoom.cpp Server/GameServer/Server/Client/WaitingRoom.h Server/GameServer/Instance/Reader/GameCmdDeseriallizer.cpp Server/GameServer/Instance/Reader/GameCmdDeseriallizer.h Server/GameServer/Instance/Observer/GameCmdSeriallizer.cpp Server/GameServer/Instance/Observer/GameCmdSeriallizer.h)
+add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstanceJNI.cpp JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp Server/ConnectionServer/Connector/Network/Sender.h Server/ConnectionServer/ClientServer/Client/Client.cpp Server/ConnectionServer/ClientServer/Client/Client.h Server/GameServer/Instance/Client/ClientGroup.cpp Server/GameServer/Instance/Client/ClientGroup.h Server/GameServer/Instance/Client/ClientMovement.cpp Server/GameServer/Instance/Client/ClientMovement.h Server/GameServer/Instance/Client/ClientReader.cpp Server/GameServer/Instance/Client/ClientReader.h Server/GameServer/Server/Client/WaitingRoom.cpp Server/GameServer/Server/Client/WaitingRoom.h Server/GameServer/Instance/Reader/GameCmdDeseriallizer.cpp Server/GameServer/Instance/Reader/GameCmdDeseriallizer.h Server/GameServer/Instance/Observer/GameCmdSeriallizer.cpp Server/GameServer/Instance/Observer/GameCmdSeriallizer.h Server/GameServer/Instance/Controller/GameController.cpp Server/GameServer/Instance/Controller/GameController.h Server/GameServer/Instance/Reader/GameReader.cpp Server/GameServer/Instance/Reader/GameReader.h)
 
 if(Boost_FOUND)
 

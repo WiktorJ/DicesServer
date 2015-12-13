@@ -10,6 +10,8 @@
 #include "../../../ConnectionServer/ClientServer/Client/Client.h"
 #include "../../Instance/Client/ClientMovement.h"
 
+//TODO MONITOR
+
 class WaitingRoom {
 private:
     std::vector<Client *> Clients;

@@ -41,3 +41,7 @@ void ClientGroup::removeClient(std::string username) {
             delete subscriber;
         }
 }
+
+ClientGroup::ClientGroup(const ClientGroup &other) : WaitingRoom_(other.WaitingRoom_), Subscribers(other.Subscribers){
+
+}

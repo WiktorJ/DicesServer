@@ -12,12 +12,15 @@
 #include "ClientMovement.h"
 #include "../../Server/Client/WaitingRoom.h"
 
+//TODO MONITOR
+
 class ClientGroup {
 private:
     std::vector<Client *> Subscribers;
     WaitingRoom WaitingRoom_;
 public:
     ClientGroup(WaitingRoom &WaitingRoom_);
+    ClientGroup(const ClientGroup &other);
     void sendData(std::string data);
     void addSubscriber(Client* client);
     void removeSubscriber(std::string username);
