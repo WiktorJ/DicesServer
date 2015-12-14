@@ -10,24 +10,25 @@ ClientGroup::ClientGroup(WaitingRoom & WaitingRoom_) : WaitingRoom_(WaitingRoom_
 }
 
 void ClientGroup::sendData(std::string data) {
-    Mutex.lock();
+    Mutex->lock();
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
         (*it)->sendData(data);
 
-    Mutex.unlock();
+    Mutex->unlock();
 }
 
 void ClientGroup::addSubscriber(Client* client) {
-    Mutex.lock();
+    Mutex->lock();
 
+    client->subscribe(&Requests);
     Subscribers.push_back(client);
 
-    Mutex.unlock();
+    Mutex->unlock();
 }
 
 void ClientGroup::removeSubscriber(std::string username) {
-    Mutex.lock();
+    Mutex->lock();
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
         if((*it)->getUsername() == username){
@@ -39,15 +40,15 @@ void ClientGroup::removeSubscriber(std::string username) {
             return;
         }
 
-    Mutex.unlock();
+    Mutex->unlock();
 }
 
 std::vector<ClientMovement> ClientGroup::getRequests() {
-    return ClientReader::getPlayerMoves(Subscribers);
+    return Requests.getRequests();
 }
 
 void ClientGroup::removeClient(std::string username) {
-    Mutex.lock();
+    Mutex->lock();
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
         if((*it)->getUsername() == username){
@@ -58,9 +59,9 @@ void ClientGroup::removeClient(std::string username) {
             return;
         }
 
-    Mutex.unlock();
+    Mutex->unlock();
 }
 
-ClientGroup::ClientGroup(const ClientGroup &other) : WaitingRoom_(other.WaitingRoom_), Subscribers(other.Subscribers){
+ClientGroup::ClientGroup(const ClientGroup &other) : WaitingRoom_(other.WaitingRoom_), Subscribers(other.Subscribers), Requests(other.Requests){
 
 }

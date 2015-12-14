@@ -16,6 +16,7 @@ private:
     boost::property_tree::ptree Move;
 public:
     ClientMovement(std::string Username, bool Player, boost::property_tree::ptree Move);
+    ClientMovement(const ClientMovement& other);
     std::string getUsername();
     boost::property_tree::ptree getMove();
     bool isPlayer();

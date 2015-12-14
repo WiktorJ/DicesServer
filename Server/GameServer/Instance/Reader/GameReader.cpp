@@ -18,8 +18,8 @@ void GameReader::readMovement() {
         try {
             command = GameCmdDeseriallizer::readCommand(data);
         } catch(const boost::property_tree::ptree_error &exception){
-            std::cout << "Invalid json" << std::endl;
-            //TODO
+            std::cout << "GameReader: Invalid json" << std::endl;
+            //TODO LOGGER
             break;
         }
 

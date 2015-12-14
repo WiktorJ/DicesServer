@@ -9,6 +9,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <string>
+#include "../../../GameServer/Event/RequestQueue.h"
 
 //TODO MONITOR
 
@@ -16,16 +17,16 @@ class Client {
 private:
     //Sender
     std::string Username;
-    boost::property_tree::ptree Request; // to json
-    bool Blocked;
+    RequestQueue* Requests;
     bool Free;
     bool Player;
 public:
     Client(std::string Username);
     std::string getUsername();
+
+    void subscribe(RequestQueue* Requests);
     void addRequest(boost::property_tree::ptree Request);
     void sendData(std::string data);
-    boost::property_tree::ptree getRequest();
     void setObserver();
     void setPlayer();
     bool isPlayer();

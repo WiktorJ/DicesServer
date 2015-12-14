@@ -12,7 +12,7 @@ class JNIInstance {
 public:
     JavaVM *jvm;                      // Pointer to the JVM (Java Virtual Machine)
     JNIEnv *env;
-    JNIInstance(char* pathToClass);
+    JNIInstance(const char* pathToClass);
     void close();
     void runSimpleWriter(const char* fileName);
 };

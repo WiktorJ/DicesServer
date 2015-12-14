@@ -7,7 +7,7 @@
 #include "JNIInstance.h"
 
 
-JNIInstance::JNIInstance(char *pathToClass)  {
+JNIInstance::JNIInstance(const char *pathToClass)  {
 
     JavaVMInitArgs vm_args;                        // Initialization arguments
     JavaVMOption* options = new JavaVMOption[1];   // JVM invocation options

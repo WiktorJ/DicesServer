@@ -10,7 +10,13 @@ boost::property_tree::ptree GamesSerializer::serialize(std::vector<GameInstance 
     result.put_child("type", boost::property_tree::ptree("GameList"));
 
     for(std::vector<GameInstance *>::iterator it = games.begin(); it != games.end(); it++){
-        result.push_back(std::make_pair("", (*it)->getInfo()));
+
+        boost::property_tree::ptree game;
+
+        game.put_child("gameId", boost::property_tree::ptree(std::to_string((*it)->getId())));
+        game.put_child("gameInfo", (*it)->getInfo());
+
+        result.push_back(std::make_pair("", game));
     }
 
     result.add_child("activeGames", result);

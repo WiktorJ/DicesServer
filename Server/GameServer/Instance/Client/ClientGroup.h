@@ -17,12 +17,15 @@
 
 class ClientGroup {
 private:
-    boost::mutex Mutex;
+    boost::shared_ptr<boost::mutex> Mutex;
     std::vector<Client *> Subscribers;
+    RequestQueue Requests;
+
+    ClientGroup(const ClientGroup &other);
     WaitingRoom &WaitingRoom_;
 public:
     ClientGroup(WaitingRoom &WaitingRoom_);
-    ClientGroup(const ClientGroup &other);
+
     void sendData(std::string data);
     void addSubscriber(Client* client);
     void removeSubscriber(std::string username);

@@ -15,11 +15,14 @@
 
 class WaitingRoom {
 private:
-    boost::mutex Mutex;
+    boost::shared_ptr<boost::mutex> Mutex;
     std::vector<Client *> Clients;
+    RequestQueue Requests;
+    WaitingRoom(const WaitingRoom &other);
+
 public:
     WaitingRoom();
-    WaitingRoom(const WaitingRoom &other);
+
     void addClient(Client* client);
     Client* removeClient(std::string username);
     std::vector<ClientMovement> getRequests();

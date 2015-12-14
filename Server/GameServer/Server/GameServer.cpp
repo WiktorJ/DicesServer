@@ -33,8 +33,15 @@ void GameServer::readRequests() {
         int gameId;
         boost::property_tree::ptree move = (*iterator).getMove();
 
-        std::string command = CmdDeseriallizer::readCommand(move, &gameId);
+        std::string command;
 
+        try {
+            command = CmdDeseriallizer::readCommand(move, &gameId);
+        } catch(const boost::property_tree::ptree &exception){
+            std::cout << "GameServer: Invalid json" << std::endl;
+            //TODO LOGGER
+            break;
+        }
         if(command == "disconnect"){
 
         } else if(command == "join"){
@@ -46,7 +53,7 @@ void GameServer::readRequests() {
                 return;
             }
             Client* client = WaitingRoom_.removeClient((*iterator).getUsername());
-            client->setObserver();
+            client->setPlayer();
             client->addRequest(move);
 
             game->getClientGroup().addSubscriber(client);

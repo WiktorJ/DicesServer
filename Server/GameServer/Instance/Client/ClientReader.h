@@ -12,7 +12,6 @@
 
 class ClientReader {
 public:
-    static std::vector<ClientMovement> getPlayerMoves(std::vector<Client *> clients);
 };
 
 

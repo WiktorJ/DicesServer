@@ -5,20 +5,21 @@
 #include "WaitingRoom.h"
 #include "../../Instance/Client/ClientReader.h"
 
-WaitingRoom::WaitingRoom() {
+WaitingRoom::WaitingRoom() : Mutex(new boost::mutex){
 
 }
 
 void WaitingRoom::addClient(Client *client) {
-    Mutex.lock();
+    Mutex->lock();
 
+    client->subscribe(&Requests);
     Clients.push_back(client);
 
-    Mutex.unlock();
+    Mutex->unlock();
 }
 
 Client *WaitingRoom::removeClient(std::string username) {
-    Mutex.lock();
+    Mutex->lock();
 
     for(std::vector<Client *>::iterator it = Clients.begin(); it != Clients.end(); it++)
         if((*it)->getUsername() == username){
@@ -29,15 +30,15 @@ Client *WaitingRoom::removeClient(std::string username) {
             return result;
         }
 
-    Mutex.unlock();
+    Mutex->unlock();
 
     return NULL;
 }
 
 std::vector<ClientMovement> WaitingRoom::getRequests() {
-    return ClientReader::getPlayerMoves(Clients);
+    return Requests.getRequests();
 }
 
-WaitingRoom::WaitingRoom(const WaitingRoom &other) : Clients(other.Clients){
+WaitingRoom::WaitingRoom(const WaitingRoom &other) : Clients(other.Clients), Requests(other.Requests), Mutex(other.Mutex){
 
 }

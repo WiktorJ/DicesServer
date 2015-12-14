@@ -12,16 +12,13 @@ std::string Client::getUsername() {
 
 void Client::addRequest(boost::property_tree::ptree Request){
     //TODO
+    ClientMovement move(Username, Player, Request);
 
-    this->Request = Request;
+    Requests->addRequest(move);
 }
 
 void Client::sendData(std::string data) {
 
-}
-
-boost::property_tree::ptree Client::getRequest() {
-    return this->Request;
 }
 
 void Client::setPlayer() {
@@ -38,4 +35,8 @@ bool Client::isPlayer() {
 
 Client::Client(std::string Username) : Username(Username){
 
+}
+
+void Client::subscribe(RequestQueue *Requests) {
+    this->Requests = Requests;
 }

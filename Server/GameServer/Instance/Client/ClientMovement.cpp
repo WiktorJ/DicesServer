@@ -18,3 +18,7 @@ boost::property_tree::ptree ClientMovement::getMove() {
 bool ClientMovement::isPlayer() {
     return Player;
 }
+
+ClientMovement::ClientMovement(const ClientMovement &other) : Username(other.Username), Player(other.Player), Move(other.Move){
+
+}

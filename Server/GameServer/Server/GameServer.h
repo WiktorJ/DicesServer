@@ -20,7 +20,7 @@ private:
 
     void readRequests();
     void run();
-private:
+public:
     void start();
     boost::property_tree::ptree getActiveGames();
     WaitingRoom& getWaitingRoom();
