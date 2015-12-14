@@ -12,6 +12,7 @@
 class GameController {
 public:
     GameController(const GameController &other);
+    GameController();
     void addPlayer(std::string username);
     void makeMove(boost::property_tree::ptree moveInfo);
     void removePlayer(std::string username);

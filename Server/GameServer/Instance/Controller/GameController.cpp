@@ -34,3 +34,7 @@ void GameController::addPlayer(std::string username) {
 GameController::GameController(const GameController &other) {
 
 }
+
+GameController::GameController() {
+
+}

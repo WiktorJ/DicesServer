@@ -40,7 +40,7 @@ void GameServer::readRequests() {
         } catch(const boost::property_tree::ptree &exception){
             std::cout << "GameServer: Invalid json" << std::endl;
             //TODO LOGGER
-            break;
+            continue;
         }
         if(command == "disconnect"){
 
@@ -52,12 +52,15 @@ void GameServer::readRequests() {
                 //TODO THROW EXCEPTION
                 return;
             }
+
             Client* client = WaitingRoom_.removeClient((*iterator).getUsername());
             client->setPlayer();
             client->addRequest(move);
 
             game->getClientGroup().addSubscriber(client);
 
+            //TODO
+            std::cout << "Joined:" << client->getUsername() << std::endl;
 
         } else if(command == "observe"){
             GameInstance* game = Games.get(gameId);
@@ -73,9 +76,15 @@ void GameServer::readRequests() {
 
             game->getClientGroup().addSubscriber(client);
 
+            std::cout << "Observing:" << client->getUsername() << std::endl;
+
         } else if(command == "create") {
-            Games.add(Factory.createGame(move));
+            Games.add(Factory.createGame(move, WaitingRoom_));
+
+            std::cout << "Creating game" << std::endl;
         } else {
+            std::cout << "Command not found" << std::endl;
+
             //TODO THROW EXCEPION
         }
     }

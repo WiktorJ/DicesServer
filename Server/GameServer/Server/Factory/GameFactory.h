@@ -9,8 +9,11 @@
 #include "../../Instance/GameInstance.h"
 
 class GameFactory {
+private:
+    int curr_id;
 public:
-    GameInstance* createGame(boost::property_tree::ptree description);
+    GameFactory();
+    GameInstance* createGame(boost::property_tree::ptree description, WaitingRoom& WaitingRoom_);
 };
 
 

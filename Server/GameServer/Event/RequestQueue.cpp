@@ -21,7 +21,11 @@ std::vector<ClientMovement> RequestQueue::getRequests() {
     {
         Condition.wait(lock);
     }
-    return Requests;
+    std::vector<ClientMovement> result = Requests;
+    Requests.clear();
+    empty = true;
+
+    return result;
 }
 
 RequestQueue::RequestQueue() {
