@@ -45,6 +45,8 @@ void tester(){
                     cin >> path;
 
                     boost::property_tree::read_json(path, pt);
+
+                    (*it)->addRequest(pt);
                 }
             }
 

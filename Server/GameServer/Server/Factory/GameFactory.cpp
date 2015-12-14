@@ -4,6 +4,10 @@
 
 #include "GameFactory.h"
 
-GameInstance *GameFactory::createGame(boost::property_tree::ptree description) {
-    return nullptr;
+GameInstance *GameFactory::createGame(boost::property_tree::ptree description, WaitingRoom& WaitingRoom_) {
+    return new GameInstance(new GameController, WaitingRoom_, curr_id++);
+}
+
+GameFactory::GameFactory() {
+    curr_id = 0;
 }
