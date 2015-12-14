@@ -15,19 +15,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ObserverImpl implements Observer{
 
     private JSONObject state;
-
-    private String operation = new String();
+    private boolean gameEnded = false;
 
     private boolean otherOperation = false;
 
-
-    private final Lock lock = new ReentrantLock();
-    private final Condition noOtherOp = lock.newCondition();
-    private final Condition someOtherOp = lock.newCondition();
-    private int id;
-
-    public ObserverImpl(int id){
-        this.id = id;
+    public ObserverImpl(){
     }
 
     @Override
@@ -39,8 +31,8 @@ public class ObserverImpl implements Observer{
             }
         }
         //doing sth
-        this.state = state;
-        operation = "update";
+        this.state = new JSONObject();
+        state.put("stateUpdated", state.toString());
         otherOperation = true;
         notifyAll();
 
@@ -57,14 +49,13 @@ public class ObserverImpl implements Observer{
             }
         }
         //doing sth
-        String end = new String("end");
-        JSONObject endJSON = new JSONObject();
-        endJSON.put("action", end);
+        this.state = new JSONObject();
+        this.state.put("gameEnded", "");
+        this.gameEnded = true;
 
         //prześlij JSONa dalej
-
-        operation = "end";
         otherOperation = true;
+
         notifyAll();
 
     }
@@ -79,9 +70,8 @@ public class ObserverImpl implements Observer{
             }
         }
         //doing sth
-//        JSONObject removePlayer = new JSONObject();
-//        removePlayer.put("remove", nickname);
-        operation = "remove";
+        this.state = new JSONObject();
+        this.state.put("removePlayer", nickname);
         //prześlij tego JSONa dalej
 
         otherOperation = true;
@@ -89,7 +79,7 @@ public class ObserverImpl implements Observer{
 
     }
 
-    public synchronized void notifyWaitUntil() throws InterruptedException {
+    public synchronized String notifyWaitUntil() throws InterruptedException {
 
         while (!otherOperation){
             try {
@@ -99,13 +89,10 @@ public class ObserverImpl implements Observer{
         }
         otherOperation = false;
         notifyAll();
+        return state.toString();
+    }
+    public synchronized boolean isGameEnded() {
+        return this.gameEnded;
     }
 
-    public String getLastOperation(){
-//        JSONObject lastOperation = new JSONObject();
-//        lastOperation.put("operation", operation);
-//        return lastOperation.toString();
-        return "sth" + id + "\n";
-
-    }
 }

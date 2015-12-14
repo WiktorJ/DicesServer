@@ -9,12 +9,17 @@
 
 
 class JNIInstance {
+private:
+    JNIInstance();
+    ~JNIInstance();
+//    JNIInstance(JNIInstance const&);
+//    void operator=(JNIInstance const&);
 public:
+    static JNIInstance& getInstance();
     JavaVM *jvm;                      // Pointer to the JVM (Java Virtual Machine)
     JNIEnv *env;
-    JNIInstance(const char* pathToClass);
-    void close();
-    void runSimpleWriter(const char* fileName);
+//    JNIInstance(JNIInstance const&) = delete;
+//    void operator=(JNIInstance const&) = delete;
 };
 
 #endif //DICESSERVER_JNIINSTANCE_H

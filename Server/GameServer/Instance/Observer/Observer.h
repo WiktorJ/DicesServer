@@ -7,6 +7,8 @@
 
 
 #include "../Client/ClientGroup.h"
+#include "jni.h"
+#include "JNIInstance.h"
 
 class Observer {
 private:
