@@ -20,6 +20,8 @@ GameInstance::~GameInstance() {
 
 void GameInstance::start() {
     Thread = boost::thread(boost::bind(&GameInstance::run, this));
+
+    Reader.start();
 }
 
 void GameInstance::stop() {

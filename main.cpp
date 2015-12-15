@@ -1,13 +1,7 @@
 #include <iostream>
-#include "GameServer/JNIInstance.h"
-#include "GameServer/Observer.h"
 #include <boost/thread/thread.hpp>
 #include "Server/ConnectionServer/ClientServer/Client/Client.h"
-#include "Server/GameServer/Server/Client/WaitingRoom.h"
-#include "Server/GameServer/Instance/Client/ClientGroup.h"
 #include "Server/StartUp/MainServer.h"
-#include "Server/GameServer/Instance/Observer/JNIInstance.h"
-#include "Server/GameServer/Instance/Observer/Observer.h"
 
 using namespace std;
 
