@@ -18,7 +18,7 @@ void Observer::listen() {
 
     // if class found, continue
     std::cout << "Class Main found" << std::endl;
-    jclass observerClass = JNIInstance::getInstance().env->FindClass("to2/ds/game/controllers/ObserverImpl");
+    jclass observerClass = localEnv->FindClass("to2/ds/game/controllers/ObserverImpl");
     jmethodID notify = localEnv->GetMethodID(observerClass, "notifyWaitUntil", "()Ljava/lang/String;");
     jmethodID isGameEnded = localEnv->GetMethodID(observerClass, "isGameEnded", "()Z");
     while (!gameEnded) {

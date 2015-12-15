@@ -19,6 +19,8 @@ boost::property_tree::ptree GameServer::getActiveGames() {
 }
 
 void GameServer::run() {
+
+
     while(true){
         readRequests();
 
