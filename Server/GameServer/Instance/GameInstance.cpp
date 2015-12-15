@@ -8,17 +8,19 @@ ClientGroup &GameInstance::getClientGroup() {
     return Clients;
 }
 
-GameInstance::GameInstance(GameController *Controller, WaitingRoom &WaitingRoom_, int GameId_/*, GameHolder& Holder_*/) : Controller(Controller), Clients(WaitingRoom_), Reader(Clients, Controller), Observer_(Clients), end(false), GameId_(GameId_)/*, Holder_(Holder_)*/{
+GameInstance::GameInstance(GameController *Controller, WaitingRoom &WaitingRoom_, int GameId_/*, GameHolder& Holder_*/) : Controller(Controller), Clients(WaitingRoom_), Reader(Clients, Controller), Observer_(Clients), end(false), GameId_(GameId_), Logger("GameInstance")/*, Holder_(Holder_)*/{
 
 }
 
 GameInstance::~GameInstance() {
+    Logger.log("deleting");
     if(!end)stop();
 
     delete Controller;
 }
 
 void GameInstance::start() {
+    Logger.log("starting");
     Thread = boost::thread(boost::bind(&GameInstance::run, this));
 
     Reader.start();
@@ -26,23 +28,28 @@ void GameInstance::start() {
 
 void GameInstance::stop() {
     end = true;
+    Logger.log("stopping");
     Reader.stop();
 
     Thread.interrupt();
     Thread.join();
+    Logger.log("stopped");
 
     //Holder_.remove(GameId_);
 }
 
 void GameInstance::run() {
-    Observer_.listen(); //TODO remember to add break points
+    //Observer_.listen(); //TODO remember to add break points
+    //
+    boost::this_thread::sleep(boost::posix_time::seconds(1000));
 
     Reader.stop();
+
+    Logger.log("instance ended");
     end = true;
 }
 
 bool GameInstance::ended() {
-    //Holder_.remove(GameId_);
 
     return end;
 }

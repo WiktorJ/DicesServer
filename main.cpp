@@ -43,10 +43,16 @@ void tester(){
 
                     boost::property_tree::ptree pt;
                     cin >> path;
+                    try {
+                        boost::property_tree::read_json(path, pt);
 
-                    boost::property_tree::read_json(path, pt);
 
+                    } catch(const boost::property_tree::ptree_error & exception){
+                        cout << "json error";
+                        continue;
+                    }
                     (*it)->addRequest(pt);
+
                 }
             }
 

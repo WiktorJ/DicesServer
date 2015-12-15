@@ -8,6 +8,7 @@
 
 #include "../Client/ClientGroup.h"
 #include "../Controller/GameController.h"
+#include "../../../Logger/LogParser.h"
 
 #include <boost/thread/thread.hpp>
 
@@ -16,6 +17,7 @@ private:
     ClientGroup& Clients;
     boost::thread thread;
     GameController* Controller;
+    LogParser Logger;
     
     void readMovement();
 public:

@@ -24,5 +24,8 @@ int Logger::getId() {
 }
 
 void Logger::log(std::string logInfo) {
+    Mutex.lock();
     std::cout << logInfo << std::endl;
+    Mutex.unlock();
 }
+

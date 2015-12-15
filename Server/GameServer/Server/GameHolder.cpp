@@ -47,6 +47,7 @@ void GameHolder::add(GameInstance *Game) {
     update();
 
     Games.push_back(Game);
+    Game->start();
 
     Mutex.unlock();
 }

@@ -6,6 +6,7 @@
 #define DICESSERVER_LOGGER_H
 
 #include <string>
+#include <boost/thread/pthread/mutex.hpp>
 
 class Logger {
 private:
@@ -13,6 +14,7 @@ private:
     ~Logger();
 
     int id;
+    boost::mutex Mutex;
 public:
     static Logger & getInstance();
     int getId();

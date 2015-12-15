@@ -17,6 +17,7 @@ private:
     GameReader Reader;
     GameController* Controller;
     //GameHolder& Holder_;
+    LogParser Logger;
 
     int GameId_;
     bool end;
