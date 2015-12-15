@@ -6,7 +6,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 boost::property_tree::ptree GameController::getGameInfo() {
-    jclass gc = localEnv->FindClass("to2/ds/game/controllers/Game");  // try to find the class
+    jclass gc = localEnv->FindClass("to2/ds/game/controllers/MockedGameController");  // try to find the class
     jmethodID makeMoveMethod = localEnv->GetMethodID(gc, "getInfo", "()Ljava/lang/String;");
     localEnv->CallVoidMethod(javaGameController, makeMoveMethod, "");
 
@@ -25,7 +25,7 @@ void GameController::makeMove(boost::property_tree::ptree moveInfo) {
 
     std::cout << "Controller input json:" << ss.str() << std::endl;
 
-    jclass gc = localEnv->FindClass("to2/ds/game/controllers/Game");  // try to find the class
+    jclass gc = localEnv->FindClass("to2/ds/game/controllers/MockedGameController");  // try to find the class
     jmethodID makeMoveMethod = localEnv->GetMethodID(gc, "makeMove", "(Ljava/lang/String;)V");
     localEnv->CallVoidMethod(javaGameController, makeMoveMethod, ss.str().c_str());
 
@@ -35,7 +35,7 @@ void GameController::makeMove(boost::property_tree::ptree moveInfo) {
 }
 
 void GameController::addPlayer(std::string username) {
-    jclass gc = localEnv->FindClass("to2/ds/game/controllers/Game");  // try to find the class
+    jclass gc = localEnv->FindClass("to2/ds/game/controllers/MockedGameController");  // try to find the class
     jmethodID addPlayerMethod = localEnv->GetMethodID(gc, "addPlayer", "(Ljava/lang/String;)V");
     localEnv->CallVoidMethod(javaGameController, addPlayerMethod, username.c_str());
 
