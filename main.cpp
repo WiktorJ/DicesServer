@@ -23,6 +23,10 @@ void tester(){
     while(1){
         std::cin >> command;
 
+        if(command == "p"){
+            std::cout << Server.printGameInfo() << endl;
+        }
+
         if(command == "c"){
             std::string newUser;
             std::cin >> newUser;
@@ -55,6 +59,7 @@ void tester(){
         }
 
         if(command == "q"){
+            Server.stop();
             break;
         }
     }

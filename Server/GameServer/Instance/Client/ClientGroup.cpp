@@ -5,7 +5,7 @@
 #include "ClientGroup.h"
 #include "ClientReader.h"
 
-ClientGroup::ClientGroup(WaitingRoom & WaitingRoom_) : WaitingRoom_(WaitingRoom_){
+ClientGroup::ClientGroup(WaitingRoom & WaitingRoom_) : WaitingRoom_(WaitingRoom_), Mutex(new boost::mutex){
 
 }
 

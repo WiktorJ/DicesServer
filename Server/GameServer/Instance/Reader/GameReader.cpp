@@ -22,10 +22,13 @@ void GameReader::readMovement() {
             //TODO LOGGER
             break;
         }
+        std::cout << "GameReader command: " << command << std::endl;
 
         if(command == "quit"){
             Clients.removeSubscriber((*it).getUsername());
             if((*it).isPlayer()) Controller->removePlayer((*it).getUsername());
+
+            std::cout << "Player quit:" << (*it).getUsername() << std::endl;
 
         } else if(command == "disconnect"){
             Clients.removeClient((*it).getUsername());
@@ -34,11 +37,16 @@ void GameReader::readMovement() {
         } else if(command == "join"){
             Controller->addPlayer((*it).getUsername());
 
+            std::cout << "Player joined:" << (*it).getUsername() << std::endl;
+
         } else if(command == "observe") {
+            std::cout << "Player observing:" << (*it).getUsername() << std::endl;
             //do nothing
         } else if(command == "move"){
             if((*it).isPlayer())Controller->makeMove(data);
             else true;//TODO THROW EXCEPTION
+
+            std::cout << "Player moved:" << (*it).getUsername() << std::endl;
         } else{
             //TODO THROW EXCEPTION
         }

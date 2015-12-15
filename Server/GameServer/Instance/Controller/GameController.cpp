@@ -6,7 +6,7 @@
 #include <boost/property_tree/json_parser.hpp>
 
 boost::property_tree::ptree GameController::getGameInfo() {
-
+    return boost::property_tree::ptree("testControler");
 }
 
 void GameController::removePlayer(std::string username) {

@@ -10,6 +10,7 @@
 #include "../Instance/GameInstance.h"
 #include "Factory/GameFactory.h"
 #include "GameHolder.h"
+#include "../../Logger/LogParser.h"
 
 class GameServer {
 private:
@@ -17,10 +18,12 @@ private:
     WaitingRoom WaitingRoom_;
     GameFactory Factory;
     boost::thread Thread;
+    LogParser Logger;
 
     void readRequests();
     void run();
 public:
+    GameServer();
     void start();
     boost::property_tree::ptree getActiveGames();
     WaitingRoom& getWaitingRoom();

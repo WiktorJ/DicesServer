@@ -37,12 +37,17 @@ void GameServer::readRequests() {
 
         try {
             command = CmdDeseriallizer::readCommand(move, &gameId);
-        } catch(const boost::property_tree::ptree &exception){
-            std::cout << "GameServer: Invalid json" << std::endl;
-            //TODO LOGGER
+        } catch(const boost::property_tree::ptree_error &exception){
+            Logger.log("Client : " + (*iterator).getUsername() + " - invalid json");
             continue;
         }
         if(command == "disconnect"){
+            Client* client = WaitingRoom_.removeClient((*iterator).getUsername());
+            if(client != NULL){
+                delete client;
+                Logger.log("Client : " + (*iterator).getUsername() + " - disconnected");
+            }
+
 
         } else if(command == "join"){
             GameInstance* game = Games.get(gameId);
@@ -55,12 +60,12 @@ void GameServer::readRequests() {
 
             Client* client = WaitingRoom_.removeClient((*iterator).getUsername());
             client->setPlayer();
-            client->addRequest(move);
 
             game->getClientGroup().addSubscriber(client);
+            client->addRequest(move);
 
             //TODO
-            std::cout << "Joined:" << client->getUsername() << std::endl;
+            Logger.log("Client : " + (*iterator).getUsername() + " - joined a game : " + std::to_string(game->getId()));
 
         } else if(command == "observe"){
             GameInstance* game = Games.get(gameId);
@@ -72,18 +77,20 @@ void GameServer::readRequests() {
 
             Client* client = WaitingRoom_.removeClient((*iterator).getUsername());
             client->setObserver();
-            client->addRequest(move);
 
             game->getClientGroup().addSubscriber(client);
+            client->addRequest(move);
 
-            std::cout << "Observing:" << client->getUsername() << std::endl;
+            Logger.log("Client : " + (*iterator).getUsername() + " - observing a game : " + std::to_string(game->getId()));
 
         } else if(command == "create") {
-            Games.add(Factory.createGame(move, WaitingRoom_));
+            GameInstance* game = Factory.createGame(move, WaitingRoom_);
 
-            std::cout << "Creating game" << std::endl;
+            Games.add(game);
+
+            Logger.log("Client : " + (*iterator).getUsername() + " - created a game: " + std::to_string(game->getId()));
         } else {
-            std::cout << "Command not found" << std::endl;
+            Logger.log("Client : " + (*iterator).getUsername() + " - invalid command: " + command);
 
             //TODO THROW EXCEPION
         }
@@ -92,10 +99,20 @@ void GameServer::readRequests() {
 
 void GameServer::start() {
     Thread = boost::thread(boost::bind(&GameServer::run, this));
+
+    Logger.log("Starting");
 }
 
 void GameServer::stop() {
+    Logger.log("Stopping");
+
     Thread.interrupt();
 
     Thread.join();
+
+    Logger.log("Stopped");
+}
+
+GameServer::GameServer() : Logger("GameServer"){
+
 }
