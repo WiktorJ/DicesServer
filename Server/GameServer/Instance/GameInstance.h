@@ -9,7 +9,7 @@
 #include "Client/ClientGroup.h"
 #include "Observer/Observer.h"
 #include "Reader/GameReader.h"
-
+#include "jni.h"
 class GameInstance {
 private:
     ClientGroup Clients;
@@ -24,7 +24,7 @@ private:
     boost::thread Thread;
     void run();
 public:
-    GameInstance(GameController* Controller, WaitingRoom& WaitingRoom_, int GameId_/*, GameHolder& Holder_*/);
+    GameInstance(GameController* Controller, WaitingRoom& WaitingRoom_, int GameId_/*, GameHolder& Holder_*/, jobject gco);
     ~GameInstance();
     bool ended();
     void start();

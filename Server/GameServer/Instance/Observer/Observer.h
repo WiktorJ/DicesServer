@@ -9,12 +9,15 @@
 #include "../Client/ClientGroup.h"
 #include "jni.h"
 #include "JNIInstance.h"
+#include "../../../Logger/LogParser.h"
 
 class Observer {
 private:
     ClientGroup& Clients;
+    jobject observerObject;
+    LogParser Logger;
 public:
-    Observer(ClientGroup& Clients);
+    Observer(ClientGroup& Clients, jobject gco);
     void listen();
 };
 

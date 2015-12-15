@@ -19,6 +19,18 @@ public class MockedGameController implements Runnable{
 
     }
 
+    public void addPlayer(String json) {
+        System.out.println("player added");
+    }
+
+    public void makeMove(String json) {
+        System.out.println("move made");
+    }
+
+    public String getInfo() {
+        return "some game info";
+    }
+
     @Override
     public void run() {
         int i = 10;
