@@ -1,0 +1,72 @@
+//
+// Created by Wojciech Grabis on 16.12.15.
+//
+
+#include "JController.h"
+#include "../../Exception/Loader/JClassException.h"
+#include "../../Exception/Env/JNIEnvException.h"
+
+JController::JController(jobject Object) : Logger("JController"), Object(Object){
+    Env = NULL;
+}
+
+void JController::attach(JNIEnv *Env) {
+    this->Env = Env;
+    initialize();
+}
+
+void JController::initialize() {
+    Logger.log("Initializing java object");
+
+    //TODO CONNECT TO A JAVA CONFIG
+    const char* temp = "to2/ds/game/controllers/GameController";
+
+    Controller = Env->FindClass(temp);
+
+    AddPlayer = Env->GetMethodID(Controller, "addPlayer", "(Ljava/lang/String;)V");
+    RemovePlayer = Env->GetMethodID(Controller, "removePlayer", "(Ljava/lang/String;)V");
+    MakeMove = Env->GetMethodID(Controller, "makeMove", "(Ljava/lang/String;)V");
+    Stop = Env->GetMethodID(Controller, "stop", "()V");
+    GetGameInfo = Env->GetMethodID(Controller, "getGameInfo", "()Ljava/lang/String;");
+
+    if(Controller == NULL || AddPlayer == NULL || RemovePlayer == NULL || MakeMove == NULL || Stop == NULL || GetGameInfo == NULL)
+        throw new JClassException("Controller");
+}
+
+void JController::addPlayer(std::string username) {
+    if(Env == NULL)throw new JNIEnvException;
+
+    Env->CallVoidMethod(Object, AddPlayer, username.c_str());
+}
+
+void JController::removePlayer(std::string username) {
+    if(Env == NULL)throw new JNIEnvException;
+
+    Env->CallVoidMethod(Object, RemovePlayer, username.c_str());
+}
+
+void JController::makeMove(std::string move) {
+    if(Env == NULL)throw new JNIEnvException;
+
+    Env->CallVoidMethod(Object, MakeMove, move.c_str());
+}
+
+void JController::stop() {
+    if(Env == NULL)throw new JNIEnvException;
+
+    Env->CallVoidMethod(Object, Stop);
+
+}
+
+std::string JController::getGameInfo() {
+    if(Env == NULL)throw new JNIEnvException;
+
+    jstring Result = (jstring) Env->CallObjectMethod(Object, GetGameInfo, "");
+    const char *str = Env->GetStringUTFChars(Result, 0);
+
+    std::string Converted = std::string(str);
+    Env->ReleaseStringUTFChars(Result, str);
+
+    return Converted;
+}
+

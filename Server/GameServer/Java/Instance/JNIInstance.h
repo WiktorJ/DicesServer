@@ -18,6 +18,7 @@ public:
     static JNIInstance& getInstance();
     JavaVM *jvm;                      // Pointer to the JVM (Java Virtual Machine)
     JNIEnv *env;
+
 //    JNIInstance(JNIInstance const&) = delete;
 //    void operator=(JNIInstance const&) = delete;
 };

@@ -18,7 +18,7 @@ void GameController::makeMove(boost::property_tree::ptree moveInfo) {
      *
      */
     std::stringstream ss;
-    boost::property_tree::read_json(ss, moveInfo);
+    boost::property_tree::write_json(ss, moveInfo);
 
     std::cout << "Controller input json:" << ss.str() << std::endl;
 

@@ -52,7 +52,7 @@ add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstan
         Server/GameServer/Server/GameHolder.cpp Server/GameServer/Server/GameHolder.h Server/GameServer/Server/GameServer.cpp
         Server/GameServer/Server/GameServer.h Server/GameServer/Server/Serializer/CmdDeseriallizer.cpp Server/GameServer/Server/Serializer/CmdDeseriallizer.h
         Server/GameServer/Server/Serializer/GamesSerializer.cpp Server/GameServer/Server/Serializer/GamesSerializer.h
-        Server/GameServer/Event/RequestQueue.cpp Server/GameServer/Event/RequestQueue.h Server/StartUp/MainServer.cpp Server/StartUp/MainServer.h Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h)
+        Server/GameServer/Event/RequestQueue.cpp Server/GameServer/Event/RequestQueue.h Server/StartUp/MainServer.cpp Server/StartUp/MainServer.h Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h Server/GameServer/Java/Object/Observer/JObserver.cpp Server/GameServer/Java/Object/Observer/JObserver.h Server/GameServer/Java/Object/Factory/JFactory.cpp Server/GameServer/Java/Object/Factory/JFactory.h Server/GameServer/Java/Object/Controller/JController.cpp Server/GameServer/Java/Object/Controller/JController.h Server/GameServer/Java/Exception/Env/JNIEnvException.cpp Server/GameServer/Java/Exception/Env/JNIEnvException.h Server/GameServer/Java/Exception/JNIException.cpp Server/GameServer/Java/Exception/JNIException.h Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h)
 
 if(Boost_FOUND)
 
