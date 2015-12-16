@@ -3,3 +3,7 @@
 //
 
 #include "JNIException.h"
+
+const char *JNIException::what() const noexcept{
+    return "JNI Error";
+}

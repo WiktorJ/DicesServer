@@ -24,7 +24,7 @@ private:
     boost::thread Thread;
     void run();
 public:
-    GameInstance(GameController* Controller, WaitingRoom& WaitingRoom_, int GameId_/*, GameHolder& Holder_*/);
+    GameInstance(GameController* Controller, JObserver Observer, WaitingRoom& WaitingRoom_, int GameId_/*, GameHolder& Holder_*/);
     ~GameInstance();
     bool ended();
     void start();

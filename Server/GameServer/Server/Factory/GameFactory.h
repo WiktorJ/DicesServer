@@ -7,10 +7,14 @@
 
 
 #include "../../Instance/GameInstance.h"
+#include "../../Java/Object/Factory/JFactory.h"
 
 class GameFactory {
 private:
+    JNIEnv* Env;
+    JFactory Factory;
     int curr_id;
+    LogParser Logger;
 public:
     GameFactory();
     GameInstance* createGame(boost::property_tree::ptree description, WaitingRoom& WaitingRoom_);

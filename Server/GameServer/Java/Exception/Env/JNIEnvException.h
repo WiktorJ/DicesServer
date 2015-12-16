@@ -10,7 +10,7 @@
 #include "../JNIException.h"
 
 class JNIEnvException : JNIException{
-    const char* what() const noexcept;
+    virtual const char* what() const noexcept;
 
 };
 

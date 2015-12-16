@@ -14,7 +14,7 @@ private:
     std::string className;
 public:
     JClassException(std::string className);
-    const char* what() const noexcept;
+    virtual const char* what() const noexcept;
 };
 
 

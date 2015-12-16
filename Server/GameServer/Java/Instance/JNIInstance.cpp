@@ -5,9 +5,10 @@
 #include <stdlib.h>
 #include <iostream>
 #include "JNIInstance.h"
+#include "../Exception/JNIException.h"
 
 
-JNIInstance::JNIInstance()  {
+JNIInstance::JNIInstance()  : Logger("JNIInstance"){
 
     JavaVMInitArgs vm_args;                        // Initialization arguments
     JavaVMOption* options = new JavaVMOption[2];   // JVM invocation options
@@ -16,19 +17,18 @@ JNIInstance::JNIInstance()  {
     vm_args.version = JNI_VERSION_1_6;             // minimum Java version
     vm_args.nOptions = 1;                          // number of options
     vm_args.options = options;
-    vm_args.ignoreUnrecognized = false;     // invalid options make the JVM init fail
+    vm_args.ignoreUnrecognized = JNI_FALSE;     // invalid options make the JVM init fail
 
     jint rc = JNI_CreateJavaVM(&jvm, (void**)&env, &vm_args);  // YES !!
 
     delete options;    // we then no longer need the initialisation options.
 
     if (rc != JNI_OK) {
-        throw "Zjebane JVM";
+        throw new JNIException;
     }
 
-    std::cout << "JVM load succeeded: Version ";
     jint ver = env->GetVersion();
-    std::cout << ((ver>>16)&0x0f) << "."<<(ver&0x0f) << std::endl;
+    Logger.log("JVM load succeeded: Version " + std::to_string((ver>>16)&0x0f) + "." + std::to_string(ver&0x0f));
 }
 
 JNIInstance& JNIInstance::getInstance() {
@@ -38,4 +38,14 @@ JNIInstance& JNIInstance::getInstance() {
 
 JNIInstance::~JNIInstance() {
     jvm->DestroyJavaVM();
+}
+
+JNIEnv* JNIInstance::attacheThread() {
+    Mutex.lock();
+
+    JNIEnv *localEnv;
+    JNIInstance::getInstance().jvm->AttachCurrentThread((void **) &localEnv, NULL);
+
+    Mutex.unlock();
+    return localEnv;
 }

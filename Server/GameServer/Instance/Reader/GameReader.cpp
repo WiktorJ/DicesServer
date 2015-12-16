@@ -4,6 +4,7 @@
 
 #include "GameReader.h"
 #include "GameCmdDeseriallizer.h"
+#include "../../Java/Exception/JNIException.h"
 
 GameReader::GameReader(ClientGroup &Clients, GameController* Controller) : Clients(Clients), Controller(Controller), Logger("GameReader"){
 
@@ -72,6 +73,15 @@ void GameReader::stop() {
 
 
 void GameReader::run() {
+    //TODO WILL FUCK UP EVERYTHING
+
+    try{
+        Controller->bind();
+    } catch(const JNIException &exception){
+        Logger.log(std::string(exception.what()));
+        stop();
+    }
+
     while(1){
         readMovement();
 

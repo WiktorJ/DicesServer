@@ -7,16 +7,22 @@
 
 #include <string>
 #include <boost/property_tree/ptree.hpp>
+#include "../../Java/Object/Controller/JController.h"
 
 //TODO CONNECT WITH JAVA
 class GameController {
+private:
+    JController Controller;
 public:
     GameController(const GameController &other);
-    GameController();
+    GameController(JController Controller);
+    ~GameController();
     void addPlayer(std::string username);
     void makeMove(boost::property_tree::ptree moveInfo);
     void removePlayer(std::string username);
     boost::property_tree::ptree getGameInfo();
+    void stop();
+    void bind();
 };
 
 

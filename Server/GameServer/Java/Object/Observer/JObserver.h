@@ -18,13 +18,14 @@ private:
     LogParser Logger;
     jobject Object;
 
-    void initialize();
+
 public:
     JObserver();
     void attach(JNIEnv* Env);
     std::string notify();
     bool isFinished();
     jobject& getObject();
+    void initialize();
 };
 
 

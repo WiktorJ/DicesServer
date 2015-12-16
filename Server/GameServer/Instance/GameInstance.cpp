@@ -8,7 +8,7 @@ ClientGroup &GameInstance::getClientGroup() {
     return Clients;
 }
 
-GameInstance::GameInstance(GameController *Controller, WaitingRoom &WaitingRoom_, int GameId_/*, GameHolder& Holder_*/) : Controller(Controller), Clients(WaitingRoom_), Reader(Clients, Controller), Observer_(Clients), end(false), GameId_(GameId_), Logger("GameInstance")/*, Holder_(Holder_)*/{
+GameInstance::GameInstance(GameController *Controller, JObserver Observer, WaitingRoom &WaitingRoom_, int GameId_/*, GameHolder& Holder_*/) : Controller(Controller), Clients(WaitingRoom_), Reader(Clients, Controller), Observer_(Clients, Observer), end(false), GameId_(GameId_), Logger("GameInstance")/*, Holder_(Holder_)*/{
 
 }
 
@@ -39,8 +39,8 @@ void GameInstance::stop() {
 }
 
 void GameInstance::run() {
-    //Observer_.listen(); //TODO remember to add break points
-    //
+    Observer_.listen(); //TODO remember to add break points
+
     boost::this_thread::sleep(boost::posix_time::seconds(1000));
 
     Reader.stop();

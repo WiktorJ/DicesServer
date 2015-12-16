@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Observer::Observer(ClientGroup& Clients) : Clients(Clients){
+Observer::Observer(ClientGroup& Clients, JObserver Observer_) : Clients(Clients), Observer_(Observer_){
 
 }
 

@@ -8,7 +8,6 @@
 
 void JObserver::attach(JNIEnv *Env) {
     this->Env = Env;
-    initialize();
 }
 
 JObserver::JObserver() : Object(), Logger("JObserver"){
