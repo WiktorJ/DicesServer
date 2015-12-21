@@ -13,10 +13,9 @@ GameInstance *GameFactory::createGame(boost::property_tree::ptree description, W
 
     std::string converted = ss.str();
 
-    JObserver Observer;
+    JObserver Observer(Env);
     Observer.attach(Env);
-    Observer.initialize();
-
+    Observer.create();
 
     JController Controller = Factory.createGame(converted, Observer);
 
@@ -25,16 +24,10 @@ GameInstance *GameFactory::createGame(boost::property_tree::ptree description, W
     return game;
 }
 
-GameFactory::GameFactory() : Logger("GameFactory"){
-    try {
-        Env = JNIInstance::getInstance().attacheThread();
-        Factory.attach(Env);
-    } catch(const JNIException &exception){
-        Logger.log("Failed to attach");
+GameFactory::GameFactory() : Env(JNIInstance::getInstance().attacheThread()), Logger("GameFactory"), Factory(Env){
+    Logger.log("Trying to attach JFactory");
 
-        // TODO IMPORTANTE EXCEPTION
+    Factory.attach(Env);
 
-        throw new std::exception;
-    }
     curr_id = 0;
 }

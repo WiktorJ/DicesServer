@@ -7,7 +7,14 @@
 #include <boost/property_tree/json_parser.hpp>
 
 boost::property_tree::ptree GameController::getGameInfo() {
-    return boost::property_tree::ptree("testControler");
+
+    std::string info = Controller.getGameInfo();
+    std::stringstream ss(info);
+
+    boost::property_tree::ptree json;
+    boost::property_tree::read_json(ss, json);
+
+    return json;
 }
 
 void GameController::removePlayer(std::string username) {

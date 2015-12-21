@@ -5,29 +5,36 @@
 #include "JObserver.h"
 #include "../../Exception/Env/JNIEnvException.h"
 #include "../../Exception/Loader/JClassException.h"
+#include "../../Instance/JConfig.h"
 
 void JObserver::attach(JNIEnv *Env) {
     this->Env = Env;
 }
 
-JObserver::JObserver() : Object(), Logger("JObserver"){
-    Env = NULL;
+JObserver::JObserver(JNIEnv* Env) : Object(), Logger("JObserver"){
+    this->Env = Env;
+
+    initialize();
+
+    this->Env = NULL;
 }
 
 void JObserver::initialize() {
     Logger.log("Initializing java object");
 
     //TODO CONNECT TO A JAVA CONFIG
-    const char* temp = "to2/ds/game/controllers/ObserverImpl";
+    const char* temp = JConfig::getInstance().getObserverPackage().c_str();
 
     Observer = Env->FindClass(temp);
 
     Notify = Env->GetMethodID(Observer, "notifyWaitUntil", "()Ljava/lang/String;");
     IsGameEnded = Env->GetMethodID(Observer, "isGameEnded", "()Z");
 
-    if(Observer == NULL || Notify == NULL || IsGameEnded == NULL) throw new JClassException("Observer");
+    if(Observer == 0 || Notify == 0 || IsGameEnded == 0){
+        Logger.log("Could not get running");
+        throw new JClassException("Observer");
+    }
 
-    Object = Env->AllocObject(Observer);
 }
 
 std::string JObserver::notify() {
@@ -53,4 +60,8 @@ bool JObserver::isFinished() {
 
 jobject &JObserver::getObject() {
     return Object;
+}
+
+void JObserver::create() {
+    Object = Env->AllocObject(Observer);
 }

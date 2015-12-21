@@ -6,6 +6,7 @@
 #include <iostream>
 #include "JNIInstance.h"
 #include "../Exception/JNIException.h"
+#include "JConfig.h"
 
 
 JNIInstance::JNIInstance()  : Logger("JNIInstance"){
@@ -13,7 +14,12 @@ JNIInstance::JNIInstance()  : Logger("JNIInstance"){
     JavaVMInitArgs vm_args;                        // Initialization arguments
     JavaVMOption* options = new JavaVMOption[2];   // JVM invocation options
 
-    options[0].optionString =(char *) "-Djava.class.path=/home/wiktor/ClionProjects/DicesServer/ControllersContainer/target/classes/.:/home/wiktor/ClionProjects/DicesServer/ControllersContainer/target/lib/json-20151123.jar";   // where to find java .class
+//    char * jarPath = (char *) ("-Djava.class.path=" + JConfig::getInstance().getJarPath()).c_str();
+//    std::cout << jarPath << std::endl;
+
+//    options[0].optionString = jarPath;
+
+    options[0].optionString =(char *) ("-Djava.class.path=/Users/wgrabis/ClionProjects/DicesServer/TestJson/TestController.jar");   // where to find java .class
     vm_args.version = JNI_VERSION_1_6;             // minimum Java version
     vm_args.nOptions = 1;                          // number of options
     vm_args.options = options;
@@ -37,12 +43,14 @@ JNIInstance& JNIInstance::getInstance() {
 }
 
 JNIInstance::~JNIInstance() {
+    Logger.log("Destroying JVM");
     jvm->DestroyJavaVM();
 }
 
 JNIEnv* JNIInstance::attacheThread() {
     Mutex.lock();
 
+    Logger.log("Attaching new thread");
     JNIEnv *localEnv;
     JNIInstance::getInstance().jvm->AttachCurrentThread((void **) &localEnv, NULL);
 

@@ -17,7 +17,7 @@ void Client::addRequest(boost::property_tree::ptree Request){
     Requests->addRequest(move);
 }
 
-void Client::sendData(std::string data) {
+void Client::sendData(boost::property_tree::ptree data) {
 
 }
 

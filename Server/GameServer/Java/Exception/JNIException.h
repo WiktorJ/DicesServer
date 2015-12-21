@@ -8,7 +8,7 @@
 
 #include <exception>
 
-class JNIException : std::exception{
+class JNIException : public std::exception{
 public:
     virtual const char* what() const noexcept;
 };

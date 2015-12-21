@@ -3,13 +3,22 @@
 //
 
 #include "MainServer.h"
+#include "../GameServer/Java/Instance/JConfig.h"
 
-MainServer::MainServer() {
-    GameServer_.start();
+MainServer::MainServer() : Logger("MainServer"){
+    state = true;
+    try {
+        JConfig::getInstance();
+        GameServer_ = new GameServer;
+    } catch(std::exception *exception){
+        Logger.log("failed to create");
+        throw new std::exception;
+        state = false;
+    }
 }
 
 std::string MainServer::printGameInfo() {
-    boost::property_tree::ptree gamesInfo = GameServer_.getActiveGames();
+    boost::property_tree::ptree gamesInfo = GameServer_->getActiveGames();
 
     std::stringstream ss;
 
@@ -19,9 +28,20 @@ std::string MainServer::printGameInfo() {
 }
 
 void MainServer::stop() {
-    GameServer_.stop();
+    GameServer_->stop();
 }
 
 void MainServer::temporaryClient(Client* test) {
-    GameServer_.getWaitingRoom().addClient(test);
+    if(state)GameServer_->getWaitingRoom().addClient(test);
+}
+
+void MainServer::start() {
+    if(state)GameServer_->start();
+}
+
+MainServer::~MainServer() {
+    if(state) {
+        stop();
+        delete GameServer_;
+    }
 }

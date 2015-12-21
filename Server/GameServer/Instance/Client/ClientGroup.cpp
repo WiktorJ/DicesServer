@@ -8,7 +8,7 @@ ClientGroup::ClientGroup(WaitingRoom & WaitingRoom_) : WaitingRoom_(WaitingRoom_
 
 }
 
-void ClientGroup::sendData(std::string data) {
+void ClientGroup::sendData(boost::property_tree::ptree data) {
     Mutex->lock();
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
@@ -63,4 +63,19 @@ void ClientGroup::removeClient(std::string username) {
 
 ClientGroup::ClientGroup(const ClientGroup &other) : WaitingRoom_(other.WaitingRoom_), Subscribers(other.Subscribers), Requests(other.Requests){
 
+}
+
+void ClientGroup::clear() {
+    Mutex->lock();
+
+    std::vector<Client *>::iterator it = Subscribers.begin();
+    while(it != Subscribers.end()){
+        Client* subscriber = (*it);
+
+        it = Subscribers.erase(it);
+
+        WaitingRoom_.addClient(subscriber);
+    }
+
+    Mutex->unlock();
 }

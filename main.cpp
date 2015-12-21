@@ -11,6 +11,11 @@ void tester(){
     std::string command;
 
     MainServer Server;
+    try {
+        Server.start();
+    } catch(const std::exception * exception){
+        return;
+    }
 
     std::vector<Client* > clients;
 
@@ -114,7 +119,11 @@ void tester(){
 
 
 int main(){
-    tester();
+    try {
+        tester();
+    } catch(std::exception *exc){
+
+    }
 
     //boost::array<int, 4> arr = {{1,2,3,4}};
     //cout << "hi" << arr[0];

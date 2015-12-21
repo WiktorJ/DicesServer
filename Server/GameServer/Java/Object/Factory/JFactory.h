@@ -19,7 +19,7 @@ private:
 
     void initialize();
 public:
-    JFactory();
+    JFactory(JNIEnv* Env);
     JController createGame(std::string description, JObserver observer);
     void attach(JNIEnv* Env);
 };

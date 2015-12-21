@@ -5,21 +5,25 @@
 #include "JController.h"
 #include "../../Exception/Loader/JClassException.h"
 #include "../../Exception/Env/JNIEnvException.h"
+#include "../../Instance/JConfig.h"
 
-JController::JController(jobject Object) : Logger("JController"), Object(Object){
-    Env = NULL;
+JController::JController(jobject Object, JNIEnv* Env) : Logger("JController"), Object(Object){
+    this->Env = Env;
+
+    initialize();
+
+    this->Env = NULL;
 }
 
 void JController::attach(JNIEnv *Env) {
     this->Env = Env;
-    initialize();
 }
 
 void JController::initialize() {
     Logger.log("Initializing java object");
 
     //TODO CONNECT TO A JAVA CONFIG
-    const char* temp = "to2/ds/game/controllers/GameController";
+    const char* temp = JConfig::getInstance().getControllerPackage().c_str();
 
     Controller = Env->FindClass(temp);
 
@@ -29,8 +33,11 @@ void JController::initialize() {
     Stop = Env->GetMethodID(Controller, "stop", "()V");
     GetGameInfo = Env->GetMethodID(Controller, "getGameInfo", "()Ljava/lang/String;");
 
-    if(Controller == NULL || AddPlayer == NULL || RemovePlayer == NULL || MakeMove == NULL || Stop == NULL || GetGameInfo == NULL)
+    if(Controller == 0 || AddPlayer == 0 || RemovePlayer == 0 || MakeMove == 0 || Stop == 0 || GetGameInfo == 0){
+        Logger.log("Could not get running");
         throw new JClassException("Controller");
+    }
+
 }
 
 void JController::addPlayer(std::string username) {

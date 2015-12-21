@@ -26,7 +26,7 @@ public:
 
     void subscribe(RequestQueue* Requests);
     void addRequest(boost::property_tree::ptree Request);
-    void sendData(std::string data);
+    void sendData(boost::property_tree::ptree data);
     void setObserver();
     void setPlayer();
     bool isPlayer();

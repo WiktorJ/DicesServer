@@ -9,7 +9,7 @@
 #include "../JNIException.h"
 #include <string>
 
-class JClassException : JNIException{
+class JClassException : public JNIException{
 private:
     std::string className;
 public:

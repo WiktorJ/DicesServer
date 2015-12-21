@@ -75,12 +75,7 @@ void GameReader::stop() {
 void GameReader::run() {
     //TODO WILL FUCK UP EVERYTHING
 
-    try{
-        Controller->bind();
-    } catch(const JNIException &exception){
-        Logger.log(std::string(exception.what()));
-        stop();
-    }
+    Controller->bind();
 
     while(1){
         readMovement();

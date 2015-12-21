@@ -26,7 +26,7 @@ private:
 
     void initialize();
 public:
-    JController(jobject Object);
+    JController(jobject Object, JNIEnv* Env);
     void attach(JNIEnv* Env);
 
     void addPlayer(std::string username);
