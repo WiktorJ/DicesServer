@@ -4,7 +4,7 @@
 
 #include "GameReader.h"
 #include "GameCmdDeseriallizer.h"
-#include "../Observer/JNIInstance.h"
+#include "../../Java/Exception/JNIException.h"
 
 GameReader::GameReader(ClientGroup &Clients, GameController* Controller) : Clients(Clients), Controller(Controller), Logger("GameReader"){
 
@@ -57,7 +57,6 @@ void GameReader::readMovement() {
 }
 
 void GameReader::start() {
-
     Logger.log("starting");
 
     thread = boost::thread(boost::bind(&GameReader::run, this));
@@ -74,11 +73,9 @@ void GameReader::stop() {
 
 
 void GameReader::run() {
-    Logger.log("Ziemniak kurwiu");
-    JNIEnv *local_env;
-    JNIInstance::getInstance().jvm->AttachCurrentThread((void **) &local_env, NULL);
-    Controller->setLocalEnvy(local_env);
-    Logger.log("Ziemniak kurwiu2");
+    //TODO WILL FUCK UP EVERYTHING
+
+    Controller->bind();
 
     while(1){
         readMovement();

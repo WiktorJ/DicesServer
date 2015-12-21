@@ -10,11 +10,15 @@
 
 class MainServer {
 private:
-    GameServer GameServer_;
+    GameServer* GameServer_;
+    LogParser Logger;
+    bool state;
 
 public:
     MainServer();
+    ~MainServer();
     std::string printGameInfo();
+    void start();
     void stop();
 
     void temporaryClient(Client* test);

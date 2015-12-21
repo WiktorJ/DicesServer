@@ -3,17 +3,22 @@
 //
 
 #include "GameController.h"
+#include "../../Java/Instance/JNIInstance.h"
 #include <boost/property_tree/json_parser.hpp>
 
 boost::property_tree::ptree GameController::getGameInfo() {
-    jclass gc = localEnv->FindClass("to2/ds/game/controllers/MockedGameController");  // try to find the class
-    jmethodID makeMoveMethod = localEnv->GetMethodID(gc, "getInfo", "()Ljava/lang/String;");
-    localEnv->CallVoidMethod(javaGameController, makeMoveMethod, "");
 
+    std::string info = Controller.getGameInfo();
+    std::stringstream ss(info);
+
+    boost::property_tree::ptree json;
+    boost::property_tree::read_json(ss, json);
+
+    return json;
 }
 
 void GameController::removePlayer(std::string username) {
-
+    Controller.removePlayer(username);
 }
 
 void GameController::makeMove(boost::property_tree::ptree moveInfo) {
@@ -23,11 +28,7 @@ void GameController::makeMove(boost::property_tree::ptree moveInfo) {
     std::stringstream ss;
     boost::property_tree::write_json(ss, moveInfo);
 
-    std::cout << "Controller input json:" << ss.str() << std::endl;
-
-    jclass gc = localEnv->FindClass("to2/ds/game/controllers/MockedGameController");  // try to find the class
-    jmethodID makeMoveMethod = localEnv->GetMethodID(gc, "makeMove", "(Ljava/lang/String;)V");
-    localEnv->CallVoidMethod(javaGameController, makeMoveMethod, ss.str().c_str());
+    Controller.makeMove(ss.str());
 
     /*
      *
@@ -35,25 +36,25 @@ void GameController::makeMove(boost::property_tree::ptree moveInfo) {
 }
 
 void GameController::addPlayer(std::string username) {
-    jclass gc = localEnv->FindClass("to2/ds/game/controllers/MockedGameController");  // try to find the class
-    jmethodID addPlayerMethod = localEnv->GetMethodID(gc, "addPlayer", "(Ljava/lang/String;)V");
-    localEnv->CallVoidMethod(javaGameController, addPlayerMethod, username.c_str());
-
-    std::cout << "Wykonanie" << std::endl;
+    Controller.addPlayer(username);
 }
 
-GameController::GameController(const GameController &other) {
+GameController::GameController(const GameController &other) : Controller(other.Controller){
 
 }
 
-GameController::GameController() {
+GameController::GameController(JController Controller) : Controller(Controller){
 
 }
 
-GameController::GameController(jobject jgc) {
-    javaGameController = jgc;
+void GameController::bind() {
+    Controller.attach(JNIInstance::getInstance().attacheThread());
 }
 
-void GameController::setLocalEnvy(JNIEnv *jniEnv) {
-    localEnv = jniEnv;
+void GameController::stop() {
+    Controller.stop();
+}
+
+GameController::~GameController() {
+    stop();
 }

@@ -11,6 +11,11 @@ void tester(){
     std::string command;
 
     MainServer Server;
+    try {
+        Server.start();
+    } catch(const std::exception * exception){
+        return;
+    }
 
     std::vector<Client* > clients;
 
@@ -114,20 +119,12 @@ void tester(){
 
 
 int main(){
-    tester();
-//    Client* test1 = new Client("test1");
-////    Client* test2 = new Client("test2");
-////    Client* test3 = new Client("test3");
-////
-//    WaitingRoom testRoom;
-////
-//    testRoom.addClient(test1);
-//    GameFactory gameFactory;
-//    boost::property_tree::ptree newData;
-//    std::string cmd = "xD";
-//    newData.put_child("command", boost::property_tree::ptree(cmd));
-//    GameInstance *gameInstance = gameFactory.createGame(newData, testRoom);
-//    gameInstance->start();
+    try {
+        tester();
+    } catch(std::exception *exc){
+
+    }
+
     //boost::array<int, 4> arr = {{1,2,3,4}};
     //cout << "hi" << arr[0];
 //    JNIInstance instanceJNI ("xd");

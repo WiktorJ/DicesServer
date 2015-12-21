@@ -3,35 +3,41 @@
 //
 
 #include "Observer.h"
-#include "JNIInstance.cpp"
+#include "ObsCmdDeserializer.h"
 
 using namespace std;
 
-Observer::Observer(ClientGroup &Clients, jobject gco) : Clients(Clients), Logger("Observer"){
-    observerObject = gco;
+Observer::Observer(ClientGroup& Clients, JObserver Observer_) : Clients(Clients), Observer_(Observer_){
+
 }
 
 void Observer::listen() {
-    bool gameEnded = false;
-    JNIEnv *localEnv;
-    JNIInstance::getInstance().jvm->AttachCurrentThread((void **) &localEnv, NULL);
+    Observer_.attach(JNIInstance::getInstance().attacheThread());
 
-    // if class found, continue
-    std::cout << "Class Main found" << std::endl;
-    jclass observerClass = localEnv->FindClass("to2/ds/game/controllers/ObserverImpl");
-    jmethodID notify = localEnv->GetMethodID(observerClass, "notifyWaitUntil", "()Ljava/lang/String;");
-    jmethodID isGameEnded = localEnv->GetMethodID(observerClass, "isGameEnded", "()Z");
-    while (!gameEnded) {
-        jstring string = (jstring) localEnv->CallObjectMethod(observerObject, notify, "");
-        jboolean javaBoolean = localEnv->CallBooleanMethod(observerObject, isGameEnded, "");
-        gameEnded = (bool) (javaBoolean == JNI_TRUE);
-        const char *str = localEnv->GetStringUTFChars(string, 0);
-        cout << str;
-        flush(cout);
-        Clients.sendData(str);
-        localEnv->ReleaseStringUTFChars(string, str);
+    while(1){
+        std::string data = Observer_.notify();
+
+        if(Observer_.isFinished()){
+            Clients.clear();
+            break;
+        }
+
+        boost::property_tree::ptree json;
+        std::stringstream ss(data);
+        boost::property_tree::read_json(ss, json);
+
+        std::string command = ObsCmdDeserializer::deserialize(json);
+
+        if(command == "removePlayer"){
+            Clients.removeClient(ObsCmdDeserializer::deserializeNick(json));
+        } else if(command == "gameEnded"){
+            true;
+        } else if(command == "stateUpdated"){
+            Clients.sendData(json);
+        } else {
+            true;
+        }
+
+        boost::this_thread::interruption_point();
     }
-    Logger.log("listen finished");
-
-
 }

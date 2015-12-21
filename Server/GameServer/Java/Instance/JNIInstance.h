@@ -5,21 +5,24 @@
 #ifndef DICESSERVER_JNIINSTANCE_H
 #define DICESSERVER_JNIINSTANCE_H
 
+#include <boost/thread/pthread/mutex.hpp>
 #include "jni.h"
+#include "../../../Logger/LogParser.h"
 
 
 class JNIInstance {
 private:
     JNIInstance();
     ~JNIInstance();
-//    JNIInstance(JNIInstance const&);
-//    void operator=(JNIInstance const&);
+
+    LogParser Logger;
+    JavaVM *jvm;
+    JNIEnv *env;
+    boost::mutex Mutex;
 public:
     static JNIInstance& getInstance();
-    JavaVM *jvm;                      // Pointer to the JVM (Java Virtual Machine)
-    JNIEnv *env;
-//    JNIInstance(JNIInstance const&) = delete;
-//    void operator=(JNIInstance const&) = delete;
+    JNIEnv* attacheThread();
+
 };
 
 #endif //DICESSERVER_JNIINSTANCE_H

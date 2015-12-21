@@ -3,27 +3,31 @@
 //
 
 #include "GameFactory.h"
-#include "jni.h"
+#include "../../Java/Exception/JNIException.h"
+
 GameInstance *GameFactory::createGame(boost::property_tree::ptree description, WaitingRoom& WaitingRoom_) {
-    JNIEnv *local_env;
-    JNIInstance::getInstance().jvm->AttachCurrentThread((void **) &local_env, NULL);
-    jclass mockedGameControllerClass = local_env->FindClass("to2/ds/game/controllers/MockedGameController");  // try to find the class
-    jclass observerClass = local_env->FindClass("to2/ds/game/controllers/ObserverImpl");  // try to find the class
-    jobject observerObj = local_env->AllocObject(observerClass);
 
-    jmethodID mockedGameControllerConstructor = local_env->GetMethodID(mockedGameControllerClass, "<init>",
-                                                                                            "(Lto2/ds/game/controllers/ObserverImpl;)V");
-    jobject mockedGameControllerObj = local_env->NewObject(mockedGameControllerClass,
-                                                                                mockedGameControllerConstructor, observerObj);
+    std::stringstream ss;
 
-    jmethodID createGameController = local_env->GetStaticMethodID(mockedGameControllerClass, "startGameController",
-                                                                                       "(Lto2/ds/game/controllers/MockedGameController;)V");  // find method
+    boost::property_tree::write_json(ss, description);
 
-    local_env->CallStaticVoidMethod(mockedGameControllerClass, createGameController, mockedGameControllerObj);// call method
+    std::string converted = ss.str();
 
-    return new GameInstance(new GameController(mockedGameControllerObj), WaitingRoom_, curr_id++, observerObj);
+    JObserver Observer(Env);
+    Observer.attach(Env);
+    Observer.create();
+
+    JController Controller = Factory.createGame(converted, Observer);
+
+    GameInstance* game = new GameInstance(new GameController(Controller), Observer, WaitingRoom_, curr_id++);
+
+    return game;
 }
 
-GameFactory::GameFactory() {
+GameFactory::GameFactory() : Env(JNIInstance::getInstance().attacheThread()), Logger("GameFactory"), Factory(Env){
+    Logger.log("Trying to attach JFactory");
+
+    Factory.attach(Env);
+
     curr_id = 0;
 }
