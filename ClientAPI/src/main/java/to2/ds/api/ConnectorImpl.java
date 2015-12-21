@@ -16,15 +16,21 @@ public class ConnectorImpl implements Connector {
 
     private Session session = null;
     private Deserializer deserializer = new Deserializer();
-    private ConnectorImpl() {}
+
+    private ConnectorImpl() {
+    }
+
     private List<ClientImpl> clientList = new LinkedList<>();
 
 
-    public static void connect(String ip, Integer port) throws IOException, DeploymentException, URISyntaxException {
-            ConnectorImpl connector = new ConnectorImpl();
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            URI uri = new URI(null, null, ip, port, "client", null, null);
-            container.connectToServer(connector, uri);
+    public static ConnectorImpl connect(String ip, Integer port) throws IOException, DeploymentException, URISyntaxException {
+        ConnectorImpl connector = new ConnectorImpl();
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+//            URI uri = new URI(null, null, ip, port, null, null, null);
+        URI uri = new URI("ws://localhost:9020");
+        Session session = container.connectToServer(connector, uri);
+        connector.session = session;
+        return connector;
     }
 
     public Client addClient(String nickname) throws URISyntaxException {
@@ -54,7 +60,6 @@ public class ConnectorImpl implements Connector {
     protected void sendMessage(String message) throws IOException {
         session.getBasicRemote().sendText(message);
     }
-
 
 
     public void removeClient(Client client) {

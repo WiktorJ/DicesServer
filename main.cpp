@@ -2,41 +2,42 @@
 #include <boost/thread/thread.hpp>
 #include "Server/ConnectionServer/ClientServer/Client/Client.h"
 #include "Server/StartUp/MainServer.h"
+#include "Server/ConnectionServer/ClientServer/ConnectionServer.h"
 
 using namespace std;
 
-void tester(){
+void tester() {
 
 
     std::string command;
 
     MainServer Server;
 
-    std::vector<Client* > clients;
+    std::vector<Client *> clients;
 
-    while(1){
+    while (1) {
         std::cin >> command;
 
-        if(command == "p"){
+        if (command == "p") {
             std::cout << Server.printGameInfo() << endl;
         }
 
-        if(command == "c"){
+        if (command == "c") {
             std::string newUser;
             std::cin >> newUser;
 
-            Client* newClient = new Client(newUser);
+            Client *newClient = new Client(newUser);
             clients.push_back(newClient);
 
             Server.temporaryClient(newClient);
         }
 
-        if(command == "j"){
+        if (command == "j") {
             std::string name;
             std::cin >> name;
 
-            for(std::vector<Client* >::iterator it = clients.begin(); it != clients.end(); it++){
-                if((*it)->getUsername() == name){
+            for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++) {
+                if ((*it)->getUsername() == name) {
                     cout << "Write json path" << endl;
 
                     std::string path;
@@ -47,7 +48,7 @@ void tester(){
                         boost::property_tree::read_json(path, pt);
 
 
-                    } catch(const boost::property_tree::ptree_error & exception){
+                    } catch (const boost::property_tree::ptree_error &exception) {
                         cout << "json error";
                         continue;
                     }
@@ -58,7 +59,7 @@ void tester(){
 
         }
 
-        if(command == "q"){
+        if (command == "q") {
             Server.stop();
             break;
         }
@@ -113,8 +114,18 @@ void tester(){
 //}
 
 
-int main(){
-    tester();
+int main() {
+
+    try {
+        ConnectionServer server_instance;
+        server_instance.init(9020);
+        boost::thread t = boost::thread(boost::bind(&ConnectionServer::run, &server_instance));
+        t.join();
+    } catch (websocketpp::exception const &e) {
+        std::cout << e.what() << std::endl;
+    }
+
+//        tester();
 //    Client* test1 = new Client("test1");
 ////    Client* test2 = new Client("test2");
 ////    Client* test3 = new Client("test3");
@@ -128,8 +139,8 @@ int main(){
 //    newData.put_child("command", boost::property_tree::ptree(cmd));
 //    GameInstance *gameInstance = gameFactory.createGame(newData, testRoom);
 //    gameInstance->start();
-    //boost::array<int, 4> arr = {{1,2,3,4}};
-    //cout << "hi" << arr[0];
+        //boost::array<int, 4> arr = {{1,2,3,4}};
+        //cout << "hi" << arr[0];
 //    JNIInstance instanceJNI ("xd");
 //    Observer o (&instanceJNI);
 //
@@ -174,5 +185,5 @@ int main(){
 //    //SimpleInstanceJNI instanceJNI;
 //    //instanceJNI.runSimpleWriter("/home/wiktor/pojebanyichuj");
 //    //instanceJNI.close();
-    return 0;
-}
+        return 0;
+    }

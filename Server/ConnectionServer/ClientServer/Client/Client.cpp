@@ -33,7 +33,7 @@ bool Client::isPlayer() {
     return Player;
 }
 
-Client::Client(std::string Username) : Username(Username){
+Client::Client(std::string Username, ClientConnector clientConnector) : Username(Username), clientConnector(clientConnector){
 
 }
 

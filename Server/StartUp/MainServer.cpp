@@ -2,9 +2,12 @@
 // Created by Wojciech Grabis on 14.12.15.
 //
 
+#include <sys/socket.h>
 #include "MainServer.h"
+#include "ConnectionServer.h"
 
 MainServer::MainServer() {
+
     GameServer_.start();
 }
 
