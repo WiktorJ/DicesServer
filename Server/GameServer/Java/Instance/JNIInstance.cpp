@@ -13,13 +13,14 @@ JNIInstance::JNIInstance()  : Logger("JNIInstance"){
 
     JavaVMInitArgs vm_args;                        // Initialization arguments
     JavaVMOption* options = new JavaVMOption[2];   // JVM invocation options
+//Djava.class.path
+    std::string tempstr = ("-Djava.class.path=" + JConfig::getInstance().getJarPath());
+    const char * jarPath = tempstr.c_str();
+    std::cout << jarPath << std::endl;
 
-//    char * jarPath = (char *) ("-Djava.class.path=" + JConfig::getInstance().getJarPath()).c_str();
-//    std::cout << jarPath << std::endl;
+    options[0].optionString = const_cast<char*>(jarPath);
 
-//    options[0].optionString = jarPath;
-
-    options[0].optionString =(char *) ("-Djava.class.path=/Users/wgrabis/ClionProjects/DicesServer/TestJson/TestController.jar");   // where to find java .class
+//    options[0].optionString = ("-Djava.class.path=/Users/wgrabis/ClionProjects/DicesServer/TestJson/Controller/.");   // where to find java .class
     vm_args.version = JNI_VERSION_1_6;             // minimum Java version
     vm_args.nOptions = 1;                          // number of options
     vm_args.options = options;

@@ -27,7 +27,7 @@ JController JFactory::createGame(std::string description, JObserver observer) {
 
     JController controller(Controller, Env);
 
-    return controller;
+    return controller;ja
 }
 
 void JFactory::initialize() {
@@ -36,13 +36,14 @@ void JFactory::initialize() {
 
     //TODO CONNECT TO A JAVA CONFIG
     const char* temp = JConfig::getInstance().getFactoryPackage().c_str();
-    const char* temp_controller = ("(Ljava/lang/String;L" + JConfig::getInstance().getObserverPackage() + ";)L" + JConfig::getInstance().getControllerPackage() + ";").c_str();
+    std::string tempstr = (std::string("(Ljava/lang/String;L") + JConfig::getInstance().getObserverPackage() + std::string(";)L") + JConfig::getInstance().getControllerPackage() + std::string(";"));
+    const char* temp_controller = tempstr.c_str();
 
     Factory = Env->FindClass(temp);
     Create = Env->GetStaticMethodID(Factory , "createGame", temp_controller);
 
     if(Factory == 0 || Create == 0){
-        Logger.log("Failed to init jfactory " + std::to_string(Factory == 0) + " " + std::to_string(Create == 0));
+        Logger.log(std::string("Failed to init jfactory ") + temp + " " + std::to_string(Factory == 0) + " " + tempstr + " " + std::to_string(Create == 0));
         throw new JClassException("JFactory");
     }
 
