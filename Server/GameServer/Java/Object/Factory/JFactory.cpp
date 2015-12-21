@@ -27,7 +27,7 @@ JController JFactory::createGame(std::string description, JObserver observer) {
 
     JController controller(Controller, Env);
 
-    return controller;ja
+    return controller;
 }
 
 void JFactory::initialize() {
