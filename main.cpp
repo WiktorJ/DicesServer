@@ -22,15 +22,14 @@ using namespace std;
 //            std::cout << Server.printGameInfo() << endl;
 //        }
 //
-//        if (command == "c") {
-//            std::string newUser;
-//            std::cin >> newUser;
-//            ClientConnector cc ();
-//            Client *newClient = new Client(newUser, cc);
-//            clients.push_back(newClient);
-//
-//            Server.temporaryClient(newClient);
-//        }
+////        if (command == "c") {
+////            std::string newUser;
+////            std::cin >> newUser;
+////            Client *newClient = new Client(newUser);
+////            clients.push_back(newClient);
+////
+////            Server.temporaryClient(newClient);
+////        }
 //
 //        if (command == "j") {
 //            std::string name;
@@ -65,7 +64,7 @@ using namespace std;
 //        }
 //    }
 //}
-//
+
 //void tester(){
 //
 //

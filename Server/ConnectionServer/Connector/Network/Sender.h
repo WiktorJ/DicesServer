@@ -14,9 +14,10 @@ class ConnectionServer;
 class Sender {
 private:
     ConnectionServer* socket;
+    std::string socketId;
 
 public:
-    Sender(ConnectionServer* server);
+    Sender(ConnectionServer* server, std::string socketId);
     void send(std::string data);
     void receive();
 };

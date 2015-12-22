@@ -27,7 +27,7 @@ public:
 
     bool sendClose(string id);
 
-    bool sendData(string data);
+    bool sendData(string data, string id);
 
     ConnectionServer(WaitingRoom* waitingRoom);
 

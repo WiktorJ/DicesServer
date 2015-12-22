@@ -119,7 +119,7 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
     string clientAddress = "cid";
     string nickname = "test";
     // if this was add player request
-        Sender* sender = new Sender(this);
+        Sender* sender = new Sender(this, clientAddress);
         clientServer->addClient(nickname, clientAddress, sender);
     // else if remove than remove
     //clientServer->removeClient()
@@ -127,9 +127,9 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
 
 }
 
-bool ConnectionServer::sendData(string data) {
+bool ConnectionServer::sendData(string data, std::string id) {
     websocketpp:: connection_hdl hdl;
-    string id = "cid"; //TODO pu thin in data or as argument
+//    string id = "cid"; //TODO pu thin in data or as argument
     if (!getWebsocket(id, hdl)) {
         Logger.log("There is no socket with id: " + id);
         return false;

@@ -8,7 +8,14 @@
 
 MainServer::MainServer() {
 
-    GameServer_.start();
+//    GameServer_.start();
+    try {
+        ConnectionServer server_instance(&GameServer_.getWaitingRoom());
+        server_instance.init(9020);
+        boost::thread(boost::bind(&ConnectionServer::run, &server_instance));
+    } catch (websocketpp::exception const &e) {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 std::string MainServer::printGameInfo() {
