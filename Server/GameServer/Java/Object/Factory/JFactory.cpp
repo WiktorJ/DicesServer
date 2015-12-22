@@ -47,7 +47,3 @@ void JFactory::initialize() {
     }
 
 }
-
-void JFactory::setEnv(JNIEnv *Env) {
-    this->Env = Env;
-}

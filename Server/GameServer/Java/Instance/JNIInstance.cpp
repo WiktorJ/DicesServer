@@ -58,3 +58,7 @@ JNIEnv* JNIInstance::attacheThread() {
     Mutex.unlock();
     return localEnv;
 }
+
+JNIEnv *JNIInstance::getCurr() {
+    return env;
+}

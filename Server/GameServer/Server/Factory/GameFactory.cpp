@@ -24,7 +24,7 @@ GameInstance *GameFactory::createGame(boost::property_tree::ptree description, W
     return game;
 }
 
-GameFactory::GameFactory() : Env(JNIInstance::getInstance().attacheThread()), Logger("GameFactory"), Factory(Env){
+GameFactory::GameFactory() : Env(JNIInstance::getInstance().getCurr()), Logger("GameFactory"), Factory(Env){
     Logger.log("Trying to attach JFactory");
 
     Factory.attach(Env);
@@ -34,5 +34,5 @@ GameFactory::GameFactory() : Env(JNIInstance::getInstance().attacheThread()), Lo
 
 void GameFactory::setEnv(JNIEnv *Env) {
     this->Env = Env;
-    Factory.setEnv(Env);
+    Factory.attach(Env);
 }
