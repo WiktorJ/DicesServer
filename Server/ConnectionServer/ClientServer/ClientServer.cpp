@@ -8,10 +8,10 @@
 using namespace std;
 
 void ClientServer::addClient(string name, string clientAddress, Sender* sender) {
-    Client client (name, sender);
+    Client *client = new Client(name, sender);
     map<string, std::vector<Client>>::iterator iter =  clients.find(clientAddress);
-    iter->second.push_back(client);
-    waitingRoom->addClient(&client);
+    iter->second.push_back(*client);
+    waitingRoom->addClient(client);
 }
 
 Client ClientServer::getClient(string name) {

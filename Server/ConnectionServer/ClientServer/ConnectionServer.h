@@ -7,9 +7,9 @@
 
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
+#include <boost/thread/thread.hpp>
 #include "../../Logger/LogParser.h"
 #include "ClientServer.h"
-#include <pthread.h>
 
 class ClientServer;
 class WaitingRoom;
@@ -25,6 +25,8 @@ public:
 
     void stop();
 
+    void start();
+
     bool sendClose(string id);
 
     bool sendData(string data, string id);
@@ -34,12 +36,12 @@ public:
 private:
     LogParser Logger;
     ClientServer* clientServer;
+    boost::thread Thread;
 
     bool getWebsocket(const string &id, websocketpp::connection_hdl &hdl);
 
     websocketpp::server<websocketpp::config::asio> server;
     map<string, websocketpp::connection_hdl> websockets;
-    pthread_rwlock_t websocketsLock;
 
     // callbacks
     bool on_validate(websocketpp::connection_hdl hdl);

@@ -6,64 +6,64 @@
 
 using namespace std;
 
-//void tester() {
+void tester() {
+
+
+    std::string command;
+
+    MainServer Server;
+
+    std::vector<Client *> clients;
+
+    while (1) {
+        std::cin >> command;
+
+        if (command == "p") {
+            std::cout << Server.printGameInfo() << endl;
+        }
+
+//        if (command == "c") {
+//            std::string newUser;
+//            std::cin >> newUser;
+//            Client *newClient = new Client(newUser);
+//            clients.push_back(newClient);
 //
-//
-//    std::string command;
-//
-//    MainServer Server;
-//
-//    std::vector<Client *> clients;
-//
-//    while (1) {
-//        std::cin >> command;
-//
-//        if (command == "p") {
-//            std::cout << Server.printGameInfo() << endl;
+//            Server.temporaryClient(newClient);
 //        }
-//
-////        if (command == "c") {
-////            std::string newUser;
-////            std::cin >> newUser;
-////            Client *newClient = new Client(newUser);
-////            clients.push_back(newClient);
-////
-////            Server.temporaryClient(newClient);
-////        }
-//
-//        if (command == "j") {
-//            std::string name;
-//            std::cin >> name;
-//
-//            for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++) {
-//                if ((*it)->getUsername() == name) {
-//                    cout << "Write json path" << endl;
-//
-//                    std::string path;
-//
-//                    boost::property_tree::ptree pt;
-//                    cin >> path;
-//                    try {
-//                        boost::property_tree::read_json(path, pt);
-//
-//
-//                    } catch (const boost::property_tree::ptree_error &exception) {
-//                        cout << "json error";
-//                        continue;
-//                    }
-//                    (*it)->addRequest(pt);
-//
-//                }
-//            }
-//
-//        }
-//
-//        if (command == "q") {
-//            Server.stop();
-//            break;
-//        }
-//    }
-//}
+
+        if (command == "j") {
+            std::string name;
+            std::cin >> name;
+
+            for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++) {
+                if ((*it)->getUsername() == name) {
+                    cout << "Write json path" << endl;
+
+                    std::string path;
+
+                    boost::property_tree::ptree pt;
+                    cin >> path;
+                    try {
+                        boost::property_tree::read_json(path, pt);
+
+
+                    } catch (const boost::property_tree::ptree_error &exception) {
+                        cout << "json error";
+                        continue;
+                    }
+                    (*it)->addRequest(pt);
+
+                }
+            }
+
+        }
+
+        if (command == "q") {
+            Server.stop();
+            break;
+        }
+    }
+}
 
 //void tester(){
 //
@@ -115,17 +115,17 @@ using namespace std;
 
 int main() {
 
-    try {
-        WaitingRoom * wr = new WaitingRoom();
-        ConnectionServer server_instance(wr);
-        server_instance.init(9020);
-        boost::thread t = boost::thread(boost::bind(&ConnectionServer::run, &server_instance));
-        t.join();
-    } catch (websocketpp::exception const &e) {
-        std::cout << e.what() << std::endl;
-    }
+//    try {
+//        WaitingRoom * wr = new WaitingRoom();
+//        ConnectionServer server_instance(wr);
+//        server_instance.init(9020);
+//        boost::thread t = boost::thread(boost::bind(&ConnectionServer::run, &server_instance));
+//        t.join();
+//    } catch (websocketpp::exception const &e) {
+//        std::cout << e.what() << std::endl;
+//    }
 
-//        tester();
+        tester();
 //    Client* test1 = new Client("test1");
 ////    Client* test2 = new Client("test2");
 ////    Client* test3 = new Client("test3");

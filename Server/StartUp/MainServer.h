@@ -10,7 +10,9 @@
 
 class MainServer {
 private:
-    GameServer GameServer_;
+    GameServer* GameServer_;
+    ConnectionServer* connectionServer;
+    boost::thread connectionServerThread;
 
 public:
     MainServer();

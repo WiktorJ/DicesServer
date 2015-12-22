@@ -10,7 +10,6 @@ using namespace std;
 
 
 ConnectionServer::ConnectionServer(WaitingRoom *waitingRoom) : Logger("ConnectionServer") {
-    websocketsLock = PTHREAD_RWLOCK_INITIALIZER;
     clientServer = new ClientServer(waitingRoom);
 }
 
@@ -85,8 +84,6 @@ bool ConnectionServer::on_validate(websocketpp::connection_hdl hdl) {
         return false;
     }
 
-//    if (pthread_rwlock_wrlock(&websocketsLock) != 0) {
-//        Logger.log("Failed to write-lock websocketsLock.");
 //    }
 
 
@@ -94,9 +91,6 @@ bool ConnectionServer::on_validate(websocketpp::connection_hdl hdl) {
 
     websockets.insert(std::pair<string, websocketpp::connection_hdl>(id, hdl));
     clientServer->addClientEndpoint(id);
-//    if (pthread_rwlock_unlock(&websocketsLock) != 0) {
-//        Logger.log("Failed to unlock websocketsLock.");
-//    }
 
     return true;
 }
@@ -147,9 +141,6 @@ bool ConnectionServer::sendData(string data, std::string id) {
 }
 
 bool ConnectionServer::getWebsocket(const string &id, websocketpp::connection_hdl &hdl) {
-//    if (pthread_rwlock_wrlock(&websocketsLock) != 0) {
-//        Logger.log("Failed to write-lock websocketsLock.");
-//    }
 
     map<string, websocketpp::connection_hdl>::iterator iter = websockets.find(id);
     if (iter == websockets.end()) {
@@ -157,11 +148,11 @@ bool ConnectionServer::getWebsocket(const string &id, websocketpp::connection_hd
     }
 
     hdl = iter->second;
-//    if (pthread_rwlock_unlock(&websocketsLock) != 0) {
-//        Logger.log("Failed to unlock websocketsLock.");
-//    }
 
     return true;
 }
 
 
+void ConnectionServer::start() {
+    Thread = boost::thread(boost::bind(&ConnectionServer::run, this));
+}
