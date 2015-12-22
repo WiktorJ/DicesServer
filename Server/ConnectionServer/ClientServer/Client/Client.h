@@ -10,19 +10,20 @@
 
 #include <string>
 #include "../../../GameServer/Event/RequestQueue.h"
-#include "../ClientConnector.h"
+#include "../../Connector/Network/Sender.h"
 
 //TODO MONITOR
+class Sender;
 
 class Client {
 private:
-    ClientConnector clientConnector;
+    Sender* sender;
     std::string Username;
     RequestQueue* Requests;
     bool Free;
     bool Player;
 public:
-    Client(std::string Username, ClientConnector clientConnector);
+    Client(std::string Username, Sender* sender);
     std::string getUsername();
 
     void subscribe(RequestQueue* Requests);

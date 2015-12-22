@@ -11,6 +11,7 @@
 #include "../../../ConnectionServer/ClientServer/Client/Client.h"
 #include "../../Instance/Client/ClientMovement.h"
 
+class Client;
 //TODO MONITOR
 
 class WaitingRoom {

@@ -3,12 +3,15 @@
 //
 
 #include "ConnectionServer.h"
+#include "../Connector/Network/Sender.h"
+
 using namespace std;
 
 
 
-ConnectionServer::ConnectionServer() : Logger("ConnectionServer") {
+ConnectionServer::ConnectionServer(WaitingRoom *waitingRoom) : Logger("ConnectionServer") {
     websocketsLock = PTHREAD_RWLOCK_INITIALIZER;
+    clientServer = new ClientServer(waitingRoom);
 }
 
 bool ConnectionServer::init(int port) {
@@ -16,7 +19,7 @@ bool ConnectionServer::init(int port) {
     server.set_open_handler(websocketpp::lib::bind(&ConnectionServer::on_validate, this, websocketpp::lib::placeholders::_1));
     server.set_fail_handler(websocketpp::lib::bind(&ConnectionServer::on_fail, this,  websocketpp::lib::placeholders::_1));
     server.set_close_handler(websocketpp::lib::bind(&ConnectionServer::on_close, this, websocketpp::lib::placeholders::_1));
-    server.set_message_handler(websocketpp::lib::bind(&ConnectionServer::on_message, this, websocketpp::lib::placeholders::_2));
+    server.set_message_handler(websocketpp::lib::bind(&ConnectionServer::on_message, this, websocketpp::lib::placeholders::_1, websocketpp::lib::placeholders::_2));
     try {
         server.listen(port);
     } catch (websocketpp::exception const &e) {
@@ -72,23 +75,25 @@ void ConnectionServer::stop() {
 bool ConnectionServer::on_validate(websocketpp::connection_hdl hdl) {
     websocketpp::server<websocketpp::config::asio>::connection_ptr con = server.get_con_from_hdl(hdl);
     websocketpp::uri_ptr uri = con->get_uri();
+    string id;
     string query = uri->get_query(); // returns empty string if no query string set.
-//    if (!query.empty()) {
-//        //get id from query
-//    }
-//    else {
-//        // Reject if no query parameter provided, for example.
-//        return false;
-//    }
+    if (!query.empty()) {
+        id = query;
+    }
+    else {
+        // Reject if no query parameter provided, for example.
+        return false;
+    }
 
 //    if (pthread_rwlock_wrlock(&websocketsLock) != 0) {
 //        Logger.log("Failed to write-lock websocketsLock.");
 //    }
 
 
-    string id = "id";
+
 
     websockets.insert(std::pair<string, websocketpp::connection_hdl>(id, hdl));
+    clientServer->addClientEndpoint(id);
 //    if (pthread_rwlock_unlock(&websocketsLock) != 0) {
 //        Logger.log("Failed to unlock websocketsLock.");
 //    }
@@ -108,12 +113,23 @@ void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
 }
 
 
-void ConnectionServer::on_message(websocketpp::connection_hdl hdl) {
-    Logger.log("RECEIVED MESSAGE");
+void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp::server<websocketpp::config::asio>::message_ptr msg) {
+    Logger.log(msg->get_payload());
+    //deserialize message and get clientAddress and nickname
+    string clientAddress = "cid";
+    string nickname = "test";
+    // if this was add player request
+        Sender* sender = new Sender(this);
+        clientServer->addClient(nickname, clientAddress, sender);
+    // else if remove than remove
+    //clientServer->removeClient()
+    //else put msg to RequestQueue(?)
+
 }
 
-bool ConnectionServer::sendData(string id, string data) {
+bool ConnectionServer::sendData(string data) {
     websocketpp:: connection_hdl hdl;
+    string id = "cid"; //TODO pu thin in data or as argument
     if (!getWebsocket(id, hdl)) {
         Logger.log("There is no socket with id: " + id);
         return false;
@@ -147,6 +163,5 @@ bool ConnectionServer::getWebsocket(const string &id, websocketpp::connection_hd
 
     return true;
 }
-
 
 

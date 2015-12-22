@@ -5,18 +5,29 @@
 #ifndef DICESSERVER_CLIENTSERVER_H
 #define DICESSERVER_CLIENTSERVER_H
 
-using namespace std;
+#include <vector>
+#include <map>
+#include "Client/Client.h"
+#include "../../GameServer/Server/Client/WaitingRoom.h"
+#include "../Connector/Network/Sender.h"
+
+class Sender;
+class Client;
+class WaitingRoom;
 
 class ClientServer {
+
+
 private:
-    map <string, vector<Client>> clients;
-    WaitingRoom waitingRoom;
+    std::map <std::string, std::vector<Client>> clients;
+    WaitingRoom* waitingRoom;
 
 public:
-    void addClient(ClientConnector clientConnector, string name);
-    void removeClient(string name);
-    Client getClient(string name);
-
+    void addClient(std::string name, std::string clientAddress, Sender* sender);
+    bool removeClient(std::string name);
+    Client getClient(std::string name);
+    void addClientEndpoint(std::string clientAddress);
+    ClientServer(WaitingRoom* waitingRoom);
 };
 
 

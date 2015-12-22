@@ -17,6 +17,8 @@ public class ConnectorImpl implements Connector {
     private Session session = null;
     private Deserializer deserializer = new Deserializer();
 
+    private String clientAddress = "cid";
+
     private ConnectorImpl() {
     }
 
@@ -27,15 +29,18 @@ public class ConnectorImpl implements Connector {
         ConnectorImpl connector = new ConnectorImpl();
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 //            URI uri = new URI(null, null, ip, port, null, null, null);
-        URI uri = new URI("ws://localhost:9020");
+        String clientAddres = "cid";
+        URI uri = new URI("ws://localhost:9020?" + clientAddres);
         Session session = container.connectToServer(connector, uri);
         connector.session = session;
+        connector.clientAddress = clientAddres;
         return connector;
     }
 
-    public Client addClient(String nickname) throws URISyntaxException {
+    public Client addClient(String nickname) throws URISyntaxException, IOException {
         ClientImpl client = ClientFactory.getClient(nickname, this);
         clientList.add(client);
+        sendMessage("{clientAddress: " + clientAddress + ", nickname: " + nickname + "}");
         return client;
     }
 

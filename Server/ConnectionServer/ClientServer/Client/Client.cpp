@@ -10,7 +10,7 @@ std::string Client::getUsername() {
     return Username;
 }
 
-void Client::addRequest(boost::property_tree::ptree Request){
+void Client::addRequest(boost::property_tree::ptree Request) {
     //TODO
     ClientMovement move(Username, Player, Request);
 
@@ -18,7 +18,7 @@ void Client::addRequest(boost::property_tree::ptree Request){
 }
 
 void Client::sendData(std::string data) {
-
+    sender->send(data);
 }
 
 void Client::setPlayer() {
@@ -33,8 +33,10 @@ bool Client::isPlayer() {
     return Player;
 }
 
-Client::Client(std::string Username, ClientConnector clientConnector) : Username(Username), clientConnector(clientConnector){
-
+//Client::Client(std::string Username, ClientConnector clientConnector)
+Client::Client(std::string Username, Sender* sender)
+        : Username(Username){
+    this->sender = sender;
 }
 
 void Client::subscribe(RequestQueue *Requests) {

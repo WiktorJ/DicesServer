@@ -54,7 +54,8 @@ add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} JNI-test/SimpleInstan
         Server/GameServer/Server/Serializer/GamesSerializer.cpp Server/GameServer/Server/Serializer/GamesSerializer.h
         Server/GameServer/Event/RequestQueue.cpp Server/GameServer/Event/RequestQueue.h Server/StartUp/MainServer.cpp Server/StartUp/MainServer.h
         Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h
-        Server/ConnectionServer/ClientServer/ConnectionServer.cpp Server/ConnectionServer/ClientServer/ConnectionServer.h)
+        Server/ConnectionServer/ClientServer/ConnectionServer.cpp Server/ConnectionServer/ClientServer/ConnectionServer.h
+        Server/ConnectionServer/ClientServer/ClientServer.h Server/ConnectionServer/ClientServer/ClientServer.cpp)
 
 
 if(Boost_FOUND)
