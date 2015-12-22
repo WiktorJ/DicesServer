@@ -5,6 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 include_directories(/usr/lib/jvm/java-8-oracle/include/)
 include_directories(/usr/lib/jvm/java-8-oracle/include/linux/)
+set(MISCELLANOUS Miscellanous/DateTime/Time/LocalTime.cpp Miscellanous/DateTime/Time/LocalTime.h Miscellanous/DateTime/Date/LocalDate.cpp Miscellanous/DateTime/Date/LocalDate.h Miscellanous/DateTime/LocalDateTime.cpp Miscellanous/DateTime/LocalDateTime.h)
 
 set(SOURCE_FILES main.cpp)
 find_package(Boost 1.54.0 COMPONENTS system filesystem thread REQUIRED)
@@ -62,6 +63,11 @@ add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} 
         Server/GameServer/Event/RequestQueue.cpp Server/GameServer/Event/RequestQueue.h
         Server/StartUp/MainServer.cpp Server/StartUp/MainServer.h
         Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h Server/GameServer/Instance/Observer/ObsCmdDeserializer.cpp Server/GameServer/Instance/Observer/ObsCmdDeserializer.h Server/GameServer/Java/Instance/JConfig.cpp Server/GameServer/Java/Instance/JConfig.h)
+        Server/GameServer/Event/RequestQueue.cpp Server/GameServer/Event/RequestQueue.h Server/StartUp/MainServer.cpp Server/StartUp/MainServer.h
+        Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h
+        Server/ConnectionServer/ClientServer/ConnectionServer.cpp Server/ConnectionServer/ClientServer/ConnectionServer.h
+        Server/ConnectionServer/ClientServer/ClientServer.h Server/ConnectionServer/ClientServer/ClientServer.cpp)
+
 
 if(Boost_FOUND)
 

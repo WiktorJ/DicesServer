@@ -9,6 +9,6 @@ import java.net.URISyntaxException;
  */
 public interface Connector {
 
-    Client addClient(String nickname) throws URISyntaxException;
+    Client addClient(String nickname) throws URISyntaxException, IOException;
     void removeClient(Client client);
 }

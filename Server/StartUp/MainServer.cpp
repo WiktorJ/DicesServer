@@ -2,6 +2,7 @@
 // Created by Wojciech Grabis on 14.12.15.
 //
 
+#include <sys/socket.h>
 #include "MainServer.h"
 #include "../GameServer/Java/Instance/JConfig.h"
 
@@ -14,6 +15,14 @@ MainServer::MainServer() : Logger("MainServer"){
         Logger.log("failed to create");
         throw new std::exception;
         state = false;
+    }
+
+    try {
+        connectionServer = new ConnectionServer(new WaitingRoom());
+        connectionServer->init(9020);
+        connectionServer->start();
+    } catch (websocketpp::exception const &e) {
+        std::cout << e.what() << std::endl;
     }
 }
 
@@ -44,4 +53,5 @@ MainServer::~MainServer() {
         stop();
         delete GameServer_;
     }
+    GameServer_->getWaitingRoom().addClient(test);
 }

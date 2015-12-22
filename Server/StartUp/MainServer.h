@@ -13,6 +13,7 @@ private:
     GameServer* GameServer_;
     LogParser Logger;
     bool state;
+    ConnectionServer* connectionServer;
 
 public:
     MainServer();
