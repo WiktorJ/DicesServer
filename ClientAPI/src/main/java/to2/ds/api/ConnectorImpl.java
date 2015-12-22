@@ -40,7 +40,7 @@ public class ConnectorImpl implements Connector {
     public Client addClient(String nickname) throws URISyntaxException, IOException {
         ClientImpl client = ClientFactory.getClient(nickname, this);
         clientList.add(client);
-        sendMessage("{clientID: " + clientAddress + ", client: " + nickname + ", command: addClient"+"}");
+        sendMessage("{clientID: " + clientAddress + ", nickname: " + nickname + ", command: addClient"+"}");
         return client;
     }
 
