@@ -21,6 +21,7 @@ private:
 public:
     JFactory(JNIEnv* Env);
     JController createGame(std::string description, JObserver observer);
+    void setEnv(JNIEnv* Env);
     void attach(JNIEnv* Env);
 };
 

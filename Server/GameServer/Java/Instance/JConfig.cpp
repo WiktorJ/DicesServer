@@ -16,15 +16,23 @@ JConfig::JConfig() {
 
     std::cout << "Write jar path" << std::endl;
     std::cin >> JARPath;
+//    JARPath = "/home/wiktor/Documents/TO";
 
     std::cout << "Write observer package" << std::endl;
     std::cin >> ObserverPackage;
+//    ObserverPackage  = "dice/controller/Observer";
+
+    std::cout << "Write observerImpl package" << std::endl;
+    std::cin >> ObserverPackage;
+//    ObserverImplPackage  = "dice/controller/ObserverImpl";
 
     std::cout << "Write factory package" << std::endl;
     std::cin >> FactoryPackage;
+//    FactoryPackage = "dice/controller/factory/GameFactory";
 
     std::cout << "Write controller package" << std::endl;
     std::cin >> ControllerPackage;
+//    ControllerPackage = "dice/controller/GameController";
 
     test();
 }
@@ -36,6 +44,10 @@ std::string JConfig::getJarPath() {
 
 std::string JConfig::getObserverPackage() {
     if(Set) return ObserverPackage;
+    throw new JNIException;
+}
+std::string JConfig::getObserverImplPackage() {
+    if(Set) return ObserverImplPackage;
     throw new JNIException;
 }
 

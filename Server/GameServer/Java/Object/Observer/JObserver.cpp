@@ -23,7 +23,7 @@ void JObserver::initialize() {
     Logger.log("Initializing java object");
 
     //TODO CONNECT TO A JAVA CONFIG
-    const char* temp = JConfig::getInstance().getObserverPackage().c_str();
+    const char* temp = JConfig::getInstance().getObserverImplPackage().c_str();
 
     Observer = Env->FindClass(temp);
 

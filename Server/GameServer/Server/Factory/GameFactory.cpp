@@ -31,3 +31,8 @@ GameFactory::GameFactory() : Env(JNIInstance::getInstance().attacheThread()), Lo
 
     curr_id = 0;
 }
+
+void GameFactory::setEnv(JNIEnv *Env) {
+    this->Env = Env;
+    Factory.setEnv(Env);
+}

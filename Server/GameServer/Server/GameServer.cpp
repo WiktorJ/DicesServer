@@ -20,7 +20,7 @@ boost::property_tree::ptree GameServer::getActiveGames() {
 
 void GameServer::run() {
 
-
+    Factory.setEnv(JNIInstance::getInstance().attacheThread());
     while(true){
         readRequests();
 

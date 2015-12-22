@@ -24,7 +24,6 @@ JController JFactory::createGame(std::string description, JObserver observer) {
     if(Env == NULL)throw new JNIEnvException;
 
     jobject Controller = Env->CallStaticObjectMethod(Factory, Create, description.c_str(), observer.getObject());
-
     JController controller(Controller, Env);
 
     return controller;
@@ -47,4 +46,8 @@ void JFactory::initialize() {
         throw new JClassException("JFactory");
     }
 
+}
+
+void JFactory::setEnv(JNIEnv *Env) {
+    this->Env = Env;
 }

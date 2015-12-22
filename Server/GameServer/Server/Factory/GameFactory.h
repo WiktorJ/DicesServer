@@ -17,6 +17,7 @@ private:
     LogParser Logger;
 public:
     GameFactory();
+    void setEnv(JNIEnv* Env);
     GameInstance* createGame(boost::property_tree::ptree description, WaitingRoom& WaitingRoom_);
 };
 

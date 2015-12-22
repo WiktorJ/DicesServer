@@ -15,6 +15,7 @@ private:
     bool Set;
     std::string JARPath;
     std::string ObserverPackage;
+    std::string ObserverImplPackage;
     std::string ControllerPackage;
     std::string FactoryPackage;
 
@@ -23,6 +24,7 @@ public:
     static JConfig& getInstance();
     std::string getJarPath();
     std::string getObserverPackage();
+    std::string getObserverImplPackage();
     std::string getControllerPackage();
     std::string getFactoryPackage();
 
