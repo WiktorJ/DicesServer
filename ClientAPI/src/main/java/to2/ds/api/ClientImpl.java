@@ -41,7 +41,7 @@ public class ClientImpl implements Client {
     }
 
     public void requestCreate(String JSON) throws IOException {
-        String createGame = TargetSerializer.serialize("createGame", JSON);
+        String createGame = TargetSerializer.serialize("create", JSON);
         socket.sendMessage(createGame);
     }
 
@@ -51,7 +51,7 @@ public class ClientImpl implements Client {
                             .put("clientId", nickname)
                             .toString();
 
-        socket.sendMessage(TargetSerializer.serialize("createGame", jsonString));
+        socket.sendMessage(TargetSerializer.serialize("create", jsonString));
     }
 
     public void requestJoinAsObserver(Integer gameID) throws IOException {
@@ -60,16 +60,16 @@ public class ClientImpl implements Client {
                 .put("clientId", nickname)
                 .toString();
 
-        socket.sendMessage(TargetSerializer.serialize("joinAsObserver", jsonString));
+        socket.sendMessage(TargetSerializer.serialize("observe", jsonString));
 
     }
 
     public void requestMove(String JSON) throws IOException {
-        socket.sendMessage(TargetSerializer.serialize("requestMove", JSON));
+        socket.sendMessage(TargetSerializer.serialize("move", JSON));
     }
 
     public void requestQuiteGame() throws IOException {
-        socket.sendMessage(TargetSerializer.serialize("quitGame", ""));
+        socket.sendMessage(TargetSerializer.serialize("quit", ""));
     }
 
     public String listen() throws InterruptedException {
