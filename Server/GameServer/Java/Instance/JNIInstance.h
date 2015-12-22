@@ -22,6 +22,7 @@ private:
 public:
     static JNIInstance& getInstance();
     JNIEnv* attacheThread();
+    JNIEnv* getCurr();
 
 };
 

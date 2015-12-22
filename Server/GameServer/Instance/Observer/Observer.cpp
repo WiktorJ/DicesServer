@@ -31,7 +31,8 @@ void Observer::listen() {
         if(command == "removePlayer"){
             Clients.removeClient(ObsCmdDeserializer::deserializeNick(json));
         } else if(command == "gameEnded"){
-            true;
+            Clients.clear();
+            break;
         } else if(command == "stateUpdated"){
             Clients.sendData(json);
         } else {

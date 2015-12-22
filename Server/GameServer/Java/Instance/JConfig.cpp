@@ -23,7 +23,7 @@ JConfig::JConfig() {
 //    ObserverPackage  = "dice/controller/Observer";
 
     std::cout << "Write observerImpl package" << std::endl;
-    std::cin >> ObserverPackage;
+    std::cin >> ObserverImplPackage;
 //    ObserverImplPackage  = "dice/controller/ObserverImpl";
 
     std::cout << "Write factory package" << std::endl;
