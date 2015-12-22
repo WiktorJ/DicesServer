@@ -26,16 +26,16 @@ void tester() {
         if (command == "p") {
             std::cout << Server.printGameInfo() << endl;
         }
-
-        if(command == "c"){
-            std::string newUser;
-            std::cin >> newUser;
-
-            Client* newClient = new Client(newUser);
-            clients.push_back(newClient);
-
-            Server.temporaryClient(newClient);
-        }
+//
+//        if(command == "c"){
+//            std::string newUser;
+//            std::cin >> newUser;
+//
+//            Client* newClient = new Client(newUser, new Sender());
+//            clients.push_back(newClient);
+//
+//            Server.temporaryClient(newClient);
+//        }
 
         if (command == "j") {
             std::string name;

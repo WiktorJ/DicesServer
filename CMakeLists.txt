@@ -62,7 +62,8 @@ add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} 
         Server/GameServer/Server/Serializer/GamesSerializer.cpp Server/GameServer/Server/Serializer/GamesSerializer.h
         Server/GameServer/Event/RequestQueue.cpp Server/GameServer/Event/RequestQueue.h
         Server/StartUp/MainServer.cpp Server/StartUp/MainServer.h
-        Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h Server/GameServer/Instance/Observer/ObsCmdDeserializer.cpp Server/GameServer/Instance/Observer/ObsCmdDeserializer.h Server/GameServer/Java/Instance/JConfig.cpp Server/GameServer/Java/Instance/JConfig.h)
+        Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h Server/GameServer/Instance/Observer/ObsCmdDeserializer.cpp
+        Server/GameServer/Instance/Observer/ObsCmdDeserializer.h Server/GameServer/Java/Instance/JConfig.cpp Server/GameServer/Java/Instance/JConfig.h
         Server/GameServer/Event/RequestQueue.cpp Server/GameServer/Event/RequestQueue.h Server/StartUp/MainServer.cpp Server/StartUp/MainServer.h
         Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h
         Server/ConnectionServer/ClientServer/ConnectionServer.cpp Server/ConnectionServer/ClientServer/ConnectionServer.h

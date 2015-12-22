@@ -53,5 +53,5 @@ MainServer::~MainServer() {
         stop();
         delete GameServer_;
     }
-    GameServer_->getWaitingRoom().addClient(test);
+//    GameServer_->getWaitingRoom().addClient(test);
 }

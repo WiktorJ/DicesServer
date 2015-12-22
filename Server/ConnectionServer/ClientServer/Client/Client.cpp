@@ -17,8 +17,11 @@ void Client::addRequest(boost::property_tree::ptree Request) {
     Requests->addRequest(move);
 }
 
-void Client::sendData(std::string data) {
-    sender->send(data);
+void Client::sendData(boost::property_tree::ptree data) {
+    stringstream ss;
+    boost::property_tree::write_json(ss, data);
+
+    sender->send(ss.str());
 }
 
 void Client::setPlayer() {

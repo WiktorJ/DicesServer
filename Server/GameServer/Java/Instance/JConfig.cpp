@@ -15,24 +15,24 @@ JConfig::JConfig() {
     Set = false;
 
     std::cout << "Write jar path" << std::endl;
-    std::cin >> JARPath;
-//    JARPath = "/home/wiktor/Documents/TO";
+//    std::cin >> JARPath;
+    JARPath = "/home/wiktor/Documents/TO";
 
     std::cout << "Write observer package" << std::endl;
-    std::cin >> ObserverPackage;
-//    ObserverPackage  = "dice/controller/Observer";
+//    std::cin >> ObserverPackage;
+    ObserverPackage  = "dice/controller/Observer";
 
     std::cout << "Write observerImpl package" << std::endl;
-    std::cin >> ObserverPackage;
-//    ObserverImplPackage  = "dice/controller/ObserverImpl";
+//    std::cin >> ObserverPackage;
+    ObserverImplPackage  = "dice/controller/ObserverImpl";
 
     std::cout << "Write factory package" << std::endl;
-    std::cin >> FactoryPackage;
-//    FactoryPackage = "dice/controller/factory/GameFactory";
+//    std::cin >> FactoryPackage;
+    FactoryPackage = "dice/controller/factory/GameFactory";
 
     std::cout << "Write controller package" << std::endl;
-    std::cin >> ControllerPackage;
-//    ControllerPackage = "dice/controller/GameController";
+//    std::cin >> ControllerPackage;
+    ControllerPackage = "dice/controller/GameController";
 
     test();
 }
