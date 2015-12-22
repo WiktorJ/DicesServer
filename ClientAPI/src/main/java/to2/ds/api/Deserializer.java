@@ -24,7 +24,7 @@ public class Deserializer {
         while (iterator.hasNext()) {
 
             if (iterator.next().getId() == clientID) {
-                ClientMessageTuple tuple = new ClientMessageTuple(JSON, iterator.next());
+                ClientMessageTuple tuple = new ClientMessageTuple(messageWithType.toString(), iterator.next());
                 return tuple;
             }
         }
