@@ -110,11 +110,43 @@ void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
 void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp::server<websocketpp::config::asio>::message_ptr msg) {
     Logger.log(msg->get_payload());
     //deserialize message and get clientAddress and nickname
-    string clientAddress = "cid";
-    string nickname = "test";
-    // if this was add player request
+    boost::property_tree::ptree parsed;
+    std::stringstream ss(msg->get_payload());
+
+    boost::property_tree::read_json(ss, parsed);
+
+    string clientAddress;
+    string nickname;
+    string command;
+    boost::property_tree::ptree request;
+    try{
+        clientAddress = parsed.get<std::string>("clientID");
+        command = parsed.get<std::string>("command");
+    } catch(const boost::property_tree::ptree_error & exception){
+        return;
+    }
+
+    try{
+        nickname = parsed.get<std::string>("nickname");
+    } catch(const boost::property_tree::ptree_error &exception){
+
+    }
+
+    try{
+        request = parsed.get_child("data");
+    } catch(const boost::property_tree::ptree_error &exception){
+
+    }
+
+    if(command == "addClient"){
         Sender* sender = new Sender(this, clientAddress);
         clientServer->addClient(nickname, clientAddress, sender);
+    } else if(command == "request"){
+        clientServer->getClient(nickname).addRequest(request);
+    }
+
+    // if this was add player request
+
     // else if remove than remove
     //clientServer->removeClient()
     //else put msg to RequestQueue(?)
