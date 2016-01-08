@@ -17,25 +17,34 @@ public class ConnectorImpl implements Connector {
     private Session session = null;
     private Deserializer deserializer = new Deserializer();
 
+    public void setClientAddress(String clientAddress) {
+        this.clientAddress = clientAddress;
+    }
+
+    public void setSession(Session session) {
+
+        this.session = session;
+    }
+
     private String clientAddress = "cid";
 
-    private ConnectorImpl() {
+    protected ConnectorImpl() {
     }
 
     private List<ClientImpl> clientList = new LinkedList<>();
 
-
-    public static ConnectorImpl connect(String ip, Integer port) throws IOException, DeploymentException, URISyntaxException {
-        ConnectorImpl connector = new ConnectorImpl();
-        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-//            URI uri = new URI(null, null, ip, port, null, null, null);
-        String clientAddres = "cid";
-        URI uri = new URI("ws://localhost:9020?" + clientAddres);
-        Session session = container.connectToServer(connector, uri);
-        connector.session = session;
-        connector.clientAddress = clientAddres;
-        return connector;
-    }
+//
+//    public static ConnectorImpl connect(String ip, Integer port) throws IOException, DeploymentException, URISyntaxException {
+//        ConnectorImpl connector = new ConnectorImpl();
+//        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+////            URI uri = new URI(null, null, ip, port, null, null, null);
+//        String clientAddres = "cid";
+//        URI uri = new URI("ws://localhost:9020?" + clientAddres);
+//        Session session = container.connectToServer(connector, uri);
+//        connector.session = session;
+//        connector.clientAddress = clientAddres;
+//        return connector;
+//    }
 
     public Client addClient(String nickname) throws URISyntaxException, IOException {
         ClientImpl client = ClientFactory.getClient(nickname, this);
