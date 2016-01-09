@@ -111,6 +111,7 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
     Logger.log(msg->get_payload());
     //deserialize message and get clientAddress and nickname
     boost::property_tree::ptree parsed;
+
     std::stringstream ss(msg->get_payload());
 
     boost::property_tree::read_json(ss, parsed);
@@ -127,7 +128,7 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
     }
 
     try{
-        nickname = parsed.get<std::string>("nickname");
+        nickname = parsed.get<std::string>("client");
     } catch(const boost::property_tree::ptree_error &exception){
 
     }
@@ -143,14 +144,16 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
         clientServer->addClient(nickname, clientAddress, sender);
     } else if(command == "request"){
         clientServer->getClient(nickname).addRequest(request);
+    } else if(command == "removeClient"){
+        boost::property_tree::ptree quit;
+
+        quit.put_child("command", boost::property_tree::ptree("disconnect"));
+        quit.put_child("data", boost::property_tree::ptree("empty"));
+
+        clientServer->getClient(nickname).addRequest(quit);
+
+        clientServer->removeClient(nickname);
     }
-
-    // if this was add player request
-
-    // else if remove than remove
-    //clientServer->removeClient()
-    //else put msg to RequestQueue(?)
-
 }
 
 bool ConnectionServer::sendData(string data, std::string id) {

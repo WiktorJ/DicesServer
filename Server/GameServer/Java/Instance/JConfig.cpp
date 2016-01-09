@@ -15,8 +15,8 @@ JConfig::JConfig() {
     Set = false;
 
     std::cout << "Write jar path" << std::endl;
-//    std::cin >> JARPath;
-    JARPath = "/home/wiktor/Documents/TO";
+    std::cin >> JARPath;
+//    JARPath = "/home/wiktor/Documents/TO";
 
     std::cout << "Write observer package" << std::endl;
 //    std::cin >> ObserverPackage;

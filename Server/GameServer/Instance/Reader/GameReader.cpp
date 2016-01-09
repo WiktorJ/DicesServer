@@ -20,8 +20,8 @@ void GameReader::readMovement() {
             command = GameCmdDeseriallizer::readCommand(data);
         } catch(const boost::property_tree::ptree_error &exception){
             Logger.log("Client : " + (*it).getUsername() + " - invalid json");
-            //TODO LOGGER
-            break;
+
+            continue;
         }
 
         if(command == "quit"){

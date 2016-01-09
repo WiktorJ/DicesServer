@@ -17,9 +17,14 @@ GameInstance *GameFactory::createGame(boost::property_tree::ptree description, W
     Observer.attach(Env);
     Observer.create();
 
-    JController Controller = Factory.createGame(converted, Observer);
+    GameInstance* game;
 
-    GameInstance* game = new GameInstance(new GameController(Controller), Observer, WaitingRoom_, curr_id++);
+    try {
+        JController Controller = Factory.createGame(converted, Observer);
+        game = new GameInstance(new GameController(Controller), Observer, WaitingRoom_, curr_id++);
+    } catch (const std::exception* exception){
+        return NULL;
+    }
 
     return game;
 }
