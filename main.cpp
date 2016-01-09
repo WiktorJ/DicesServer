@@ -15,10 +15,9 @@ void tester() {
     try {
         Server.start();
     } catch(const std::exception * exception){
+        std::cout << "Encountered critical error" << endl;
         return;
     }
-
-    std::vector<Client *> clients;
 
     while (1) {
         std::cin >> command;
@@ -27,43 +26,6 @@ void tester() {
             std::cout << Server.printGameInfo() << endl;
         }
 //
-//        if(command == "c"){
-//            std::string newUser;
-//            std::cin >> newUser;
-//
-//            Client* newClient = new Client(newUser, new Sender());
-//            clients.push_back(newClient);
-//
-//            Server.temporaryClient(newClient);
-//        }
-
-        if (command == "j") {
-            std::string name;
-            std::cin >> name;
-
-            for (std::vector<Client *>::iterator it = clients.begin(); it != clients.end(); it++) {
-                if ((*it)->getUsername() == name) {
-                    cout << "Write json path" << endl;
-
-                    std::string path;
-
-                    boost::property_tree::ptree pt;
-                    cin >> path;
-                    try {
-                        boost::property_tree::read_json(path, pt);
-
-
-                    } catch (const boost::property_tree::ptree_error &exception) {
-                        cout << "json error";
-                        continue;
-                    }
-                    (*it)->addRequest(pt);
-
-                }
-            }
-
-        }
-
         if (command == "q") {
             Server.stop();
             break;

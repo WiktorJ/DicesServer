@@ -18,9 +18,8 @@ MainServer::MainServer() : Logger("MainServer"){
     }
 
     try {
-        connectionServer = new ConnectionServer(new WaitingRoom());
+        connectionServer = new ConnectionServer(&GameServer_->getWaitingRoom());
         connectionServer->init(9020);
-        connectionServer->start();
     } catch (websocketpp::exception const &e) {
         std::cout << e.what() << std::endl;
     }
@@ -37,8 +36,12 @@ std::string MainServer::printGameInfo() {
 }
 
 void MainServer::stop() {
+    state = false;
+
     GameServer_->stop();
+    connectionServer->stop();
 }
+
 
 void MainServer::temporaryClient(Client* test) {
     if(state)GameServer_->getWaitingRoom().addClient(test);
@@ -46,12 +49,14 @@ void MainServer::temporaryClient(Client* test) {
 
 void MainServer::start() {
     if(state)GameServer_->start();
+    if(state)connectionServer->start();
 }
 
 MainServer::~MainServer() {
     if(state) {
         stop();
-        delete GameServer_;
     }
+    delete GameServer_;
+    delete connectionServer;
 //    GameServer_->getWaitingRoom().addClient(test);
 }

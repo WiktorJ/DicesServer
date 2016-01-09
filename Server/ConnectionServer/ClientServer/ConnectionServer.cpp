@@ -66,9 +66,10 @@ void ConnectionServer::stop() {
             Logger.log(ec.message());
         }
     }
-
+    Logger.log("Trying to stop the server");
     // Stop the endpoint.
     server.stop();
+    Logger.log("Server stopped");
 }
 
 bool ConnectionServer::on_validate(websocketpp::connection_hdl hdl) {
@@ -108,13 +109,17 @@ void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
 
 
 void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp::server<websocketpp::config::asio>::message_ptr msg) {
-    Logger.log(msg->get_payload());
+    //Logger.log(msg->get_payload());
     //deserialize message and get clientAddress and nickname
     boost::property_tree::ptree parsed;
 
     std::stringstream ss(msg->get_payload());
-
-    boost::property_tree::read_json(ss, parsed);
+    try {
+        boost::property_tree::read_json(ss, parsed);
+    } catch(const boost::property_tree::json_parser_error &exception){
+        Logger.log("Invalid json received : " + std::string(msg->get_payload()));
+        return;
+    }
 
     string clientAddress;
     string nickname;
