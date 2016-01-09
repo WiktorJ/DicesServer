@@ -33,7 +33,7 @@ public:
     void removePlayer(std::string username);
     void makeMove(std::string move);
     void stop();
-    std::string getGameInfo();
+    std::string getGameInfo(JNIEnv* Env);
 };
 
 

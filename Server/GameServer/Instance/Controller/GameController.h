@@ -20,7 +20,7 @@ public:
     void addPlayer(std::string username);
     void makeMove(boost::property_tree::ptree moveInfo);
     void removePlayer(std::string username);
-    boost::property_tree::ptree getGameInfo();
+    boost::property_tree::ptree getGameInfo(JNIEnv* TEnv);
     void stop();
     void bind();
 };

@@ -19,6 +19,7 @@ private:
     GameFactory Factory;
     boost::thread Thread;
     LogParser Logger;
+    JNIEnv* Env;
 
     void readRequests();
     void run();

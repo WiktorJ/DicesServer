@@ -13,14 +13,15 @@ WaitingRoom &GameServer::getWaitingRoom() {
 boost::property_tree::ptree GameServer::getActiveGames() {
 
 
-    boost::property_tree::ptree activeGames = GamesSerializer::serialize(Games.getGames());
+    boost::property_tree::ptree activeGames = GamesSerializer::serialize(Games.getGames(), Env);
 
     return activeGames;
 }
 
 void GameServer::run() {
 
-    Factory.setEnv(JNIInstance::getInstance().attacheThread());
+    Env = JNIInstance::getInstance().attacheThread();
+    Factory.setEnv(Env);
 
     while(true){
         readRequests();
@@ -90,7 +91,7 @@ void GameServer::readRequests() {
             Logger.log("Client : " + (*iterator).getUsername() + " - observing a game : " + std::to_string(game->getId()));
 
         } else if(command == "create") {
-            GameInstance* game = Factory.createGame(move, WaitingRoom_);
+            GameInstance* game = Factory.createGame(move.get_child("data"), WaitingRoom_);
 
             if(game == NULL){
                 Logger.log("Client : " + (*iterator).getUsername() + " - failed to create a game ");

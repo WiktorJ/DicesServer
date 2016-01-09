@@ -29,8 +29,9 @@ void JObserver::initialize() {
 
     Notify = Env->GetMethodID(Observer, "notifyWaitUntil", "()Ljava/lang/String;");
     IsGameEnded = Env->GetMethodID(Observer, "isGameEnded", "()Z");
+    Constructor = Env->GetMethodID(Observer, "<init>", "()V");
 
-    if(Observer == 0 || Notify == 0 || IsGameEnded == 0){
+    if(Observer == 0 || Notify == 0 || IsGameEnded == 0 || Constructor == 0){
         Logger.log("Could not get running");
         throw new JClassException("Observer");
     }
@@ -63,5 +64,5 @@ jobject &JObserver::getObject() {
 }
 
 void JObserver::create() {
-    Object = Env->AllocObject(Observer);
+    Object = Env->NewObject(Observer, Constructor);
 }

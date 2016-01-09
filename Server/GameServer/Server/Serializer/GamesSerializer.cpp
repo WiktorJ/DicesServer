@@ -4,7 +4,7 @@
 
 #include "GamesSerializer.h"
 
-boost::property_tree::ptree GamesSerializer::serialize(std::vector<GameInstance *> games) {
+boost::property_tree::ptree GamesSerializer::serialize(std::vector<GameInstance *> games, JNIEnv* TEnv) {
 
     boost::property_tree::ptree temp;
 
@@ -13,7 +13,7 @@ boost::property_tree::ptree GamesSerializer::serialize(std::vector<GameInstance 
         boost::property_tree::ptree game;
 
         game.put_child("gameId", boost::property_tree::ptree(std::to_string((*it)->getId())));
-        game.put_child("gameInfo", (*it)->getInfo());
+        game.put_child("gameInfo", (*it)->getInfo(TEnv));
 
         temp.push_back(std::make_pair("", game));
     }

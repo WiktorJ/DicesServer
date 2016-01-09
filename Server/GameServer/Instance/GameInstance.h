@@ -28,7 +28,7 @@ public:
     ~GameInstance();
     bool ended();
     void start();
-    boost::property_tree::ptree getInfo();
+    boost::property_tree::ptree getInfo(JNIEnv* TEnv);
     ClientGroup& getClientGroup();
     void stop();
     int getId();

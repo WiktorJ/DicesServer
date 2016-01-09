@@ -54,8 +54,8 @@ bool GameInstance::ended() {
     return end;
 }
 
-boost::property_tree::ptree GameInstance::getInfo() {
-    return Controller->getGameInfo();
+boost::property_tree::ptree GameInstance::getInfo(JNIEnv* TEnv) {
+    return Controller->getGameInfo(TEnv);
 }
 
 int GameInstance::getId() {

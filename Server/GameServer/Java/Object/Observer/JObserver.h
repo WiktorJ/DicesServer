@@ -15,6 +15,7 @@ private:
     jclass Observer;
     jmethodID Notify;
     jmethodID IsGameEnded;
+    jmethodID Constructor;
     LogParser Logger;
     jobject Object;
 

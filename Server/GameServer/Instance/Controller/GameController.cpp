@@ -6,9 +6,9 @@
 #include "../../Java/Instance/JNIInstance.h"
 #include <boost/property_tree/json_parser.hpp>
 
-boost::property_tree::ptree GameController::getGameInfo() {
+boost::property_tree::ptree GameController::getGameInfo(JNIEnv* TEnv) {
 
-    std::string info = Controller.getGameInfo();
+    std::string info = Controller.getGameInfo(TEnv);
     std::stringstream ss(info);
 
     boost::property_tree::ptree json;

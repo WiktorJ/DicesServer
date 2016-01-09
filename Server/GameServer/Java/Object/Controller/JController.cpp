@@ -65,14 +65,14 @@ void JController::stop() {
 
 }
 
-std::string JController::getGameInfo() {
-    if(Env == NULL)throw new JNIEnvException;
+std::string JController::getGameInfo(JNIEnv* TEnv) {
+    if(TEnv == NULL)throw new JNIEnvException;
 
-    jstring Result = (jstring) Env->CallObjectMethod(Object, GetGameInfo, "");
-    const char *str = Env->GetStringUTFChars(Result, 0);
+    jstring Result = (jstring) TEnv->CallObjectMethod(Object, GetGameInfo, "");
+    const char *str = TEnv->GetStringUTFChars(Result, 0);
 
     std::string Converted = std::string(str);
-    Env->ReleaseStringUTFChars(Result, str);
+    TEnv->ReleaseStringUTFChars(Result, str);
 
     return Converted;
 }

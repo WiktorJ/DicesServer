@@ -11,7 +11,7 @@
 
 class GamesSerializer {
 public:
-    static boost::property_tree::ptree serialize(std::vector<GameInstance *> games);
+    static boost::property_tree::ptree serialize(std::vector<GameInstance *> games, JNIEnv* TEnv);
 };
 
 

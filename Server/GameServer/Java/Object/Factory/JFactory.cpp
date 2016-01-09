@@ -23,9 +23,14 @@ JController JFactory::createGame(std::string description, JObserver observer) {
     Logger.log("Creating new controller");
     if(Env == NULL)throw new JNIEnvException;
 
-    jobject Controller = Env->CallStaticObjectMethod(Factory, Create, description.c_str(), observer.getObject());
+    jstring desc = Env->NewStringUTF(description.c_str());
+    Logger.log(description);
+
+    jobject Controller = Env->CallStaticObjectMethod(Factory, Create, desc, observer.getObject());
 
     if (Env->ExceptionCheck()){
+        Env->ExceptionDescribe();
+        Env->ExceptionClear();
         Logger.log("Game could not be created");
         throw new JNIException;
     }

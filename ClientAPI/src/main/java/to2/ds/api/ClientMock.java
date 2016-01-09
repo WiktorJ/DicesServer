@@ -38,10 +38,11 @@ public class ClientMock {
                 finishFlag = true;
             }
             String json = new String(Files.readAllBytes(Paths.get(ClientMock.class.getClassLoader().getResource("JSON").toURI())));
+            String json2 = new String(Files.readAllBytes(Paths.get(ClientMock.class.getClassLoader().getResource("JSON2").toURI())));
             switch (s) {
                 case "m": test.requestMove(json);
                     break;
-                case "c": test.requestCreate(json);
+                case "c": test.requestMove(json2);
                     break;
                 case "j":
                     System.out.println("Podaj GameId");
