@@ -9,7 +9,7 @@ set(MISCELLANOUS Miscellanous/DateTime/Time/LocalTime.cpp Miscellanous/DateTime/
 
 set(SOURCE_FILES main.cpp)
 find_package(Boost 1.54.0 COMPONENTS system filesystem thread REQUIRED)
-find_package(JNI)
+find_package(JNI REQUIRED)
 
 if (JNI_FOUND)
     message (STATUS "JNI_INCLUDE_DIRS=${JNI_INCLUDE_DIRS}")
@@ -19,6 +19,7 @@ if (JNI_FOUND)
 else()
     message(WARNING "JNI Not found")
 endif()
+
 
 if(Boost_FOUND)
 
@@ -40,7 +41,7 @@ set(JAVA_SOURCE_FILES Server/GameServer/Java/Instance/JNIInstance.cpp Server/Gam
         Server/GameServer/Java/Object/Controller/JController.cpp Server/GameServer/Java/Object/Controller/JController.h
         Server/GameServer/Java/Exception/Env/JNIEnvException.cpp Server/GameServer/Java/Exception/Env/JNIEnvException.h
         Server/GameServer/Java/Exception/JNIException.cpp Server/GameServer/Java/Exception/JNIException.h
-        Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h)
+        Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h Server/GameServer/Server/Client/ResponseSerializer.cpp Server/GameServer/Server/Client/ResponseSerializer.h)
 
 add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} JNI-test/SimpleInstanceJNI.cpp
         JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp

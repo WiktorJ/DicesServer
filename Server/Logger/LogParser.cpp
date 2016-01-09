@@ -10,5 +10,5 @@ LogParser::LogParser(std::string className) {
 }
 
 void LogParser::log(std::string info) {
-    Logger::getInstance().log(Prefix + "<--" + info + "-->");
+    Logger::getInstance().log(Prefix + " -> " + info + "  ");
 }

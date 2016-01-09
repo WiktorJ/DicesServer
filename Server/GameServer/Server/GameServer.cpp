@@ -56,6 +56,7 @@ void GameServer::readRequests() {
             GameInstance* game = Games.get(gameId);
 
             if(game == NULL){
+                Logger.log("Client : " + (*iterator).getUsername() + " - tried to join unexisting game");
 
                 //TODO THROW EXCEPTION
                 return;
@@ -74,8 +75,10 @@ void GameServer::readRequests() {
             GameInstance* game = Games.get(gameId);
 
             if(game == NULL){
+                Logger.log("Client : " + (*iterator).getUsername() + " - tried to observer unexisting game");
+
                 //TODO THROW EXCEPTION
-                return;
+                continue;
             }
 
             Client* client = WaitingRoom_.removeClient((*iterator).getUsername());
@@ -88,6 +91,12 @@ void GameServer::readRequests() {
 
         } else if(command == "create") {
             GameInstance* game = Factory.createGame(move, WaitingRoom_);
+
+            if(game == NULL){
+                Logger.log("Client : " + (*iterator).getUsername() + " - failed to create a game ");
+
+                continue;
+            }
 
             Games.add(game);
 

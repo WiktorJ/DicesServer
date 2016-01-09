@@ -24,6 +24,12 @@ JController JFactory::createGame(std::string description, JObserver observer) {
     if(Env == NULL)throw new JNIEnvException;
 
     jobject Controller = Env->CallStaticObjectMethod(Factory, Create, description.c_str(), observer.getObject());
+
+    if (Env->ExceptionCheck()){
+        Logger.log("Game could not be created");
+        throw new JNIException;
+    }
+
     JController controller(Controller, Env);
 
     return controller;
@@ -42,7 +48,7 @@ void JFactory::initialize() {
     Create = Env->GetStaticMethodID(Factory , "createGame", temp_controller);
 
     if(Factory == 0 || Create == 0){
-        Logger.log(std::string("Failed to init jfactory ") + temp + " " + std::to_string(Factory == 0) + " " + tempstr + " " + std::to_string(Create == 0));
+        Logger.log(std::string("Failed to init jfactory ") + temp + " " + std::to_string(Factory == 0) + " " + temp_controller + " " + std::to_string(Create == 0));
         throw new JClassException("JFactory");
     }
 
