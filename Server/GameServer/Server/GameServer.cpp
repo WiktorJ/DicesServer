@@ -108,7 +108,7 @@ void GameServer::readRequests() {
         } else {
             Logger.log("Client : " + (*iterator).getUsername() + " - invalid command: " + command);
 
-            //TODO THROW EXCEPION
+            //TODO THROW
         }
     }
 }
