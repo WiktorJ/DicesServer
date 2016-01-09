@@ -19,14 +19,15 @@ class ClientServer {
 
 
 private:
-    std::map <std::string, std::vector<Client>> clients;
+    std::map <std::string, std::vector<Client*>> clients;
     WaitingRoom* waitingRoom;
 
 public:
     void addClient(std::string name, std::string clientAddress, Sender* sender);
-    bool removeClient(std::string name);
-    Client getClient(std::string name);
+    bool removeClient(std::string clientAddress, std::string name);
+    Client* getClient(std::string clientAddress, std::string name);
     void addClientEndpoint(std::string clientAddress);
+    void removeClientEndpoint(std::string clientAddress);
     ClientServer(WaitingRoom* waitingRoom);
 };
 

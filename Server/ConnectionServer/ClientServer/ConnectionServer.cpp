@@ -122,42 +122,67 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
     }
 
     string clientAddress;
-    string nickname;
+    string nickname = "INVALID_NAME";
     string command;
     boost::property_tree::ptree request;
+    bool isRequest = true;
+
     try{
         clientAddress = parsed.get<std::string>("clientID");
         command = parsed.get<std::string>("command");
+        nickname = parsed.get<std::string>("client");
     } catch(const boost::property_tree::ptree_error & exception){
+        Logger.log("No command, clientID or client field found :" + std::string(msg->get_payload()));
         return;
     }
 
-    try{
-        nickname = parsed.get<std::string>("client");
-    } catch(const boost::property_tree::ptree_error &exception){
-
-    }
+    Logger.log("clientID :" + clientAddress + " ; command :" + command + " ; client :" + nickname);
 
     try{
         request = parsed.get_child("data");
     } catch(const boost::property_tree::ptree_error &exception){
-
+        isRequest = false;
     }
 
     if(command == "addClient"){
         Sender* sender = new Sender(this, clientAddress);
         clientServer->addClient(nickname, clientAddress, sender);
+
+        Logger.log("Added client " + nickname + " for " + clientAddress);
     } else if(command == "request"){
-        clientServer->getClient(nickname).addRequest(request);
+        if(!isRequest){
+            Logger.log("No request for request command found");
+            return;
+        }
+        try {
+            clientServer->getClient(clientAddress, nickname)->addRequest(request);
+        } catch(const char * e){
+            Logger.log("Could not find client :" + nickname);
+        }
+
+        Logger.log("Added request for" + nickname);
     } else if(command == "removeClient"){
         boost::property_tree::ptree quit;
 
         quit.put_child("command", boost::property_tree::ptree("disconnect"));
         quit.put_child("data", boost::property_tree::ptree("empty"));
 
-        clientServer->getClient(nickname).addRequest(quit);
+        try {
 
-        clientServer->removeClient(nickname);
+            Client* temp = clientServer->getClient(clientAddress, nickname);
+
+            clientServer->removeClient(clientAddress, nickname);
+
+            temp->addRequest(quit);
+
+        } catch(const char * e){
+            Logger.log("Could not find client :" + nickname);
+        }
+
+
+        Logger.log("Removed client " + nickname + " for " + clientAddress);
+    } else {
+        Logger.log("Invalid command :" + command);
     }
 }
 

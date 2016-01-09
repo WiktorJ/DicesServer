@@ -65,7 +65,7 @@ public class ClientImpl implements Client {
     }
 
     public void requestMove(String JSON) throws IOException {
-        socket.sendMessage(TargetSerializer.serialize("move", JSON));
+        socket.sendMessage(JSON);
     }
 
     public void requestQuiteGame() throws IOException {

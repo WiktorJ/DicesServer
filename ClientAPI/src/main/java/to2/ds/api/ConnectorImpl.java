@@ -50,9 +50,9 @@ public class ConnectorImpl implements Connector {
         ClientImpl client = ClientFactory.getClient(nickname, this);
         clientList.add(client);
         sendMessage("{" +
-                "clientID: " + "\"" + clientAddress + "\"" +
-                ", client: " + "\"" + nickname + "\"" +
-                ", command: \"addClient\"" + "" +
+                "\"clientID\": " + "\"" + clientAddress + "\"" +
+                ", \"client\": " + "\"" + nickname + "\"" +
+                ", \"command\": \"addClient\"" + "" +
                 "}");
         return client;
     }

@@ -24,6 +24,7 @@ private:
 public:
     WaitingRoom();
 
+    void sendActiveGames(std::string username, boost::property_tree::ptree activeGames);
     void addClient(Client* client);
     Client* removeClient(std::string username);
     std::vector<ClientMovement> getRequests();

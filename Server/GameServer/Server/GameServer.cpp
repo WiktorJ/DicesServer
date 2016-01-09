@@ -101,6 +101,10 @@ void GameServer::readRequests() {
             Games.add(game);
 
             Logger.log("Client : " + (*iterator).getUsername() + " - created a game: " + std::to_string(game->getId()));
+        } else if(command == "activeGames"){
+            WaitingRoom_.sendActiveGames((*iterator).getUsername(), getActiveGames());
+
+            Logger.log("Client : " + (*iterator).getUsername() + " - asked for active games");
         } else {
             Logger.log("Client : " + (*iterator).getUsername() + " - invalid command: " + command);
 

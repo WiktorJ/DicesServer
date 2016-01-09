@@ -42,3 +42,14 @@ std::vector<ClientMovement> WaitingRoom::getRequests() {
 WaitingRoom::WaitingRoom(const WaitingRoom &other) : Clients(other.Clients), Requests(other.Requests), Mutex(other.Mutex){
 
 }
+
+void WaitingRoom::sendActiveGames(std::string username, boost::property_tree::ptree activeGames) {
+    Mutex->lock();
+
+    for(std::vector<Client *>::iterator it = Clients.begin(); it != Clients.end(); it++)
+        if((*it)->getUsername() == username){
+            (*it)->sendData(activeGames);
+        }
+
+    Mutex->unlock();
+}
