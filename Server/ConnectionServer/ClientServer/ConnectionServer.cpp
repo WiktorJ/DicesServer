@@ -215,14 +215,43 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
 
 
         Logger.log("Removed client " + nickname + " for " + clientAddress);
-    } else {
+    } else if(command == "quit") {
+        std::string logResult = "";
+
+        std::vector<Client *> Clients = clientServer->getClientList(clientAddress);
+        clientServer->removeClientEndpoint(clientAddress);
+
+
+        for(std::vector<Client *>::iterator tmp = Clients.begin(); tmp != Clients.end(); tmp++){
+            boost::property_tree::ptree quit;
+
+            quit.put_child("command", boost::property_tree::ptree("disconnect"));
+            quit.put_child("data", boost::property_tree::ptree("empty"));
+
+
+            logResult += (*tmp)->getUsername() + ", ";
+            (*tmp)->addRequest(quit);
+        }
+
+        websocketpp::lib::error_code ec;
+        string data = "";
+        server.close(websockets.find(clientAddress)->second, websocketpp::close::status::normal, data, ec); // send text message.
+        if (ec) {
+            Logger.log("error in ConnectionServer:stop()");
+            Logger.log(ec.message());
+        }
+
+        websockets.erase(websockets.find(clientAddress));
+
+        Logger.log("Shutting endpoint :" + clientAddress + " clients : {" + logResult + "}");
+    }else {
         Logger.log("Invalid command :" + command);
     }
 }
 
 bool ConnectionServer::sendData(string data, std::string id) {
     websocketpp:: connection_hdl hdl;
-//    string id = "cid"; //TODO pu thin in data or as argument
+
     if (!getWebsocket(id, hdl)) {
         Logger.log("There is no socket with id: " + id);
         return false;
