@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by wiktor on 07.12.15.
@@ -35,9 +36,14 @@ public class ClientImpl implements Client {
         myMap = Collections.unmodifiableMap(aMap);
     }
 
-    public String getActiveGames() throws InterruptedException, IOException {
-        socket.sendMessage(TargetSerializer.serialize("getActiveGames", ""));
-        return activeGamesQueue.take();
+    public String getActiveGames() throws InterruptedException, IOException {//TODO: this json
+        socket.sendMessage("{" +
+                "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
+                ", \"client\": " + "\"" + nickname + "\"" +
+                ", \"data\": " + "{\"command\": \"activeGames\", \"data\": \"somedata\"}"  +
+                ", \"command\": \"request\"" + "" +
+                "}");
+        return activeGamesQueue.poll(2, TimeUnit.SECONDS);
     }
 
     public void requestCreate(String JSON) throws IOException {
@@ -74,6 +80,11 @@ public class ClientImpl implements Client {
 
     public String listen() throws InterruptedException {
         return statesQueue.take();
+    }
+
+    @Override
+    public String getNickName() {
+        return nickname;
     }
 
 

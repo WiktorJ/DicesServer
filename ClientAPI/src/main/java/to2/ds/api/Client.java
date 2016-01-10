@@ -14,5 +14,6 @@ public interface Client {
     void requestMove(String JSON) throws IOException;
     void requestQuiteGame() throws IOException;
     String listen() throws InterruptedException;
+    String getNickName();
 
 }

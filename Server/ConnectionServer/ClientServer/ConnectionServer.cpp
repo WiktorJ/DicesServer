@@ -104,7 +104,7 @@ void ConnectionServer::on_fail(websocketpp::connection_hdl hdl) {
 }
 
 void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
-    // Websocket connection closed.
+    Logger.log("websockt closing"); //TODO: remove client from websockets
 }
 
 

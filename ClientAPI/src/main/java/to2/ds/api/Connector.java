@@ -20,10 +20,12 @@ public interface Connector {
 //            URI uri = new URI(null, null, ip, port, null, null, null);
         String clientAddres = "cid";
         URI uri = new URI("ws://localhost:9020?" + clientAddres);
+//        URI uri = new URI("ws://localhost:9021/web/echo" + clientAddres);
         Session session = container.connectToServer(connector, uri);
         connector.setSession(session);
         connector.setClientAddress(clientAddres);
         return connector;
     }
-    void removeClient(Client client);
+    void removeClient(Client client) throws IOException;
+    void closeConnection() throws IOException;
 }

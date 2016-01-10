@@ -26,6 +26,10 @@ public class ConnectorImpl implements Connector {
         this.session = session;
     }
 
+    public String getClientAddress() {
+        return clientAddress;
+    }
+
     private String clientAddress = "cid";
 
     protected ConnectorImpl() {
@@ -33,18 +37,6 @@ public class ConnectorImpl implements Connector {
 
     private List<ClientImpl> clientList = new LinkedList<>();
 
-//
-//    public static ConnectorImpl connect(String ip, Integer port) throws IOException, DeploymentException, URISyntaxException {
-//        ConnectorImpl connector = new ConnectorImpl();
-//        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-////            URI uri = new URI(null, null, ip, port, null, null, null);
-//        String clientAddres = "cid";
-//        URI uri = new URI("ws://localhost:9020?" + clientAddres);
-//        Session session = container.connectToServer(connector, uri);
-//        connector.session = session;
-//        connector.clientAddress = clientAddres;
-//        return connector;
-//    }
 
     public Client addClient(String nickname) throws URISyntaxException, IOException {
         ClientImpl client = ClientFactory.getClient(nickname, this);
@@ -58,21 +50,31 @@ public class ConnectorImpl implements Connector {
     }
 
     @OnOpen
-    private void onOpen(Session session) {
+    public void onOpen(Session session) {
         System.out.println("Connected to server");
         this.session = session;
 
     }
 
     @OnMessage
-    private void onMessage(String json) throws UnexistingClientException {
-        ClientMessageTuple client = deserializer.deserializeUser(json, clientList);
-        client.getClient().stateUpdateAndNotify(client.getJSON());
+    public void onMessage(String json)  {
+        try {
+            ClientMessageTuple client = deserializer.deserializeUser(json, clientList);
+            client.getClient().stateUpdateAndNotify(client.getJSON());
+        } catch (UnexistingClientException e) {
+            e.printStackTrace();
+        }
     } // {client: clientID, messageWithType: {type: activeGames/gameState, state: {..}}}
 
     @OnClose
-    public void onClose(CloseReason reason, Session session) {
+    public void onClose(CloseReason reason, Session session) throws IOException {
         System.out.println("Closing a WebSocket due to " + reason.getReasonPhrase());
+    }
+
+
+    @OnError
+    public void onError(Throwable t) {
+        t.printStackTrace();
     }
 
     protected void sendMessage(String message) throws IOException {
@@ -80,7 +82,17 @@ public class ConnectorImpl implements Connector {
     }
 
 
-    public void removeClient(Client client) {
-        throw new UnsupportedOperationException();
+    public void removeClient(Client client) throws IOException {
+        clientList.remove(client);
+        sendMessage("{" +
+                "\"clientID\": " + "\"" + clientAddress + "\"" +
+                ", \"client\": " + "\"" + client.getNickName() + "\"" +
+                ", \"command\": \"removeClient\"" + "" +
+                "}");
+    }
+
+    @Override
+    public void closeConnection() throws IOException {
+        session.close();
     }
 }

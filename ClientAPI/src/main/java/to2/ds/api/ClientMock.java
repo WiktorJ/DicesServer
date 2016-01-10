@@ -1,10 +1,13 @@
 package to2.ds.api;
 
+
 import javax.websocket.DeploymentException;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -15,6 +18,8 @@ public class ClientMock {
 
 
     public static void main(String[] args) throws DeploymentException, IOException, URISyntaxException, InterruptedException {
+
+
         Connector connector = Connector.connect("localhost", 9020);
         Client test = connector.addClient("test");
         boolean finishFlag = false;
@@ -31,23 +36,35 @@ public class ClientMock {
         });
         t.start();
         Scanner scanner = new Scanner(System.in);
+        Path pathToJson = Paths.get(ClientMock.class.getClassLoader().getResource("JSON").toURI());
+        System.out.println(pathToJson);
+
+
         while (!finishFlag) {
 
             String s = scanner.nextLine();
-            if (s.equals("q")) {
+            if (s.equals("e")) {
                 finishFlag = true;
+                connector.removeClient(test);
             }
-            String json = new String(Files.readAllBytes(Paths.get(ClientMock.class.getClassLoader().getResource("JSON").toURI())));
-            String json2 = new String(Files.readAllBytes(Paths.get(ClientMock.class.getClassLoader().getResource("JSON2").toURI())));
+            String json = new String(Files.readAllBytes(pathToJson));
             switch (s) {
-                case "m": test.requestMove(json);
+                case "m":
+                    test.requestMove(json);
                     break;
-                case "c": test.requestMove(json2);
+                case "c":
+                    test.requestCreate(json);
                     break;
                 case "j":
                     System.out.println("Podaj GameId");
                     int i = scanner.nextInt();
                     test.requestJoinAsPlayer(i);
+                    break;
+                case "q":
+                    test.requestQuiteGame();
+                    break;
+                case "a":
+                    test.getActiveGames();
                     break;
                 default:
                     System.out.println("Wrong command");
@@ -55,6 +72,6 @@ public class ClientMock {
         }
         t.interrupt();
         t.join();
-
+        connector.closeConnection();
     }
 }
