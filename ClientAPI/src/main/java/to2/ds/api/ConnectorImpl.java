@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by wiktor on 07.12.15.
@@ -30,7 +31,7 @@ public class ConnectorImpl implements Connector {
         return clientAddress;
     }
 
-    private String clientAddress = "cid";
+    private String clientAddress = UUID.randomUUID().toString();
 
     protected ConnectorImpl() {
     }
@@ -78,6 +79,7 @@ public class ConnectorImpl implements Connector {
     }
 
     protected void sendMessage(String message) throws IOException {
+        System.out.println(message);
         session.getBasicRemote().sendText(message);
     }
 

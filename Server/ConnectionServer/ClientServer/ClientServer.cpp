@@ -66,3 +66,12 @@ void ClientServer::removeClientEndpoint(std::string clientAddress) {
         clients.erase(iter);
     }
 }
+
+std::vector<Client *> ClientServer::getClientList(std::string clientAddress) {
+    if ( clients.find(clientAddress) == clients.end()) {
+        throw std::exception();
+    } else {
+        map<string, std::vector<Client *>>::iterator iter =  clients.find(clientAddress);
+        return (*iter).second;
+    }
+}

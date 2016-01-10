@@ -28,6 +28,7 @@ public:
     Client* getClient(std::string clientAddress, std::string name);
     void addClientEndpoint(std::string clientAddress);
     void removeClientEndpoint(std::string clientAddress);
+    std::vector<Client *> getClientList(std::string clientAddress);
     ClientServer(WaitingRoom* waitingRoom);
 };
 

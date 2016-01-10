@@ -85,10 +85,6 @@ bool ConnectionServer::on_validate(websocketpp::connection_hdl hdl) {
         return false;
     }
 
-//    }
-
-
-
 
     websockets.insert(std::pair<string, websocketpp::connection_hdl>(id, hdl));
     clientServer->addClientEndpoint(id);
@@ -104,7 +100,45 @@ void ConnectionServer::on_fail(websocketpp::connection_hdl hdl) {
 }
 
 void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
-    Logger.log("websockt closing"); //TODO: remove client from websockets
+    Logger.log("websocket closing");
+
+    std::map<string, websocketpp::connection_hdl>::iterator it;
+
+    std::string logResult;
+    for(it = websockets.begin(); it != websockets.end(); it++){
+        if(server.get_con_from_hdl((*it).second) == server.get_con_from_hdl(hdl)){
+            std::string id = (*it).first;
+            websockets.erase(it);
+
+            std::vector<Client *> Clients = clientServer->getClientList(id);
+            clientServer->removeClientEndpoint(id);
+
+            for(std::vector<Client *>::iterator tmp = Clients.begin(); tmp != Clients.end(); tmp++){
+                boost::property_tree::ptree quit;
+
+                quit.put_child("command", boost::property_tree::ptree("disconnect"));
+                quit.put_child("data", boost::property_tree::ptree("empty"));
+
+
+                logResult += (*tmp)->getUsername() + ", ";
+                (*tmp)->addRequest(quit);
+            }
+
+            websocketpp::lib::error_code ec;
+            string data = "";
+            server.close(it->second, websocketpp::close::status::normal, data, ec); // send text message.
+            if (ec) {
+                Logger.log("error in ConnectionServer:stop()");
+                Logger.log(ec.message());
+            }
+
+
+            Logger.log("Removed endpoint :" + id + " clients : {" + logResult + "}");
+            return;
+
+        }
+    }
+
 }
 
 

@@ -7,6 +7,7 @@ import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 /**
  * Created by wiktor on 07.12.15.
@@ -18,7 +19,7 @@ public interface Connector {
         ConnectorImpl connector = new ConnectorImpl();
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 //            URI uri = new URI(null, null, ip, port, null, null, null);
-        String clientAddres = "cid";
+        String clientAddres = UUID.randomUUID().toString();
         URI uri = new URI("ws://localhost:9020?" + clientAddres);
 //        URI uri = new URI("ws://localhost:9021/web/echo" + clientAddres);
         Session session = container.connectToServer(connector, uri);
