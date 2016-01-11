@@ -53,7 +53,7 @@ public class ClientImpl implements Client {
                         "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
                         ", \"client\": " + "\"" + nickname + "\"" +
                         ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"createGame\", \"data\": {"+JSON+"}}"  +
+                        ", \"data\": " + "{\"command\": \"createGame\", \"data\": "+JSON+"}"  +
                         "}";
         socket.sendMessage(createGame);
     }
@@ -90,7 +90,7 @@ public class ClientImpl implements Client {
                         "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
                         ", \"client\": " + "\"" + nickname + "\"" +
                         ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"move\", \"data\": {"+JSON+"}"  +
+                        ", \"data\": " + "{\"command\": \"move\", \"data\": "+JSON+"}"  +
                         "}";
         socket.sendMessage(requestMove);
     }
