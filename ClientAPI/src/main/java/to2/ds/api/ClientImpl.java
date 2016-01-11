@@ -41,7 +41,7 @@ public class ClientImpl implements Client {
                 "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
                 ", \"client\": " + "\"" + nickname + "\"" +
                 ", \"command\": \"request\"" + "" +
-                ", \"data\": " + "{\"command\": \"activeGames\", \"data\": {somedata}}"  +
+                ", \"data\": " + "{\"command\": \"activeGames\", \"data\": {}}"  +
                 "}");
         return activeGamesQueue.poll(2, TimeUnit.SECONDS);
     }
@@ -64,7 +64,7 @@ public class ClientImpl implements Client {
                         "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
                         ", \"client\": " + "\"" + nickname + "\"" +
                         ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"join\", \"gameId\":"+gameID.toString()+ " ,\"data\":  {somedata}}"  +
+                        ", \"data\": " + "{\"command\": \"join\", \"gameId\": \""+gameID.toString()+"\" ,\"data\":  {}}"  +
                         "}";
 
         socket.sendMessage(requestJoinAsPlayer);
@@ -76,7 +76,7 @@ public class ClientImpl implements Client {
                         "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
                         ", \"client\": " + "\"" + nickname + "\"" +
                         ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"observe\", \"gameId\":"+gameID.toString()+ " ,\"data\":  {somedata}}"  +
+                        ", \"data\": " + "{\"command\": \"observe\", \"gameId\": \""+gameID.toString()+"\" ,\"data\":  {}}"  +
                         "}";
 
         //  socket.sendMessage(TargetSerializer.serialize("observe", requestJoinAsObserver));
@@ -101,7 +101,7 @@ public class ClientImpl implements Client {
                         "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
                         ", \"client\": " + "\"" + nickname + "\"" +
                         ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"quit\", \"data\":  {somedata}}"  +
+                        ", \"data\": " + "{\"command\": \"quit\", \"data\":  {}}"  +
                         "}";
 
         socket.sendMessage(requestQuit);
@@ -121,7 +121,7 @@ public class ClientImpl implements Client {
 
     public void stateUpdateAndNotify(String message) {
         JSONObject jsonObject = new JSONObject(message);
-        Queue queue = myMap.get((String) jsonObject.get("type"));
+        Queue queue = myMap.get((String) jsonObject.get("\"command\""));
         queue.add(message);
     }
 
