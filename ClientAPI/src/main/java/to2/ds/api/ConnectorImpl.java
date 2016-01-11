@@ -45,7 +45,7 @@ public class ConnectorImpl implements Connector {
                 "\"clientID\": " + "\"" + clientAddress + "\"" +
                 ", \"client\": " + "\"" + nickname + "\"" +
                 ", \"command\": \"addClient\"" + "" +
-                ", \"data\": " + "{\"command\": \"quit\", \"data\":  {somedata}}"  +
+                ", \"data\": " + "{\"command\": \"addClient\", \"data\":  {}}"  +
                 "}");
         return client;
     }
@@ -90,7 +90,7 @@ public class ConnectorImpl implements Connector {
                 "\"clientID\": " + "\"" + clientAddress + "\"" +
                 ", \"client\": " + "\"" + client.getNickName() + "\"" +
                 ", \"command\": \"removeClient\"" + "" +
-                ", \"data\": " + "{\"command\": \"quit\", \"data\":  {somedata}}"  +
+                ", \"data\": " + "{\"command\": \"quit\", \"data\":  {}}"  +
                 "}");
     }
 
