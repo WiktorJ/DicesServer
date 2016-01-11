@@ -1,7 +1,6 @@
 .idea
 .DS_Store
 *.iml
-*.jar
 /ControllersContainer/target/maven-status
 /ControllersContainer/target/maven-archiver
 /ControllersContainer/target/surefire
