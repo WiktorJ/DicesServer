@@ -22,7 +22,7 @@ public class Deserializer {
 
         ListIterator<ClientImpl> iterator = clients.listIterator();
     while (iterator.hasNext()) {
-        if (iterator.next().getId() == clientId) {
+        if (iterator.next().getId().equals(clientId)) {
             ClientMessageTuple tuple = new ClientMessageTuple(dataJSON.toString(), iterator.next());
             return tuple;
         }
