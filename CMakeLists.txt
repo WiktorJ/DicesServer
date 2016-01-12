@@ -41,7 +41,7 @@ set(JAVA_SOURCE_FILES Server/GameServer/Java/Instance/JNIInstance.cpp Server/Gam
         Server/GameServer/Java/Object/Controller/JController.cpp Server/GameServer/Java/Object/Controller/JController.h
         Server/GameServer/Java/Exception/Env/JNIEnvException.cpp Server/GameServer/Java/Exception/Env/JNIEnvException.h
         Server/GameServer/Java/Exception/JNIException.cpp Server/GameServer/Java/Exception/JNIException.h
-        Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h Server/GameServer/Server/Client/ResponseSerializer.cpp Server/GameServer/Server/Client/ResponseSerializer.h)
+        Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h Server/GameServer/Server/Client/ResponseSerializer.cpp Server/GameServer/Server/Client/ResponseSerializer.h Server/ConnectionServer/ClientServer/Client/Serializer/ClientSerializer.cpp Server/ConnectionServer/ClientServer/Client/Serializer/ClientSerializer.h)
 
 add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} JNI-test/SimpleInstanceJNI.cpp
         JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp
