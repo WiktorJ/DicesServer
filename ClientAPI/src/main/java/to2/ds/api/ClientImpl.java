@@ -121,7 +121,8 @@ public class ClientImpl implements Client {
 
     public void stateUpdateAndNotify(String message) {
         JSONObject jsonObject = new JSONObject(message);
-        Queue queue = myMap.get((String) jsonObject.get("command"));
+        System.out.println(message);
+        Queue queue = myMap.get(jsonObject.get("command"));
         queue.add(message);
     }
 
