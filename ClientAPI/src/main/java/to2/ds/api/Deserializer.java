@@ -21,17 +21,17 @@ public class Deserializer {
         JSONObject dataJSON = OneClient.getJSONObject("data");
 
         ListIterator<ClientImpl> iterator = clients.listIterator();
-
-        while(iterator.hasNext()) {
-            if(iterator.next().getId() == clientId){
-                ClientMessageTuple tuple = new ClientMessageTuple(dataJSON.toString(), iterator.next());
-                return tuple;
-            }
+    while (iterator.hasNext()) {
+        if (iterator.next().getId() == clientId) {
+            ClientMessageTuple tuple = new ClientMessageTuple(dataJSON.toString(), iterator.next());
+            return tuple;
         }
+    }
+    throw new UnexistingClientException ();
 
 
 
-        return null;
+
     }
 }
 
