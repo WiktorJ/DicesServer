@@ -40,42 +40,73 @@ public class ClientImpl implements Client {
         socket.sendMessage("{" +
                 "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
                 ", \"client\": " + "\"" + nickname + "\"" +
-                ", \"data\": " + "{\"command\": \"activeGames\", \"data\": \"somedata\"}"  +
                 ", \"command\": \"request\"" + "" +
+                ", \"data\": " + "{\"command\": \"activeGames\", \"data\": {}}"  +
                 "}");
         return activeGamesQueue.poll(2, TimeUnit.SECONDS);
     }
 
     public void requestCreate(String JSON) throws IOException {
-        String createGame = TargetSerializer.serialize("create", JSON);
+
+        String createGame =
+                "{" +
+                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
+                        ", \"client\": " + "\"" + nickname + "\"" +
+                        ", \"command\": \"request\"" + "" +
+                        ", \"data\": " + "{\"command\": \"createGame\", \"data\": "+JSON+"}"  +
+                        "}";
         socket.sendMessage(createGame);
     }
 
     public void requestJoinAsPlayer(Integer gameID) throws IOException {
-        String jsonString = new JSONObject()
-                            .put("gameId", gameID)
-                            .put("clientId", nickname)
-                            .toString();
+        String requestJoinAsPlayer =
+                "{" +
+                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
+                        ", \"client\": " + "\"" + nickname + "\"" +
+                        ", \"command\": \"request\"" + "" +
+                        ", \"data\": " + "{\"command\": \"join\", \"gameId\": \""+gameID.toString()+"\" ,\"data\":  {}}"  +
+                        "}";
 
-        socket.sendMessage(TargetSerializer.serialize("create", jsonString));
+        socket.sendMessage(requestJoinAsPlayer);
     }
 
     public void requestJoinAsObserver(Integer gameID) throws IOException {
-        String jsonString = new JSONObject()
-                .put("gameId", gameID)
-                .put("clientId", nickname)
-                .toString();
+        String requestJoinAsObserver =
+                "{" +
+                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
+                        ", \"client\": " + "\"" + nickname + "\"" +
+                        ", \"command\": \"request\"" + "" +
+                        ", \"data\": " + "{\"command\": \"observe\", \"gameId\": \""+gameID.toString()+"\" ,\"data\":  {}}"  +
+                        "}";
 
-        socket.sendMessage(TargetSerializer.serialize("observe", jsonString));
+        //  socket.sendMessage(TargetSerializer.serialize("observe", requestJoinAsObserver));
 
+        socket.sendMessage(requestJoinAsObserver);
     }
 
     public void requestMove(String JSON) throws IOException {
-        socket.sendMessage(JSON);
+        String requestMove =
+                "{" +
+                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
+                        ", \"client\": " + "\"" + nickname + "\"" +
+                        ", \"command\": \"request\"" + "" +
+                        ", \"data\": " + "{\"command\": \"move\", \"data\": "+JSON+"}"  +
+                        "}";
+        socket.sendMessage(requestMove);
     }
 
     public void requestQuiteGame() throws IOException {
-        socket.sendMessage(TargetSerializer.serialize("quit", ""));
+        String requestQuit =
+                "{" +
+                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
+                        ", \"client\": " + "\"" + nickname + "\"" +
+                        ", \"command\": \"request\"" + "" +
+                        ", \"data\": " + "{\"command\": \"quit\", \"data\":  {}}"  +
+                        "}";
+
+        socket.sendMessage(requestQuit);
+
+        // socket.sendMessage(TargetSerializer.serialize("quit", ""));
     }
 
     public String listen() throws InterruptedException {
@@ -90,7 +121,7 @@ public class ClientImpl implements Client {
 
     public void stateUpdateAndNotify(String message) {
         JSONObject jsonObject = new JSONObject(message);
-        Queue queue = myMap.get((String) jsonObject.get("type"));
+        Queue queue = myMap.get((String) jsonObject.get("\"command\""));
         queue.add(message);
     }
 

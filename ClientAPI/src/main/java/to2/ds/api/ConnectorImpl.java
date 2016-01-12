@@ -3,7 +3,6 @@ package to2.ds.api;
 
 import javax.websocket.*;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,6 +45,7 @@ public class ConnectorImpl implements Connector {
                 "\"clientID\": " + "\"" + clientAddress + "\"" +
                 ", \"client\": " + "\"" + nickname + "\"" +
                 ", \"command\": \"addClient\"" + "" +
+                ", \"data\": " + "{\"command\": \"addClient\", \"data\":  {}}"  +
                 "}");
         return client;
     }
@@ -90,6 +90,7 @@ public class ConnectorImpl implements Connector {
                 "\"clientID\": " + "\"" + clientAddress + "\"" +
                 ", \"client\": " + "\"" + client.getNickName() + "\"" +
                 ", \"command\": \"removeClient\"" + "" +
+                ", \"data\": " + "{\"command\": \"quit\", \"data\":  {}}"  +
                 "}");
     }
 

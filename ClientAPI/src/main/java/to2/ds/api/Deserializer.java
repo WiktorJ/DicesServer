@@ -12,22 +12,23 @@ public class Deserializer {
 
     public static ClientMessageTuple deserializeUser(String json, List<ClientImpl> clients) throws UnexistingClientException {
 
-        JSONObject oneclient = new JSONObject(json);
-        String clientID = oneclient.getString("clientID");
+        JSONObject OneClient = new JSONObject(json);
 
-        JSONObject messageWithType = oneclient.getJSONObject("messageWithType");
-        String JSON = messageWithType.getString("state");
-        String type = messageWithType.getString("type");
+        String clientId = OneClient.getString("\"clientID\"");
+        //  String client = OneClient.getString("client");
+        String command = OneClient.getString("\"command\"");
+        JSONObject dataJSON = OneClient.getJSONObject("\"data\"");
 
         ListIterator<ClientImpl> iterator = clients.listIterator();
 
-        while (iterator.hasNext()) {
-
-            if (iterator.next().getId() == clientID) {
-                ClientMessageTuple tuple = new ClientMessageTuple(messageWithType.toString(), iterator.next());
+        while(iterator.hasNext()) {
+            if(iterator.next().getId() == clientId){
+                ClientMessageTuple tuple = new ClientMessageTuple(dataJSON.toString(), iterator.next());
                 return tuple;
             }
         }
+
+
 
         return null;
     }
