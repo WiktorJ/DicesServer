@@ -20,18 +20,19 @@ public class Deserializer {
 
         JSONObject dataJSON = OneClient.getJSONObject("data");
 
-        ListIterator<ClientImpl> iterator = clients.listIterator();
-    while (iterator.hasNext()) {
-        if (iterator.next().getId().equals(clientId)) {
-            ClientMessageTuple tuple = new ClientMessageTuple(dataJSON.toString(), iterator.next());
-            return tuple;
+        for (ClientImpl client : clients) {
+            if (client.getId().equals(clientId)) {
+                return new ClientMessageTuple(dataJSON.toString(), client);
+            }
         }
-    }
-    throw new UnexistingClientException ();
-
-
-
-
+//        ListIterator<ClientImpl> iterator = clients.listIterator();
+//    while (iterator.hasNext()) {
+//        if (iterator.next().getId().equals(clientId)) {
+//            ClientMessageTuple tuple = new ClientMessageTuple(dataJSON.toString(), iterator.next());
+//            return tuple;
+//        }
+//    }
+         throw new UnexistingClientException ();
     }
 }
 
