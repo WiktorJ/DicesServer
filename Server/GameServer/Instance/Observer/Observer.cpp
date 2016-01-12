@@ -38,7 +38,7 @@ void Observer::listen() {
             Clients.clear();
             break;
         } else if(command == "stateUpdated"){
-            Clients.sendData(json, "stateUpdated");
+            Clients.sendData(json, "gameState");
         } else {
             true;
         }
