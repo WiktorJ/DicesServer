@@ -21,6 +21,7 @@ public interface Connector {
 //            URI uri = new URI(null, null, ip, port, null, null, null);
         String clientAddres = UUID.randomUUID().toString();
         URI uri = new URI("ws://localhost:9020?" + clientAddres);
+//        URI uri = new URI("ws://" + ip + ":" + port + "?" + clientAddres);
 //        URI uri = new URI("ws://localhost:9021/web/echo" + clientAddres);
         Session session = container.connectToServer(connector, uri);
         connector.setSession(session);

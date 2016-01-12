@@ -13,7 +13,7 @@ ConnectionServer::ConnectionServer(WaitingRoom *waitingRoom) : Logger("Connectio
     clientServer = new ClientServer(waitingRoom);
 }
 
-bool ConnectionServer::init(int port) {
+bool ConnectionServer:: init(int port) {
     server.init_asio();
     server.set_open_handler(websocketpp::lib::bind(&ConnectionServer::on_validate, this, websocketpp::lib::placeholders::_1));
     server.set_fail_handler(websocketpp::lib::bind(&ConnectionServer::on_fail, this,  websocketpp::lib::placeholders::_1));
@@ -73,6 +73,7 @@ void ConnectionServer::stop() {
 }
 
 bool ConnectionServer::on_validate(websocketpp::connection_hdl hdl) {
+    Logger.log("New validate connection");
     websocketpp::server<websocketpp::config::asio>::connection_ptr con = server.get_con_from_hdl(hdl);
     websocketpp::uri_ptr uri = con->get_uri();
     string id;
@@ -85,7 +86,7 @@ bool ConnectionServer::on_validate(websocketpp::connection_hdl hdl) {
         return false;
     }
 
-
+    Logger.log("Adding new endpoint");
     websockets.insert(std::pair<string, websocketpp::connection_hdl>(id, hdl));
     clientServer->addClientEndpoint(id);
 

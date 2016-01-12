@@ -10,6 +10,7 @@
 #include "Client/Client.h"
 #include "../../GameServer/Server/Client/WaitingRoom.h"
 #include "../Connector/Network/Sender.h"
+#include "../../Logger/LogParser.h"
 
 class Sender;
 class Client;
@@ -20,6 +21,7 @@ class ClientServer {
 
 private:
     std::map <std::string, std::vector<Client*>> clients;
+    LogParser logger;
     WaitingRoom* waitingRoom;
 
 public:

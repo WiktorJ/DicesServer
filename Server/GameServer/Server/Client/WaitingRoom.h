@@ -9,6 +9,7 @@
 #include <vector>
 #include <boost/thread/pthread/mutex.hpp>
 #include "../../../ConnectionServer/ClientServer/Client/Client.h"
+#include "../../../Logger/LogParser.h"
 #include "../../Instance/Client/ClientMovement.h"
 
 class Client;
@@ -16,6 +17,7 @@ class Client;
 
 class WaitingRoom {
 private:
+    LogParser logger;
     boost::shared_ptr<boost::mutex> Mutex;
     std::vector<Client *> Clients;
     RequestQueue Requests;

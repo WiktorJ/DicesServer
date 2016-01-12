@@ -7,7 +7,7 @@
 
 using namespace std;
 
-Observer::Observer(ClientGroup& Clients, JObserver Observer_) : Clients(Clients), Observer_(Observer_){
+Observer::Observer(ClientGroup& Clients, JObserver Observer_) : Clients(Clients), Observer_(Observer_), Logger("Observer"){
 
 }
 
@@ -24,8 +24,11 @@ void Observer::listen() {
 
         boost::property_tree::ptree json;
         std::stringstream ss(data);
-        boost::property_tree::read_json(ss, json);
-
+        try {
+            boost::property_tree::read_json(ss, json);
+        } catch(const boost::property_tree::json_parser_error &e){
+            Logger.log("Could not parse json" + ss.str());
+        }
         std::string command = ObsCmdDeserializer::deserialize(json);
 
         if(command == "removePlayer"){

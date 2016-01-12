@@ -15,6 +15,7 @@ class Observer {
 private:
     ClientGroup& Clients;
     JObserver Observer_;
+    LogParser Logger;
 public:
     Observer(ClientGroup& Clients, JObserver Observer_);
     void listen();

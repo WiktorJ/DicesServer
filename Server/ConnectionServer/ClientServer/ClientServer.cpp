@@ -7,7 +7,8 @@
 
 using namespace std;
 
-void ClientServer::addClient(string name, string clientAddress, Sender* sender) {
+void ClientServer::addClient(string name, string clientAddress, Sender* sender){
+    logger.log("Trying to add client");
     Client *client = new Client(name, sender);
     map<string, std::vector<Client *>>::iterator iter =  clients.find(clientAddress);
     iter->second.push_back(client);
@@ -15,6 +16,7 @@ void ClientServer::addClient(string name, string clientAddress, Sender* sender) 
 }
 
 Client* ClientServer::getClient(std::string clientAddress, string name) {
+    logger.log("Trying to get client");
     if ( clients.find(clientAddress) == clients.end()) {
             cout<<"Some error message";
         throw "get Client exception";
@@ -31,6 +33,7 @@ Client* ClientServer::getClient(std::string clientAddress, string name) {
 }
 
 bool ClientServer::removeClient(std::string clientAddress, string name) {
+    logger.log("trying to remove client");
     if ( clients.find(clientAddress) == clients.end()) {
         cout << "Some error message";
         return false;
@@ -49,16 +52,18 @@ bool ClientServer::removeClient(std::string clientAddress, string name) {
 }
 
 void ClientServer::addClientEndpoint(string clientAddress) {
+    logger.log("adding endpoint");
     std::vector<Client *> vec;
     clients.insert(pair<string,  std::vector<Client *>>(clientAddress, vec));
 }
 
 
-ClientServer::ClientServer(WaitingRoom* waitingRoom) {
+ClientServer::ClientServer(WaitingRoom* waitingRoom) : logger("ClientServer"){
     this->waitingRoom = waitingRoom;
 }
 
 void ClientServer::removeClientEndpoint(std::string clientAddress) {
+    logger.log("remove client endpoint");
     if ( clients.find(clientAddress) == clients.end()) {
         cout << "Some error message";
     } else {
@@ -68,6 +73,7 @@ void ClientServer::removeClientEndpoint(std::string clientAddress) {
 }
 
 std::vector<Client *> ClientServer::getClientList(std::string clientAddress) {
+    logger.log("get client list");
     if ( clients.find(clientAddress) == clients.end()) {
         throw std::exception();
     } else {

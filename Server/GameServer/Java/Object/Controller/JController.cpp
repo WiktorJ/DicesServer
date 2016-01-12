@@ -42,20 +42,20 @@ void JController::initialize() {
 
 void JController::addPlayer(std::string username) {
     if(Env == NULL)throw new JNIEnvException;
-
-    Env->CallVoidMethod(Object, AddPlayer, username.c_str());
+    jstring name = Env->NewStringUTF(username.c_str());
+    Env->CallVoidMethod(Object, AddPlayer, name);
 }
 
 void JController::removePlayer(std::string username) {
     if(Env == NULL)throw new JNIEnvException;
-
-    Env->CallVoidMethod(Object, RemovePlayer, username.c_str());
+    jstring name = Env->NewStringUTF(username.c_str());
+    Env->CallVoidMethod(Object, RemovePlayer, name);
 }
 
 void JController::makeMove(std::string move) {
     if(Env == NULL)throw new JNIEnvException;
-
-    Env->CallVoidMethod(Object, MakeMove, move.c_str());
+    jstring m = Env->NewStringUTF(move.c_str());
+    Env->CallVoidMethod(Object, MakeMove, m);
 }
 
 void JController::stop() {

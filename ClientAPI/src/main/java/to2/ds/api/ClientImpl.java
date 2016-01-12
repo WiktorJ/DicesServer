@@ -53,7 +53,7 @@ public class ClientImpl implements Client {
                         "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
                         ", \"client\": " + "\"" + nickname + "\"" +
                         ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"createGame\", \"data\": "+JSON+"}"  +
+                        ", \"data\": " + "{\"command\": \"create\", \"data\": "+JSON+"}"  +
                         "}";
         socket.sendMessage(createGame);
     }
