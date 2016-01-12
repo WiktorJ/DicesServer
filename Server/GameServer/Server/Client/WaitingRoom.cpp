@@ -48,7 +48,7 @@ void WaitingRoom::sendActiveGames(std::string username, boost::property_tree::pt
 
     for(std::vector<Client *>::iterator it = Clients.begin(); it != Clients.end(); it++)
         if((*it)->getUsername() == username){
-            (*it)->sendData(activeGames);
+            (*it)->sendData(activeGames, "activeGames");
         }
 
     Mutex->unlock();

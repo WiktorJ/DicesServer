@@ -29,12 +29,16 @@ void Observer::listen() {
         std::string command = ObsCmdDeserializer::deserialize(json);
 
         if(command == "removePlayer"){
-            Clients.removeClient(ObsCmdDeserializer::deserializeNick(json));
+            std::string username = ObsCmdDeserializer::deserializeNick(json);
+
+            Clients.sendDataToPlayer(username, boost::property_tree::ptree("Empty"), "remove");
+
+            Clients.removeClient(username);
         } else if(command == "gameEnded"){
             Clients.clear();
             break;
         } else if(command == "stateUpdated"){
-            Clients.sendData(json);
+            Clients.sendData(json, "stateUpdated");
         } else {
             true;
         }

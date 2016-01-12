@@ -8,11 +8,11 @@ ClientGroup::ClientGroup(WaitingRoom & WaitingRoom_) : WaitingRoom_(WaitingRoom_
 
 }
 
-void ClientGroup::sendData(boost::property_tree::ptree data) {
+void ClientGroup::sendData(boost::property_tree::ptree data, std::string command) {
     Mutex->lock();
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
-        (*it)->sendData(data);
+        (*it)->sendData(data, command);
 
     Mutex->unlock();
 }
@@ -76,6 +76,19 @@ void ClientGroup::clear() {
 
         WaitingRoom_.addClient(subscriber);
     }
+
+    Mutex->unlock();
+}
+
+void ClientGroup::sendDataToPlayer(std::string username, boost::property_tree::ptree data, std::string command) {
+    Mutex->lock();
+
+    for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
+        if((*it)->getUsername() == username){
+            (*it)->sendData(data, command);
+
+            return;
+        }
 
     Mutex->unlock();
 }

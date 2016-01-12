@@ -3,6 +3,7 @@
 //
 
 #include "Client.h"
+#include "Serializer/ClientSerializer.h"
 
 //TODO
 
@@ -17,9 +18,9 @@ void Client::addRequest(boost::property_tree::ptree Request) {
     Requests->addRequest(move);
 }
 
-void Client::sendData(boost::property_tree::ptree data) {
+void Client::sendData(boost::property_tree::ptree data, std::string command) {
     stringstream ss;
-    boost::property_tree::write_json(ss, data);
+    boost::property_tree::write_json(ss, ClientSerializer::serialize(Username, data, command));
 
     sender->send(ss.str());
 }
