@@ -43,7 +43,7 @@ public class ClientImpl implements Client {
                 ", \"command\": \"request\"" + "" +
                 ", \"data\": " + "{\"command\": \"activeGames\", \"data\": {}}"  +
                 "}");
-        return activeGamesQueue.poll(2, TimeUnit.SECONDS);
+        return activeGamesQueue.take(); //TODO timeout exception
     }
 
     public void requestCreate(String JSON) throws IOException {

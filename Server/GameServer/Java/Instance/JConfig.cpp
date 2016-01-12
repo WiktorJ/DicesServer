@@ -16,7 +16,7 @@ JConfig::JConfig() {
 
     std::cout << "Write jar path" << std::endl;
 //    std::cin >> JARPath;
-    JARPath = "/home/wg/Github/DicesServer/Local/Dice.jar";
+    JARPath = "//home/wiktor/Documents/Dice.jar";
 
     std::cout << "Write observer package" << std::endl;
 //    std::cin >> ObserverPackage;
