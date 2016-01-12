@@ -14,10 +14,11 @@ public class Deserializer {
 
         JSONObject OneClient = new JSONObject(json);
 
-        String clientId = OneClient.getString("\"clientID\"");
+        String clientId = OneClient.getString("clientID");
         //  String client = OneClient.getString("client");
-        String command = OneClient.getString("\"command\"");
-        JSONObject dataJSON = OneClient.getJSONObject("\"data\"");
+        //String command = OneClient.getString("\"command\"");
+
+        JSONObject dataJSON = OneClient.getJSONObject("data");
 
         ListIterator<ClientImpl> iterator = clients.listIterator();
 
