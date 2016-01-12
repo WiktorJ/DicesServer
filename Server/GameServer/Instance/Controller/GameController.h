@@ -13,6 +13,7 @@
 class GameController {
 private:
     JController Controller;
+    LogParser Logger;
 public:
     GameController(const GameController &other);
     GameController(JController Controller);

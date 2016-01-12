@@ -25,7 +25,7 @@ void GameHolder::update(){
 }
 
 void GameHolder::remove(int GameId) {
-    Mutex.lock();
+    boost::unique_lock<boost::mutex> lock(Mutex);
 
     update();
 
@@ -34,37 +34,31 @@ void GameHolder::remove(int GameId) {
             delete (*iterator);
             Games.erase(iterator);
 
-            Mutex.unlock();
             return;
         }
-
-    Mutex.unlock();
 }
 
 void GameHolder::add(GameInstance *Game) {
-    Mutex.lock();
+    boost::unique_lock<boost::mutex> lock(Mutex);
 
     update();
 
     Games.push_back(Game);
     Game->start();
 
-    Mutex.unlock();
 }
 
 GameInstance *GameHolder::get(int GameId) {
-    Mutex.lock();
+    boost::unique_lock<boost::mutex> lock(Mutex);
 
     update();
 
     for(std::vector<GameInstance *>::iterator iterator = Games.begin(); iterator != Games.end(); iterator++)
         if((*iterator)->getId() == GameId){
 
-            Mutex.unlock();
             return (*iterator);
         }
 
-    Mutex.unlock();
     return NULL;
 }
 
@@ -73,12 +67,11 @@ GameHolder::GameHolder() {
 }
 
 std::vector<GameInstance *> GameHolder::getGames() {
-    Mutex.lock();
+    boost::unique_lock<boost::mutex> lock(Mutex);
 
     update();
 
     std::vector<GameInstance *> result = Games;
 
-    Mutex.unlock();
     return result;
 }

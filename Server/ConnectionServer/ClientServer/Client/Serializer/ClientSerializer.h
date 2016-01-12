@@ -10,7 +10,8 @@
 
 class ClientSerializer {
 public:
-    static boost::property_tree::ptree serialize(std::string ClientName, boost::property_tree::ptree data, std::string command);
+    static boost::property_tree::ptree serializeUserName(std::string ClientName, boost::property_tree::ptree data);
+    static boost::property_tree::ptree serializeType(boost::property_tree::ptree data);
 };
 
 

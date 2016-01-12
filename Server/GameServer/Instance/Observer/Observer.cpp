@@ -4,10 +4,11 @@
 
 #include "Observer.h"
 #include "ObsCmdDeserializer.h"
+#include "../Client/GameResponseSerializer.h"
 
 using namespace std;
 
-Observer::Observer(ClientGroup& Clients, JObserver Observer_) : Clients(Clients), Observer_(Observer_){
+Observer::Observer(ClientGroup& Clients, JObserver Observer_) : Clients(Clients), Observer_(Observer_), Logger("Observer"){
 
 }
 
@@ -17,30 +18,37 @@ void Observer::listen() {
     while(1){
         std::string data = Observer_.notify();
 
-        if(Observer_.isFinished()){
-            Clients.clear();
-            break;
-        }
 
         boost::property_tree::ptree json;
         std::stringstream ss(data);
-        boost::property_tree::read_json(ss, json);
 
-        std::string command = ObsCmdDeserializer::deserialize(json);
+        try {
+            boost::property_tree::read_json(ss, json);
 
-        if(command == "removePlayer"){
-            std::string username = ObsCmdDeserializer::deserializeNick(json);
+            std::string command = ObsCmdDeserializer::deserialize(json);
 
-            Clients.sendDataToPlayer(username, boost::property_tree::ptree("Empty"), "remove");
+            if(command == "removePlayer"){
+                std::string username = ObsCmdDeserializer::deserializeNick(json);
 
-            Clients.removeClient(username);
-        } else if(command == "gameEnded"){
+                Clients.sendDataToPlayer(username, GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("CONTROLLER ASKED FOR REMOVAL")));
+
+                Clients.removeClient(username);
+            } else if(command == "stateUpdated"){
+                Clients.sendData(GameResponseSerializer::serializeResponse(command, status::SUCCESS, json));
+            } else {
+                Logger.log("Got an invalid command" + command);
+            }
+
+        } catch(const boost::property_tree::json_parser_error &e){
+            Logger.log("Could not parse JSON");
+
+        }
+
+        if(Observer_.isFinished()){
+            Clients.sendData(GameResponseSerializer::serializeResponse("gameEnded", status::SUCCESS, boost::property_tree::ptree("GAME STATE CHANGED TO FINISH")));
+
             Clients.clear();
             break;
-        } else if(command == "stateUpdated"){
-            Clients.sendData(json, "gameState");
-        } else {
-            true;
         }
 
         boost::this_thread::interruption_point();
