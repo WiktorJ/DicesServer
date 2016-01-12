@@ -20,6 +20,7 @@ void Client::addRequest(boost::property_tree::ptree Request) {
 
 void Client::sendData(boost::property_tree::ptree data, std::string command) {
     stringstream ss;
+    data.put_child("command", boost::property_tree::ptree(command));
     boost::property_tree::write_json(ss, ClientSerializer::serialize(Username, data, command));
 
     sender->send(ss.str());
