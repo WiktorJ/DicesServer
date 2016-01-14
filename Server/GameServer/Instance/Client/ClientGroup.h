@@ -27,8 +27,8 @@ public:
     ClientGroup(WaitingRoom &WaitingRoom_);
 
     void clear();
-    void sendDataToPlayer(std::string username, boost::property_tree::ptree data, std::string command);
-    void sendData(boost::property_tree::ptree data, std::string command);
+    void sendDataToPlayer(std::string username, boost::property_tree::ptree data);
+    void sendData(boost::property_tree::ptree data);
     void addSubscriber(Client* client);
     void removeSubscriber(std::string username);
     void removeClient(std::string username);

@@ -41,7 +41,8 @@ set(JAVA_SOURCE_FILES Server/GameServer/Java/Instance/JNIInstance.cpp Server/Gam
         Server/GameServer/Java/Object/Controller/JController.cpp Server/GameServer/Java/Object/Controller/JController.h
         Server/GameServer/Java/Exception/Env/JNIEnvException.cpp Server/GameServer/Java/Exception/Env/JNIEnvException.h
         Server/GameServer/Java/Exception/JNIException.cpp Server/GameServer/Java/Exception/JNIException.h
-        Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h Server/GameServer/Server/Client/ResponseSerializer.cpp Server/GameServer/Server/Client/ResponseSerializer.h Server/ConnectionServer/ClientServer/Client/Serializer/ClientSerializer.cpp Server/ConnectionServer/ClientServer/Client/Serializer/ClientSerializer.h)
+        Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h
+        )
 
 add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} JNI-test/SimpleInstanceJNI.cpp
         JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp
@@ -49,7 +50,6 @@ add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} 
         Server/ConnectionServer/ClientServer/Client/Client.cpp Server/ConnectionServer/ClientServer/Client/Client.h
         Server/GameServer/Instance/Client/ClientGroup.cpp Server/GameServer/Instance/Client/ClientGroup.h
         Server/GameServer/Instance/Client/ClientMovement.cpp Server/GameServer/Instance/Client/ClientMovement.h
-        Server/GameServer/Instance/Client/ClientReader.cpp Server/GameServer/Instance/Client/ClientReader.h
         Server/GameServer/Server/Client/WaitingRoom.cpp Server/GameServer/Server/Client/WaitingRoom.h
         Server/GameServer/Instance/Reader/GameCmdDeseriallizer.cpp Server/GameServer/Instance/Reader/GameCmdDeseriallizer.h
         Server/GameServer/Instance/Observer/GameCmdSeriallizer.cpp Server/GameServer/Instance/Observer/GameCmdSeriallizer.h
@@ -68,7 +68,10 @@ add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} 
         Server/GameServer/Event/RequestQueue.cpp Server/GameServer/Event/RequestQueue.h Server/StartUp/MainServer.cpp Server/StartUp/MainServer.h
         Server/Logger/Logger.cpp Server/Logger/Logger.h Server/Logger/LogParser.cpp Server/Logger/LogParser.h
         Server/ConnectionServer/ClientServer/ConnectionServer.cpp Server/ConnectionServer/ClientServer/ConnectionServer.h
-        Server/ConnectionServer/ClientServer/ClientServer.h Server/ConnectionServer/ClientServer/ClientServer.cpp)
+        Server/ConnectionServer/ClientServer/ClientServer.h Server/ConnectionServer/ClientServer/ClientServer.cpp
+        Server/ConnectionServer/ClientServer/Client/Serializer/ClientSerializer.cpp Server/ConnectionServer/ClientServer/Client/Serializer/ClientSerializer.h
+        Server/GameServer/Instance/Client/GameResponseSerializer.cpp Server/GameServer/Instance/Client/GameResponseSerializer.h
+        )
 
 
 if(Boost_FOUND)

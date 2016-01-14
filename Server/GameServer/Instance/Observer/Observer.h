@@ -14,6 +14,7 @@
 class Observer {
 private:
     ClientGroup& Clients;
+    LogParser Logger;
     JObserver Observer_;
     LogParser Logger;
 public:

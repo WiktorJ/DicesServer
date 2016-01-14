@@ -12,16 +12,14 @@ std::string Client::getUsername() {
 }
 
 void Client::addRequest(boost::property_tree::ptree Request) {
-    //TODO
     ClientMovement move(Username, Player, Request);
 
     Requests->addRequest(move);
 }
 
-void Client::sendData(boost::property_tree::ptree data, std::string command) {
+void Client::sendData(boost::property_tree::ptree data) {
     stringstream ss;
-    data.put_child("command", boost::property_tree::ptree(command));
-    boost::property_tree::write_json(ss, ClientSerializer::serialize(Username, data, command));
+    boost::property_tree::write_json(ss, ClientSerializer::serializeType(ClientSerializer::serializeUserName(Username, data)));
 
     sender->send(ss.str());
 }

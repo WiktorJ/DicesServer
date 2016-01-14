@@ -8,26 +8,22 @@ ClientGroup::ClientGroup(WaitingRoom & WaitingRoom_) : WaitingRoom_(WaitingRoom_
 
 }
 
-void ClientGroup::sendData(boost::property_tree::ptree data, std::string command) {
-    Mutex->lock();
+void ClientGroup::sendData(boost::property_tree::ptree data) {
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
-        (*it)->sendData(data, command);
-
-    Mutex->unlock();
+        (*it)->sendData(data);
 }
 
 void ClientGroup::addSubscriber(Client* client) {
-    Mutex->lock();
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
     client->subscribe(&Requests);
     Subscribers.push_back(client);
-
-    Mutex->unlock();
 }
 
 void ClientGroup::removeSubscriber(std::string username) {
-    Mutex->lock();
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
         if((*it)->getUsername() == username){
@@ -38,8 +34,6 @@ void ClientGroup::removeSubscriber(std::string username) {
             WaitingRoom_.addClient(subscriber);
             return;
         }
-
-    Mutex->unlock();
 }
 
 std::vector<ClientMovement> ClientGroup::getRequests() {
@@ -47,7 +41,7 @@ std::vector<ClientMovement> ClientGroup::getRequests() {
 }
 
 void ClientGroup::removeClient(std::string username) {
-    Mutex->lock();
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
         if((*it)->getUsername() == username){
@@ -58,7 +52,6 @@ void ClientGroup::removeClient(std::string username) {
             return;
         }
 
-    Mutex->unlock();
 }
 
 ClientGroup::ClientGroup(const ClientGroup &other) : WaitingRoom_(other.WaitingRoom_), Subscribers(other.Subscribers), Requests(other.Requests){
@@ -66,7 +59,7 @@ ClientGroup::ClientGroup(const ClientGroup &other) : WaitingRoom_(other.WaitingR
 }
 
 void ClientGroup::clear() {
-    Mutex->lock();
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
     std::vector<Client *>::iterator it = Subscribers.begin();
     while(it != Subscribers.end()){
@@ -76,19 +69,15 @@ void ClientGroup::clear() {
 
         WaitingRoom_.addClient(subscriber);
     }
-
-    Mutex->unlock();
 }
 
-void ClientGroup::sendDataToPlayer(std::string username, boost::property_tree::ptree data, std::string command) {
-    Mutex->lock();
+void ClientGroup::sendDataToPlayer(std::string username, boost::property_tree::ptree data) {
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
         if((*it)->getUsername() == username){
-            (*it)->sendData(data, command);
+            (*it)->sendData(data);
 
             return;
         }
-
-    Mutex->unlock();
 }

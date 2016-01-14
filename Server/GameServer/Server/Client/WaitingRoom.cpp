@@ -3,36 +3,33 @@
 //
 
 #include "WaitingRoom.h"
-#include "../../Instance/Client/ClientReader.h"
 
-WaitingRoom::WaitingRoom() : Mutex(new boost::mutex), logger("WaitingRoom"){
+WaitingRoom::WaitingRoom() : Mutex(new boost::mutex), Logger("WaitingRoom"){
 
 }
 
 void WaitingRoom::addClient(Client *client) {
-    Mutex->lock();
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
-    logger.log("adding new client");
+    Logger.log("Adding client" + client->getUsername());
+
     client->subscribe(&Requests);
     Clients.push_back(client);
-
-    Mutex->unlock();
 }
 
 Client *WaitingRoom::removeClient(std::string username) {
-    Mutex->lock();
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
-    logger.log("removing client");
     for(std::vector<Client *>::iterator it = Clients.begin(); it != Clients.end(); it++)
         if((*it)->getUsername() == username){
             Client* result = (*it);
 
             Clients.erase(it);
 
+            Logger.log("Removing client" + result->getUsername());
+
             return result;
         }
-
-    Mutex->unlock();
 
     return NULL;
 }
@@ -41,18 +38,18 @@ std::vector<ClientMovement> WaitingRoom::getRequests() {
     return Requests.getRequests();
 }
 
-WaitingRoom::WaitingRoom(const WaitingRoom &other) : Clients(other.Clients), Requests(other.Requests), Mutex(other.Mutex), logger("WaitingRoom"){
+WaitingRoom::WaitingRoom(const WaitingRoom &other) : Clients(other.Clients), Requests(other.Requests), Mutex(other.Mutex), Logger(other.Logger){
 
 }
 
-void WaitingRoom::sendActiveGames(std::string username, boost::property_tree::ptree activeGames) {
-    Mutex->lock();
+void WaitingRoom::sendDataToClient(std::string username, boost::property_tree::ptree data) {
+    boost::unique_lock<boost::mutex> lock(*Mutex);
 
-    logger.log("giving active games to" + username);
+    Logger.log("Sending data to user" + username);
+
     for(std::vector<Client *>::iterator it = Clients.begin(); it != Clients.end(); it++)
         if((*it)->getUsername() == username){
-            (*it)->sendData(activeGames, "activeGames");
+            (*it)->sendData(data);
         }
 
-    Mutex->unlock();
 }

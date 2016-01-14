@@ -10,15 +10,14 @@
 #include <boost/thread/pthread/mutex.hpp>
 #include "../../../ConnectionServer/ClientServer/Client/Client.h"
 #include "../../../Logger/LogParser.h"
-#include "../../Instance/Client/ClientMovement.h"
 
 class Client;
 //TODO MONITOR
 
 class WaitingRoom {
 private:
-    LogParser logger;
     boost::shared_ptr<boost::mutex> Mutex;
+    LogParser Logger;
     std::vector<Client *> Clients;
     RequestQueue Requests;
     WaitingRoom(const WaitingRoom &other);
@@ -26,7 +25,7 @@ private:
 public:
     WaitingRoom();
 
-    void sendActiveGames(std::string username, boost::property_tree::ptree activeGames);
+    void sendDataToClient(std::string username, boost::property_tree::ptree data);
     void addClient(Client* client);
     Client* removeClient(std::string username);
     std::vector<ClientMovement> getRequests();

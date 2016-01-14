@@ -5,6 +5,7 @@
 #include "GameServer.h"
 #include "Serializer/GamesSerializer.h"
 #include "Serializer/CmdDeseriallizer.h"
+#include "../Instance/Client/GameResponseSerializer.h"
 
 WaitingRoom &GameServer::getWaitingRoom() {
     return WaitingRoom_;
@@ -59,7 +60,7 @@ void GameServer::readRequests() {
             if(game == NULL){
                 Logger.log("Client : " + (*iterator).getUsername() + " - tried to join unexisting game");
 
-                //TODO THROW EXCEPTION
+                WaitingRoom_.sendDataToClient((*iterator).getUsername(), (GameResponseSerializer::serializeResponse(command, status::FAILURE, boost::property_tree::ptree("COULD NOT FIND REQUESTED GAME"))));
                 return;
             }
 
@@ -69,7 +70,6 @@ void GameServer::readRequests() {
             game->getClientGroup().addSubscriber(client);
             client->addRequest(move);
 
-            //TODO
             Logger.log("Client : " + (*iterator).getUsername() + " - joined a game : " + std::to_string(game->getId()));
 
         } else if(command == "observe"){
@@ -78,7 +78,7 @@ void GameServer::readRequests() {
             if(game == NULL){
                 Logger.log("Client : " + (*iterator).getUsername() + " - tried to observer unexisting game");
 
-                //TODO THROW EXCEPTION
+                WaitingRoom_.sendDataToClient((*iterator).getUsername(), (GameResponseSerializer::serializeResponse(command, status::FAILURE, boost::property_tree::ptree("COULD NOT FIND REQUESTED GAME"))));
                 continue;
             }
 
@@ -96,20 +96,24 @@ void GameServer::readRequests() {
             if(game == NULL){
                 Logger.log("Client : " + (*iterator).getUsername() + " - failed to create a game ");
 
+                WaitingRoom_.sendDataToClient((*iterator).getUsername(), (GameResponseSerializer::serializeResponse(command, status::FAILURE, boost::property_tree::ptree("COULD NOT CREATE GAME"))));
+
                 continue;
             }
 
             Games.add(game);
 
+            WaitingRoom_.sendDataToClient((*iterator).getUsername(), (GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree(std::to_string(game->getId())))));
+
             Logger.log("Client : " + (*iterator).getUsername() + " - created a game: " + std::to_string(game->getId()));
         } else if(command == "activeGames"){
-            WaitingRoom_.sendActiveGames((*iterator).getUsername(), getActiveGames());
+            WaitingRoom_.sendDataToClient((*iterator).getUsername(), GameResponseSerializer::serializeResponse(command, status::SUCCESS, getActiveGames()));
 
             Logger.log("Client : " + (*iterator).getUsername() + " - asked for active games");
         } else {
             Logger.log("Client : " + (*iterator).getUsername() + " - invalid command: " + command);
 
-            //TODO THROW
+            WaitingRoom_.sendDataToClient((*iterator).getUsername(), GameResponseSerializer::serializeResponse(command, status::FAILURE, boost::property_tree::ptree("WRONG COMMAND")));
         }
     }
 }

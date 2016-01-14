@@ -4,7 +4,7 @@
 
 #include "GameReader.h"
 #include "GameCmdDeseriallizer.h"
-#include "../../Java/Exception/JNIException.h"
+#include "../Client/GameResponseSerializer.h"
 
 GameReader::GameReader(ClientGroup &Clients, GameController* Controller) : Clients(Clients), Controller(Controller), Logger("GameReader"){
 
@@ -28,6 +28,8 @@ void GameReader::readMovement() {
             Clients.removeSubscriber((*it).getUsername());
             if((*it).isPlayer()) Controller->removePlayer((*it).getUsername());
 
+            Clients.sendDataToPlayer((*it).getUsername(), GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("QUIT THE GAME INSTANCE")));
+
             Logger.log("Client : " + (*it).getUsername() + " - player quit the game");
 
         } else if(command == "disconnect"){
@@ -39,20 +41,31 @@ void GameReader::readMovement() {
         } else if(command == "join"){
             Controller->addPlayer((*it).getUsername());
 
+            Clients.sendDataToPlayer((*it).getUsername(), GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("JOINED THE GAME INSTANCE AS PLAYER")));
+
             Logger.log("Client : " + (*it).getUsername() + " - player joined");
 
         } else if(command == "observe") {
             Logger.log("Client : " + (*it).getUsername() + " - client observing the game");
-            //do nothing
+
+            Clients.sendDataToPlayer((*it).getUsername(), GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("JOINED THE GAME INSTANCE AS OBSERVER")));
+
         } else if(command == "move"){
-            if((*it).isPlayer())Controller->makeMove(data);
-            else true;//TODO THROW EXCEPTION
+            if((*it).isPlayer()){
+                Controller->makeMove(data);
+
+                Clients.sendDataToPlayer((*it).getUsername(), GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("MADE A MOVE")));
+            }
+            else {
+                Clients.sendDataToPlayer((*it).getUsername(), GameResponseSerializer::serializeResponse(command, status::FAILURE, boost::property_tree::ptree("NOT A PLAYER")));
+            }
 
             Logger.log("Client : " + (*it).getUsername() + " - client requested move");
         } else{
             Logger.log("Client : " + (*it).getUsername() + " - bad command :" + command);
-        }
 
+            Clients.sendDataToPlayer((*it).getUsername(), GameResponseSerializer::serializeResponse(command, status::FAILURE, boost::property_tree::ptree("INVALID COMMAND")));
+        }
     }
 }
 
