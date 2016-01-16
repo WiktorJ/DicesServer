@@ -16,7 +16,6 @@ private:
     ClientGroup& Clients;
     LogParser Logger;
     JObserver Observer_;
-    LogParser Logger;
 public:
     Observer(ClientGroup& Clients, JObserver Observer_);
     void listen();
