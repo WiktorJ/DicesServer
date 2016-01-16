@@ -7,7 +7,7 @@ include_directories(/usr/lib/jvm/java-8-oracle/include/)
 include_directories(/usr/lib/jvm/java-8-oracle/include/linux/)
 set(MISCELLANOUS Miscellanous/DateTime/Time/LocalTime.cpp Miscellanous/DateTime/Time/LocalTime.h Miscellanous/DateTime/Date/LocalDate.cpp Miscellanous/DateTime/Date/LocalDate.h Miscellanous/DateTime/LocalDateTime.cpp Miscellanous/DateTime/LocalDateTime.h)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp Server/ConnectionServer/ClientServer/Exception/ClientNotFoundException.cpp Server/ConnectionServer/ClientServer/Exception/ClientNotFoundException.h Server/ConnectionServer/ClientServer/Exception/ConnectorNotFoundException.cpp Server/ConnectionServer/ClientServer/Exception/ConnectorNotFoundException.h)
 find_package(Boost 1.54.0 COMPONENTS system filesystem thread REQUIRED)
 find_package(JNI REQUIRED)
 
@@ -42,7 +42,7 @@ set(JAVA_SOURCE_FILES Server/GameServer/Java/Instance/JNIInstance.cpp Server/Gam
         Server/GameServer/Java/Exception/Env/JNIEnvException.cpp Server/GameServer/Java/Exception/Env/JNIEnvException.h
         Server/GameServer/Java/Exception/JNIException.cpp Server/GameServer/Java/Exception/JNIException.h
         Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h
-        )
+        Server/ConnectionServer/ClientServer/Serializer/ConnectorResponseSerializer.cpp Server/ConnectionServer/ClientServer/Serializer/ConnectorResponseSerializer.h Server/ConnectionServer/ClientServer/Exception/NameTakenException.cpp Server/ConnectionServer/ClientServer/Exception/NameTakenException.h)
 
 add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} JNI-test/SimpleInstanceJNI.cpp
         JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp

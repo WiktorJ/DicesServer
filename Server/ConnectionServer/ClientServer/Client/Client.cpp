@@ -18,10 +18,7 @@ void Client::addRequest(boost::property_tree::ptree Request) {
 }
 
 void Client::sendData(boost::property_tree::ptree data) {
-    stringstream ss;
-    boost::property_tree::write_json(ss, ClientSerializer::serializeType(ClientSerializer::serializeUserName(Username, data)));
-
-    sender->send(ss.str());
+    sender->send(data);
 }
 
 void Client::setPlayer() {
@@ -36,7 +33,6 @@ bool Client::isPlayer() {
     return Player;
 }
 
-//Client::Client(std::string Username, ClientConnector clientConnector)
 Client::Client(std::string Username, Sender* sender)
         : Username(Username){
     this->sender = sender;
@@ -44,4 +40,8 @@ Client::Client(std::string Username, Sender* sender)
 
 void Client::subscribe(RequestQueue *Requests) {
     this->Requests = Requests;
+}
+
+Client::~Client() {
+    delete sender;
 }

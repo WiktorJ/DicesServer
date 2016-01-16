@@ -15,11 +15,11 @@ class Sender {
 private:
     ConnectionServer* socket;
     std::string socketId;
+    LogParser Logger;
 
 public:
     Sender(ConnectionServer* server, std::string socketId);
-    void send(std::string data);
-    void receive();
+    void send(boost::property_tree::ptree data);
 };
 
 

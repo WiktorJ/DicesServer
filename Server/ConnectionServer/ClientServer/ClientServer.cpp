@@ -3,69 +3,83 @@
 //
 
 #include "ClientServer.h"
-#include "../Connector/Network/Sender.h"
+#include "Exception/ClientNotFoundException.h"
+#include "Serializer/ConnectorResponseSerializer.h"
+#include "Exception/ConnectorNotFoundException.h"
+#include "Exception/NameTakenException.h"
 
 using namespace std;
 
-void ClientServer::addClient(string name, string clientAddress, Sender* sender){
-    logger.log("Trying to add client");
-    Client *client = new Client(name, sender);
+void ClientServer::addClient(string name, string clientAddress, Sender* sender) {
+    boost::unique_lock<boost::mutex> lock(*Mutex);
+
     map<string, std::vector<Client *>>::iterator iter =  clients.find(clientAddress);
+
+    if(ClientNames.find(name) != ClientNames.end() || iter == clients.end()){
+        throw NameTakenException();
+    }
+
+    Client *client = new Client(name, sender);
+
+    ClientNames.insert(name);
     iter->second.push_back(client);
     waitingRoom->addClient(client);
 }
 
 Client* ClientServer::getClient(std::string clientAddress, string name) {
-    logger.log("Trying to get client");
+    boost::unique_lock<boost::mutex> lock(*Mutex);
+
     if ( clients.find(clientAddress) == clients.end()) {
-            cout<<"Some error message";
-        throw "get Client exception";
+        throw ConnectorNotFoundException();
     } else {
         map<string, std::vector<Client *>>::iterator iter =  clients.find(clientAddress);
-//        clients.erase(iter);
 
         for(std::vector<Client *>::iterator it= iter->second.begin(); it != iter->second.end(); iter++){
             if((*it)->getUsername() == name){
                 return (*it);
             }
         }
+
+        throw ClientNotFoundException();
     }
 }
 
-bool ClientServer::removeClient(std::string clientAddress, string name) {
-    logger.log("trying to remove client");
+void ClientServer::removeClient(std::string clientAddress, string name) {
+    boost::unique_lock<boost::mutex> lock(*Mutex);
+
     if ( clients.find(clientAddress) == clients.end()) {
-        cout << "Some error message";
-        return false;
+        throw ConnectorNotFoundException();
     } else {
         map<string, std::vector<Client *>>::iterator iter =  clients.find(clientAddress);
-//        clients.erase(iter);
 
         for(std::vector<Client *>::iterator it= iter->second.begin(); it != iter->second.end(); iter++){
             if((*it)->getUsername() == name){
                 iter->second.erase(it);
-                return true;
+                ClientNames.erase(ClientNames.find(name));
             }
         }
+
+        throw ClientNotFoundException();
     }
-    return false;
 }
 
 void ClientServer::addClientEndpoint(string clientAddress) {
-    logger.log("adding endpoint");
+    boost::unique_lock<boost::mutex> lock(*Mutex);
+
     std::vector<Client *> vec;
     clients.insert(pair<string,  std::vector<Client *>>(clientAddress, vec));
 }
 
 
-ClientServer::ClientServer(WaitingRoom* waitingRoom) : logger("ClientServer"){
+ClientServer::ClientServer(WaitingRoom* waitingRoom) : Logger("ClientServer"){
     this->waitingRoom = waitingRoom;
 }
 
 void ClientServer::removeClientEndpoint(std::string clientAddress) {
-    logger.log("remove client endpoint");
+    boost::unique_lock<boost::mutex> lock(*Mutex);
+
     if ( clients.find(clientAddress) == clients.end()) {
-        cout << "Some error message";
+        throw ConnectorNotFoundException();
     } else {
         map<string, std::vector<Client *>>::iterator iter =  clients.find(clientAddress);
         clients.erase(iter);
@@ -73,9 +87,10 @@ void ClientServer::removeClientEndpoint(std::string clientAddress) {
 }
 
 std::vector<Client *> ClientServer::getClientList(std::string clientAddress) {
-    logger.log("get client list");
+    boost::unique_lock<boost::mutex> lock(*Mutex);
+
     if ( clients.find(clientAddress) == clients.end()) {
-        throw std::exception();
+        throw ConnectorNotFoundException();
     } else {
         map<string, std::vector<Client *>>::iterator iter =  clients.find(clientAddress);
         return (*iter).second;

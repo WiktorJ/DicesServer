@@ -24,6 +24,7 @@ private:
     bool Player;
 public:
     Client(std::string Username, Sender* sender);
+    ~Client();
     std::string getUsername();
 
     void subscribe(RequestQueue* Requests);

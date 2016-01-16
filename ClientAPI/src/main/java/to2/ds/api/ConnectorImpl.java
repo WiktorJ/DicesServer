@@ -59,12 +59,14 @@ public class ConnectorImpl implements Connector {
 
     @OnMessage
     public void onMessage(String json)  {
-        try {
-            ClientMessageTuple client = deserializer.deserializeUser(json, clientList);
-            client.getClient().stateUpdateAndNotify(client.getJSON());
-        } catch (UnexistingClientException e) {
-            e.printStackTrace(); //TODO This has to be handled on client site!
-        }
+        System.out.println(json);
+
+//        try {
+//            ClientMessageTuple client = deserializer.deserializeUser(json, clientList);
+//            client.getClient().stateUpdateAndNotify(client.getJSON());
+//        } catch (UnexistingClientException e) {
+//            e.printStackTrace(); //TODO This has to be handled on client site!
+//        }
     } // {client: clientID, messageWithType: {type: activeGames/gameState, state: {..}}}
 
     @OnClose

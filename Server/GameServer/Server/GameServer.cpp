@@ -35,13 +35,12 @@ void GameServer::readRequests() {
     std::vector<ClientMovement> Requests = WaitingRoom_.getRequests();
 
     for(std::vector<ClientMovement>::iterator iterator = Requests.begin(); iterator != Requests.end(); iterator++){
-        int gameId;
         boost::property_tree::ptree move = (*iterator).getMove();
 
         std::string command;
 
         try {
-            command = CmdDeseriallizer::readCommand(move, &gameId);
+            command = CmdDeseriallizer::readCommand(move);
         } catch(const boost::property_tree::ptree_error &exception){
             Logger.log("Client : " + (*iterator).getUsername() + " - invalid json");
             continue;
@@ -55,7 +54,8 @@ void GameServer::readRequests() {
 
 
         } else if(command == "join"){
-            GameInstance* game = Games.get(gameId);
+
+            GameInstance* game = Games.get(CmdDeseriallizer::getGameID(move));
 
             if(game == NULL){
                 Logger.log("Client : " + (*iterator).getUsername() + " - tried to join unexisting game");
@@ -73,7 +73,7 @@ void GameServer::readRequests() {
             Logger.log("Client : " + (*iterator).getUsername() + " - joined a game : " + std::to_string(game->getId()));
 
         } else if(command == "observe"){
-            GameInstance* game = Games.get(gameId);
+            GameInstance* game = Games.get(CmdDeseriallizer::getGameID(move));
 
             if(game == NULL){
                 Logger.log("Client : " + (*iterator).getUsername() + " - tried to observer unexisting game");

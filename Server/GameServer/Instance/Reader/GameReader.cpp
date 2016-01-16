@@ -86,8 +86,6 @@ void GameReader::stop() {
 
 
 void GameReader::run() {
-    //TODO WILL FUCK UP EVERYTHING
-
     Controller->bind();
 
     while(1){
