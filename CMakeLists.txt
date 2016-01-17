@@ -42,7 +42,7 @@ set(JAVA_SOURCE_FILES Server/GameServer/Java/Instance/JNIInstance.cpp Server/Gam
         Server/GameServer/Java/Exception/Env/JNIEnvException.cpp Server/GameServer/Java/Exception/Env/JNIEnvException.h
         Server/GameServer/Java/Exception/JNIException.cpp Server/GameServer/Java/Exception/JNIException.h
         Server/GameServer/Java/Exception/Loader/JClassException.cpp Server/GameServer/Java/Exception/Loader/JClassException.h
-        Server/ConnectionServer/ClientServer/Serializer/ConnectorResponseSerializer.cpp Server/ConnectionServer/ClientServer/Serializer/ConnectorResponseSerializer.h Server/ConnectionServer/ClientServer/Exception/NameTakenException.cpp Server/ConnectionServer/ClientServer/Exception/NameTakenException.h)
+        Server/ConnectionServer/ClientServer/Deserializer/MessageHandle.cpp Server/ConnectionServer/ClientServer/Deserializer/MessageHandle.h Server/ConnectionServer/ClientServer/Deserializer/Command.cpp Server/ConnectionServer/ClientServer/Deserializer/Command.h Server/ConnectionServer/ClientServer/Deserializer/Exception/ConnMessageException.cpp Server/ConnectionServer/ClientServer/Deserializer/Exception/ConnMessageException.h Server/ConnectionServer/ClientServer/Deserializer/Exception/ClientMessageException.cpp Server/ConnectionServer/ClientServer/Deserializer/Exception/ClientMessageException.h)
 
 add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} JNI-test/SimpleInstanceJNI.cpp
         JNI-test/SimpleInstanceJNI.h Server/ConnectionServer/Connector/Network/Sender.cpp
@@ -71,7 +71,10 @@ add_executable(DicesServer ${SOURCE_FILES} ${MISCELLANOUS} ${JAVA_SOURCE_FILES} 
         Server/ConnectionServer/ClientServer/ClientServer.h Server/ConnectionServer/ClientServer/ClientServer.cpp
         Server/ConnectionServer/ClientServer/Client/Serializer/ClientSerializer.cpp Server/ConnectionServer/ClientServer/Client/Serializer/ClientSerializer.h
         Server/GameServer/Instance/Client/GameResponseSerializer.cpp Server/GameServer/Instance/Client/GameResponseSerializer.h
-        )
+        Server/ConnectionServer/ClientServer/Serializer/ConnectorResponseSerializer.cpp Server/ConnectionServer/ClientServer/Serializer/ConnectorResponseSerializer.h
+        Server/ConnectionServer/ClientServer/Exception/NameTakenException.cpp Server/ConnectionServer/ClientServer/Exception/NameTakenException.h
+        Server/ConnectionServer/ClientServer/Serializer/ConnectorDeserializer.cpp Server/ConnectionServer/ClientServer/Serializer/ConnectorDeserializer.h
+        Server/ConnectionServer/ClientServer/ClientHandler.cpp Server/ConnectionServer/ClientServer/ClientHandler.h)
 
 
 if(Boost_FOUND)

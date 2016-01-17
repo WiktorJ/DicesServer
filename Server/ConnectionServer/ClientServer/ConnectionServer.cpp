@@ -4,6 +4,13 @@
 
 #include "ConnectionServer.h"
 #include "../Connector/Network/Sender.h"
+#include "Deserializer/MessageHandle.h"
+#include "Deserializer/Exception/ConnMessageException.h"
+#include "Deserializer/Exception/ClientMessageException.h"
+#include "Exception/NameTakenException.h"
+#include "Serializer/ConnectorResponseSerializer.h"
+#include "Exception/ConnectorNotFoundException.h"
+#include "Exception/ClientNotFoundException.h"
 
 using namespace std;
 
@@ -144,110 +151,119 @@ void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
 
 
 void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp::server<websocketpp::config::asio>::message_ptr msg) {
-    //Logger.log(msg->get_payload());
-    //deserialize message and get clientAddress and nickname
-    boost::property_tree::ptree parsed;
-
-    std::stringstream ss(msg->get_payload());
     try {
-        boost::property_tree::read_json(ss, parsed);
-    } catch(const boost::property_tree::json_parser_error &exception){
-        Logger.log("Invalid json received : " + std::string(msg->get_payload()));
-        return;
+        MessageHandle Message(msg->get_payload());
+
+        switch(Message.getCommand()){
+            case ConnCommand::ADDPLAYER: {
+                try {
+                    Sender *sender = new Sender(this, Message.getClientID());
+                    try {
+                        clientServer->addClient(Message.getClientName(), Message.getClientID(), sender);
+
+                        Logger.log("Added client " + Message.getClientName() + " for " + Message.getClientID());
+
+                        sender->send(ConnectorResponseSerializer::serializeType(ConnectorResponseSerializer::serializeResponse("addPlayer", status::SUCCESS)));
+                    } catch(const NameTakenException& exception2){
+                        Logger.log("Could not add client " + Message.getClientName() + " for " + Message.getClientID() + " reason: NAME TAKEN");
+
+                        sender->send(ConnectorResponseSerializer::serializeType(ConnectorResponseSerializer::serializeResponse("addPlayer", status::FAILURE)));
+                    } catch(const ConnectorNotFoundException& exception3){
+                        Logger.log("Clientaddress not found");
+                    }
+                }  catch(const ClientMessageException& exception1){
+                    Logger.log("Invalid client message" + std::string(msg->get_payload()));
+                }
+            }
+            case ConnCommand::REMOVEPLAYER: {
+                boost::property_tree::ptree quit;
+
+                quit.put_child("command", boost::property_tree::ptree("disconnect"));
+                quit.put_child("data", boost::property_tree::ptree("empty"));
+
+                try {
+                    Sender tempSender(this, Message.getClientID());
+                    try {
+
+                        Client* temp = clientServer->getClient(Message.getClientID(), Message.getClientName());
+
+                        clientServer->removeClient(Message.getClientID(), Message.getClientName());
+
+                        temp->addRequest(quit);
+
+                        tempSender.send(ConnectorResponseSerializer::serializeType(ConnectorResponseSerializer::serializeResponse("removePlayer", status::SUCCESS)));
+                    } catch(const ClientNotFoundException){
+                        tempSender.send(ConnectorResponseSerializer::serializeType(ConnectorResponseSerializer::serializeResponse("removePlayer", status::FAILURE)));
+                    }  catch(const ConnectorNotFoundException& exception3){
+                        Logger.log("Clientaddress not found");
+                    }
+                } catch(const ClientMessageException& exception1){
+                    Logger.log("Invalid client message" + std::string(msg->get_payload()));
+                }
+            }
+            case ConnCommand::QUIT: {
+                std::string logResult = "";
+
+                try {
+                    std::vector<Client *> Clients = clientServer->getClientList(Message.getClientID());
+                    clientServer->removeClientEndpoint(Message.getClientID());
+
+
+                    for (std::vector<Client *>::iterator tmp = Clients.begin(); tmp != Clients.end(); tmp++) {
+                        boost::property_tree::ptree quit;
+
+                        quit.put_child("command", boost::property_tree::ptree("disconnect"));
+                        quit.put_child("data", boost::property_tree::ptree("empty"));
+
+
+                        logResult += (*tmp)->getUsername() + ", ";
+                        (*tmp)->addRequest(quit);
+                    }
+
+                    websocketpp::lib::error_code ec;
+                    string data = "";
+                    server.close(websockets.find(Message.getClientID())->second, websocketpp::close::status::normal, data,
+                                 ec); // send text message.
+                    if (ec) {
+                        Logger.log("error in ConnectionServer:stop()");
+                        Logger.log(ec.message());
+                    }
+
+                    websockets.erase(websockets.find(Message.getClientID()));
+
+                    Logger.log("Shutting endpoint :" + Message.getClientID() + " clients : {" + logResult + "}");
+                } catch(const ConnectorNotFoundException& exception2){
+                    Logger.log("Could not shut down endpoint (Clientaddress not found)");
+                }
+
+            }
+            case ConnCommand::REQUEST: {
+                try {
+                    Sender tempSender(this, Message.getClientID());
+                    try {
+                        clientServer->getClient(Message.getClientID(), Message.getClientName())->addRequest(Message.getClientRequest());
+                    } catch (const ClientNotFoundException) {
+                        tempSender.send(ConnectorResponseSerializer::serializeType(
+                                ConnectorResponseSerializer::serializeResponse("request", status::FAILURE)));
+                    } catch (const ConnectorNotFoundException &exception3) {
+                        Logger.log("Clientaddress not found");
+                    }
+                } catch(const ClientMessageException& exception1){
+                    Logger.log("Invalid client message" + std::string(msg->get_payload()));
+                }
+            }
+            default:{
+                Sender tempSender(this, Message.getClientID());
+                tempSender.send(ConnectorResponseSerializer::serializeType(ConnectorResponseSerializer::serializeResponse("unknown", status::FAILURE)));
+
+                Logger.log("Invalid command");
+            }
+
+        }
+    } catch(const ConnMessageException& exception){
+        Logger.log("Invalid message" + std::string(msg->get_payload()));
     }
 
-    string clientAddress;
-    string nickname = "INVALID_NAME";
-    string command;
-    boost::property_tree::ptree request;
-    bool isRequest = true;
-
-    try{
-        clientAddress = parsed.get<std::string>("clientID");
-        command = parsed.get<std::string>("command");
-        nickname = parsed.get<std::string>("client");
-    } catch(const boost::property_tree::ptree_error & exception){
-        Logger.log("No command, clientID or client field found :" + std::string(msg->get_payload()));
-        return;
-    }
-
-    Logger.log("clientID :" + clientAddress + " ; command :" + command + " ; client :" + nickname);
-
-    try{
-        request = parsed.get_child("data");
-    } catch(const boost::property_tree::ptree_error &exception){
-        isRequest = false;
-    }
-
-    if(command == "addClient"){
-        Sender* sender = new Sender(this, clientAddress);
-        clientServer->addClient(nickname, clientAddress, sender);
-
-        Logger.log("Added client " + nickname + " for " + clientAddress);
-    } else if(command == "request"){
-        if(!isRequest){
-            Logger.log("No request for request command found");
-            return;
-        }
-        try {
-            clientServer->getClient(clientAddress, nickname)->addRequest(request);
-        } catch(const char * e){
-            Logger.log("Could not find client :" + nickname);
-        }
-
-        Logger.log("Added request for" + nickname);
-    } else if(command == "removeClient"){
-        boost::property_tree::ptree quit;
-
-        quit.put_child("command", boost::property_tree::ptree("disconnect"));
-        quit.put_child("data", boost::property_tree::ptree("empty"));
-
-        try {
-
-            Client* temp = clientServer->getClient(clientAddress, nickname);
-
-            clientServer->removeClient(clientAddress, nickname);
-
-            temp->addRequest(quit);
-
-        } catch(const char * e){
-            Logger.log("Could not find client :" + nickname);
-        }
-
-
-        Logger.log("Removed client " + nickname + " for " + clientAddress);
-    } else if(command == "quit") {
-        std::string logResult = "";
-
-        std::vector<Client *> Clients = clientServer->getClientList(clientAddress);
-        clientServer->removeClientEndpoint(clientAddress);
-
-
-        for(std::vector<Client *>::iterator tmp = Clients.begin(); tmp != Clients.end(); tmp++){
-            boost::property_tree::ptree quit;
-
-            quit.put_child("command", boost::property_tree::ptree("disconnect"));
-            quit.put_child("data", boost::property_tree::ptree("empty"));
-
-
-            logResult += (*tmp)->getUsername() + ", ";
-            (*tmp)->addRequest(quit);
-        }
-
-        websocketpp::lib::error_code ec;
-        string data = "";
-        server.close(websockets.find(clientAddress)->second, websocketpp::close::status::normal, data, ec); // send text message.
-        if (ec) {
-            Logger.log("error in ConnectionServer:stop()");
-            Logger.log(ec.message());
-        }
-
-        websockets.erase(websockets.find(clientAddress));
-
-        Logger.log("Shutting endpoint :" + clientAddress + " clients : {" + logResult + "}");
-    }else {
-        Logger.log("Invalid command :" + command);
-    }
 }
 
 bool ConnectionServer::sendData(string data, std::string id) {

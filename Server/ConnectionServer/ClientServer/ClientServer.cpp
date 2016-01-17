@@ -4,7 +4,6 @@
 
 #include "ClientServer.h"
 #include "Exception/ClientNotFoundException.h"
-#include "Serializer/ConnectorResponseSerializer.h"
 #include "Exception/ConnectorNotFoundException.h"
 #include "Exception/NameTakenException.h"
 
@@ -15,9 +14,10 @@ void ClientServer::addClient(string name, string clientAddress, Sender* sender) 
 
     map<string, std::vector<Client *>>::iterator iter =  clients.find(clientAddress);
 
-    if(ClientNames.find(name) != ClientNames.end() || iter == clients.end()){
-        throw NameTakenException();
-    }
+    if(iter == clients.end()) throw ConnectorNotFoundException();
+
+    if(ClientNames.find(name) != ClientNames.end())throw NameTakenException();
+
 
     Client *client = new Client(name, sender);
 
