@@ -127,7 +127,6 @@ void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
                 quit.put_child("command", boost::property_tree::ptree("disconnect"));
                 quit.put_child("data", boost::property_tree::ptree("empty"));
 
-
                 logResult += (*tmp)->getUsername() + ", ";
                 (*tmp)->addRequest(quit);
             }
@@ -140,13 +139,10 @@ void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
                 Logger.log(ec.message());
             }
 
-
             Logger.log("Removed endpoint :" + id + " clients : {" + logResult + "}");
             return;
-
         }
     }
-
 }
 
 
