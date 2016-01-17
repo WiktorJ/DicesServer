@@ -137,3 +137,9 @@ void GameServer::stop() {
 GameServer::GameServer() : Logger("GameServer"){
 
 }
+
+boost::property_tree::ptree GameServer::getActiveGamesLocally() {
+    boost::property_tree::ptree activeGames = GamesSerializer::serialize(Games.getGames(), JNIInstance::getInstance().getCurr());
+
+    return activeGames;
+}

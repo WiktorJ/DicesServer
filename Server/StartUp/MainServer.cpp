@@ -26,7 +26,7 @@ MainServer::MainServer() : Logger("MainServer"){
 }
 
 std::string MainServer::printGameInfo() {
-    boost::property_tree::ptree gamesInfo = GameServer_->getActiveGames();
+    boost::property_tree::ptree gamesInfo = GameServer_->getActiveGamesLocally();
 
     std::stringstream ss;
 

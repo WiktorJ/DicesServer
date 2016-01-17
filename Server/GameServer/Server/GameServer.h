@@ -27,6 +27,7 @@ public:
     GameServer();
     void start();
     boost::property_tree::ptree getActiveGames();
+    boost::property_tree::ptree getActiveGamesLocally();
     WaitingRoom& getWaitingRoom();
     void stop();
 };
