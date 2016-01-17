@@ -25,10 +25,10 @@ void GameReader::readMovement() {
         }
 
         if(command == "quit"){
-            Clients.removeSubscriber((*it).getUsername());
+            Client* temp = Clients.removeSubscriber((*it).getUsername());
             if((*it).isPlayer()) Controller->removePlayer((*it).getUsername());
 
-            Clients.sendDataToPlayer((*it).getUsername(), GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("QUIT THE GAME INSTANCE")));
+            temp->sendData(GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("QUIT THE GAME INSTANCE")));
 
             Logger.log("Client : " + (*it).getUsername() + " - player quit the game");
 

@@ -18,7 +18,7 @@ void Client::addRequest(boost::property_tree::ptree Request) {
 }
 
 void Client::sendData(boost::property_tree::ptree data) {
-    sender->send(data);
+    sender->send(ClientSerializer::serializeType(ClientSerializer::serializeUserName(Username, data)));
 }
 
 void Client::setPlayer() {

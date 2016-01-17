@@ -65,8 +65,7 @@ public class ClientImpl implements Client {
                         .put("clientName", nickname)
                         .put("request", new JSONObject()
                                 .put("command", "join")
-                                .put("gameId", gameID.toString())
-                                .put("data", "")));
+                                .put("data", gameID.toString())));
 
         socket.sendMessage(json.toString());
     }
@@ -79,8 +78,7 @@ public class ClientImpl implements Client {
                         .put("clientName", nickname)
                         .put("request", new JSONObject()
                                 .put("command", "observe")
-                                .put("gameId", gameID.toString())
-                                .put("data", "")));
+                                .put("data", gameID.toString())));
 
         socket.sendMessage(json.toString());
     }

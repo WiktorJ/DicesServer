@@ -30,7 +30,7 @@ public:
     void sendDataToPlayer(std::string username, boost::property_tree::ptree data);
     void sendData(boost::property_tree::ptree data);
     void addSubscriber(Client* client);
-    void removeSubscriber(std::string username);
+    Client* removeSubscriber(std::string username);
     void removeClient(std::string username);
     std::vector<ClientMovement> getRequests();
 };

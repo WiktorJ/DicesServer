@@ -22,7 +22,7 @@ void ClientGroup::addSubscriber(Client* client) {
     Subscribers.push_back(client);
 }
 
-void ClientGroup::removeSubscriber(std::string username) {
+Client* ClientGroup::removeSubscriber(std::string username) {
     boost::unique_lock<boost::mutex> lock(*Mutex);
 
     for(std::vector<Client *>::iterator it = Subscribers.begin(); it != Subscribers.end(); it++)
@@ -32,8 +32,9 @@ void ClientGroup::removeSubscriber(std::string username) {
             Subscribers.erase(it);
 
             WaitingRoom_.addClient(subscriber);
-            return;
+            return subscriber;
         }
+    return NULL;
 }
 
 std::vector<ClientMovement> ClientGroup::getRequests() {
