@@ -37,74 +37,78 @@ public class ClientImpl implements Client {
     }
 
     public String getActiveGames() throws InterruptedException, IOException {//TODO: this json
-        socket.sendMessage("{" +
-                "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
-                ", \"client\": " + "\"" + nickname + "\"" +
-                ", \"command\": \"request\"" + "" +
-                ", \"data\": " + "{\"command\": \"activeGames\", \"data\": {}}"  +
-                "}");
-        return activeGamesQueue.take(); //TODO timeout exception
+        JSONObject json = new JSONObject().put("clientID", socket.getClientAddress()).put("type", "request").put("request", new JSONObject().put("clientName", nickname).put("request", new JSONObject().put("command", "activeGames").put("data", "")));
+
+        socket.sendMessage(json.toString());
+        //return activeGamesQueue.take(); //TODO timeout exception
+        return "";
     }
 
     public void requestCreate(String JSON) throws IOException {
+        JSONObject json = new JSONObject()
+                .put("clientID", socket.getClientAddress())
+                .put("type", "request")
+                .put("request", new JSONObject()
+                        .put("clientName", nickname)
+                        .put("request", new JSONObject()
+                                .put("command", "create")
+                                .put("data", new JSONObject(JSON))));
 
-        String createGame =
-                "{" +
-                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
-                        ", \"client\": " + "\"" + nickname + "\"" +
-                        ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"create\", \"data\": "+JSON+"}"  +
-                        "}";
-        socket.sendMessage(createGame);
+        socket.sendMessage(json.toString());
     }
 
     public void requestJoinAsPlayer(Integer gameID) throws IOException {
-        String requestJoinAsPlayer =
-                "{" +
-                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
-                        ", \"client\": " + "\"" + nickname + "\"" +
-                        ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"join\", \"gameId\": \""+gameID.toString()+"\" ,\"data\":  {}}"  +
-                        "}";
+        JSONObject json = new JSONObject()
+                .put("clientID", socket.getClientAddress())
+                .put("type", "request")
+                .put("request", new JSONObject()
+                        .put("clientName", nickname)
+                        .put("request", new JSONObject()
+                                .put("command", "join")
+                                .put("gameId", gameID.toString())
+                                .put("data", "")));
 
-        socket.sendMessage(requestJoinAsPlayer);
+        socket.sendMessage(json.toString());
     }
 
     public void requestJoinAsObserver(Integer gameID) throws IOException {
-        String requestJoinAsObserver =
-                "{" +
-                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
-                        ", \"client\": " + "\"" + nickname + "\"" +
-                        ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"observe\", \"gameId\": \""+gameID.toString()+"\" ,\"data\":  {}}"  +
-                        "}";
+        JSONObject json = new JSONObject()
+                .put("clientID", socket.getClientAddress())
+                .put("type", "request")
+                .put("request", new JSONObject()
+                        .put("clientName", nickname)
+                        .put("request", new JSONObject()
+                                .put("command", "observe")
+                                .put("gameId", gameID.toString())
+                                .put("data", "")));
 
-        //  socket.sendMessage(TargetSerializer.serialize("observe", requestJoinAsObserver));
-
-        socket.sendMessage(requestJoinAsObserver);
+        socket.sendMessage(json.toString());
     }
 
     public void requestMove(String JSON) throws IOException {
-        String requestMove =
-                "{" +
-                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
-                        ", \"client\": " + "\"" + nickname + "\"" +
-                        ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"move\", \"data\": "+JSON+"}"  +
-                        "}";
-        socket.sendMessage(requestMove);
+        JSONObject json = new JSONObject()
+                .put("clientID", socket.getClientAddress())
+                .put("type", "request")
+                .put("request", new JSONObject()
+                        .put("clientName", nickname)
+                        .put("request", new JSONObject()
+                                .put("command", "move")
+                                .put("data", new JSONObject(JSON))));
+
+        socket.sendMessage(json.toString());
     }
 
     public void requestQuiteGame() throws IOException {
-        String requestQuit =
-                "{" +
-                        "\"clientID\": " + "\"" + socket.getClientAddress()+ "\"" +
-                        ", \"client\": " + "\"" + nickname + "\"" +
-                        ", \"command\": \"request\"" + "" +
-                        ", \"data\": " + "{\"command\": \"quit\", \"data\":  {}}"  +
-                        "}";
+        JSONObject json = new JSONObject()
+                .put("clientID", socket.getClientAddress())
+                .put("type", "request")
+                .put("request", new JSONObject()
+                        .put("clientName", nickname)
+                        .put("request", new JSONObject()
+                                .put("command", "quit")
+                                .put("data", "")));
 
-        socket.sendMessage(requestQuit);
+        socket.sendMessage(json.toString());
 
         // socket.sendMessage(TargetSerializer.serialize("quit", ""));
     }

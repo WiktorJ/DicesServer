@@ -1,6 +1,9 @@
 package to2.ds.api;
 
 
+import jdk.nashorn.api.scripting.JSObject;
+import org.json.JSONObject;
+
 import javax.websocket.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -41,12 +44,9 @@ public class ConnectorImpl implements Connector {
     public Client addClient(String nickname) throws URISyntaxException, IOException {
         ClientImpl client = ClientFactory.getClient(nickname, this);
         clientList.add(client);
-        sendMessage("{" +
-                "\"clientID\": " + "\"" + clientAddress + "\"" +
-                ", \"client\": " + "\"" + nickname + "\"" +
-                ", \"command\": \"addClient\"" + "" +
-                ", \"data\": " + "{\"command\": \"addClient\", \"data\":  {}}"  +
-                "}");
+        JSONObject json = new JSONObject().put("clientID", clientAddress).put("type", "addClient").put("request", new JSONObject().put("clientName", nickname));
+        sendMessage(json.toString());
+
         return client;
     }
 
@@ -88,12 +88,8 @@ public class ConnectorImpl implements Connector {
 
     public void removeClient(Client client) throws IOException {
         clientList.remove(client);
-        sendMessage("{" +
-                "\"clientID\": " + "\"" + clientAddress + "\"" +
-                ", \"client\": " + "\"" + client.getNickName() + "\"" +
-                ", \"command\": \"removeClient\"" + "" +
-                ", \"data\": " + "{\"command\": \"quit\", \"data\":  {}}"  +
-                "}");
+        JSONObject json = new JSONObject().put("clientID", clientAddress).put("type", "removeClient").put("request", new JSONObject().put("clientName", client.getNickName()));
+        sendMessage(json.toString());
     }
 
     @Override

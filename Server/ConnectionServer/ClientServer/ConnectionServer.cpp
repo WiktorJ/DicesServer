@@ -147,11 +147,14 @@ void ConnectionServer::on_close(websocketpp::connection_hdl hdl) {
 
 
 void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp::server<websocketpp::config::asio>::message_ptr msg) {
+    Logger.log(msg->get_payload());
+
     try {
         MessageHandle Message(msg->get_payload());
 
         switch(Message.getCommand()){
             case ConnCommand::ADDPLAYER: {
+                Logger.log("Trying to add a player");
                 try {
                     Sender *sender = new Sender(this, Message.getClientID());
                     try {
@@ -159,19 +162,28 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
 
                         Logger.log("Added client " + Message.getClientName() + " for " + Message.getClientID());
 
-                        sender->send(ConnectorResponseSerializer::serializeType(ConnectorResponseSerializer::serializeResponse("addPlayer", status::SUCCESS)));
-                    } catch(const NameTakenException& exception2){
-                        Logger.log("Could not add client " + Message.getClientName() + " for " + Message.getClientID() + " reason: NAME TAKEN");
+                        sender->send(ConnectorResponseSerializer::serializeType(
+                                ConnectorResponseSerializer::serializeResponse("addPlayer", status::SUCCESS)));
+                    } catch (const NameTakenException &exception2) {
+                        Logger.log("Could not add client " + Message.getClientName() + " for " + Message.getClientID() +
+                                   " reason: NAME TAKEN");
 
-                        sender->send(ConnectorResponseSerializer::serializeType(ConnectorResponseSerializer::serializeResponse("addPlayer", status::FAILURE)));
-                    } catch(const ConnectorNotFoundException& exception3){
+                        sender->send(ConnectorResponseSerializer::serializeType(
+                                ConnectorResponseSerializer::serializeResponse("addPlayer", status::FAILURE)));
+                    } catch (const ConnectorNotFoundException &exception3) {
                         Logger.log("Clientaddress not found");
                     }
-                }  catch(const ClientMessageException& exception1){
+                } catch (const ClientMessageException &exception1) {
                     Logger.log("Invalid client message" + std::string(msg->get_payload()));
+                    Sender tempSender(this, Message.getClientID());
+                    tempSender.send(ConnectorResponseSerializer::serializeType(
+                            ConnectorResponseSerializer::serializeResponse("addPlayer", status::FAILURE)));
+
                 }
+                break;
             }
             case ConnCommand::REMOVEPLAYER: {
+                Logger.log("Trying to remove a player");
                 boost::property_tree::ptree quit;
 
                 quit.put_child("command", boost::property_tree::ptree("disconnect"));
@@ -195,9 +207,15 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
                     }
                 } catch(const ClientMessageException& exception1){
                     Logger.log("Invalid client message" + std::string(msg->get_payload()));
+
+                    Sender tempSender(this, Message.getClientID());
+                    tempSender.send(ConnectorResponseSerializer::serializeType(
+                            ConnectorResponseSerializer::serializeResponse("removePlayer", status::FAILURE)));
                 }
+                break;
             }
             case ConnCommand::QUIT: {
+                Logger.log("Trying to close connection");
                 std::string logResult = "";
 
                 try {
@@ -231,9 +249,10 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
                 } catch(const ConnectorNotFoundException& exception2){
                     Logger.log("Could not shut down endpoint (Clientaddress not found)");
                 }
-
+                break;
             }
             case ConnCommand::REQUEST: {
+                Logger.log("Trying to add a request to a player");
                 try {
                     Sender tempSender(this, Message.getClientID());
                     try {
@@ -246,16 +265,25 @@ void ConnectionServer::on_message(websocketpp::connection_hdl hdl,  websocketpp:
                     }
                 } catch(const ClientMessageException& exception1){
                     Logger.log("Invalid client message" + std::string(msg->get_payload()));
+
+                    Sender tempSender(this, Message.getClientID());
+                    tempSender.send(ConnectorResponseSerializer::serializeType(
+                            ConnectorResponseSerializer::serializeResponse("request", status::FAILURE)));
                 }
+                break;
             }
-            default:{
+                break;
+            default: {
+                Logger.log("Unknown command");
                 Sender tempSender(this, Message.getClientID());
-                tempSender.send(ConnectorResponseSerializer::serializeType(ConnectorResponseSerializer::serializeResponse("unknown", status::FAILURE)));
+                tempSender.send(ConnectorResponseSerializer::serializeType(
+                        ConnectorResponseSerializer::serializeResponse("unknown", status::FAILURE)));
 
                 Logger.log("Invalid command");
+                break;
             }
-
         }
+
     } catch(const ConnMessageException& exception){
         Logger.log("Invalid message" + std::string(msg->get_payload()));
     }
