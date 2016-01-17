@@ -32,8 +32,8 @@ public class ObserverImpl implements Observer{
         }
         //doing sth
         this.state = new JSONObject();
-        state.put("command", "stateUpdated");
-        state.put("data", state.toString());
+        this.state.put("command", "stateUpdated");
+        this.state.put("data", state.toString());
         otherOperation = true;
         notifyAll();
 
@@ -52,6 +52,7 @@ public class ObserverImpl implements Observer{
         //doing sth
         this.state = new JSONObject();
         this.state.put("command", "gameEnded");
+        this.state.put("data", "");
         this.gameEnded = true;
 
         //prześlij JSONa dalej

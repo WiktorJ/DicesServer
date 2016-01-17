@@ -34,7 +34,7 @@ void JController::initialize() {
     GetGameInfo = Env->GetMethodID(Controller, "getGameInfo", "()Ljava/lang/String;");
 
     if(Controller == 0 || AddPlayer == 0 || RemovePlayer == 0 || MakeMove == 0 || Stop == 0 || GetGameInfo == 0){
-        Logger.log("Could not get running");
+        Logger.log("Could not get running" + std::to_string(Controller == 0) + std::to_string(AddPlayer == 0) + std::to_string(RemovePlayer == 0) + std::to_string(MakeMove == 0) + std::to_string(GetGameInfo == 0));
         throw new JClassException("Controller");
     }
 

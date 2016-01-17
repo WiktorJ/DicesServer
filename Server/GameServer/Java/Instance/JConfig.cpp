@@ -16,23 +16,23 @@ JConfig::JConfig() {
 
 //    std::cout << "Write jar path" << std::endl;
 //    std::cin >> JARPath;
-    JARPath = "//home/wg/Github/DicesServer/Local/Dice.jar";
+    JARPath = "//home/wg/Github/DicesServer/ControllersContainer/target/classes/.:/home/wg/Github/DicesServer/ControllersContainer/target/lib/json-20151123.jar";
 
 //    std::cout << "Write observer package" << std::endl;
 //    std::cin >> ObserverPackage;
-    ObserverPackage  = "dice/controller/Observer";
+    ObserverPackage  = "to2/ds/game/controllers/Observer";
 
 //    std::cout << "Write observerImpl package" << std::endl;
 //    std::cin >> ObserverPackage;
-    ObserverImplPackage  = "dice/controller/ObserverImpl";
+    ObserverImplPackage  = "to2/ds/game/controllers/ObserverImpl";
 
 //    std::cout << "Write factory package" << std::endl;
 //    std::cin >> FactoryPackage;
-    FactoryPackage = "dice/controller/factory/GameFactory";
+    FactoryPackage = "to2/ds/game/controllers/MockedGameFactory";
 
 //    std::cout << "Write controller package" << std::endl;
 //    std::cin >> ControllerPackage;
-    ControllerPackage = "dice/controller/GameController";
+    ControllerPackage = "to2/ds/game/controllers/MockedGameController";
 
     test();
 }

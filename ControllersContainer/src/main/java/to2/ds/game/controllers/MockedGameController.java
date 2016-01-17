@@ -14,7 +14,7 @@ public class MockedGameController implements Runnable {
 
     private final int UPDATES_INTERVAL = 1000; //ms
     private final int UPDATE_COUNT = 3;
-    private int clientCount= 2;
+    private int clientCount= 1;
 
     public MockedGameController() {
     }
@@ -29,6 +29,14 @@ public class MockedGameController implements Runnable {
 
     }
 
+    public void stop(){
+
+    }
+
+    public void removePlayer(String json){
+        String a = "";
+    }
+
     public void addPlayer(String json) {
         System.out.println("Player added\n"+json);
         if(--clientCount == 0) {
@@ -41,7 +49,7 @@ public class MockedGameController implements Runnable {
         System.out.println("move made\n" + json);
     }
 
-    public String getInfo() {
+    public String getGameInfo() {
         return "{\n"+
                 " \"gameType\": \"N_PLUS\",\n"+
                 " \"gameName\": \"some name\",\n"+

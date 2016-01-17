@@ -41,8 +41,7 @@ void GameInstance::stop() {
 void GameInstance::run() {
     Observer_.listen(); //TODO remember to add break points
 
-    boost::this_thread::sleep(boost::posix_time::seconds(1000));
-
+    Logger.log("Observer ended");
     Reader.stop();
 
     Logger.log("instance ended");
