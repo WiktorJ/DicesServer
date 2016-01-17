@@ -14,6 +14,7 @@ class MessageHandle {
 private:
     Command Command_;
     std::string ClientID;
+    std::string Type;
     bool Request;
     boost::property_tree::ptree Data;
 

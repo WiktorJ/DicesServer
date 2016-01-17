@@ -55,6 +55,8 @@ void MessageHandle::deserializeClientRequest() {
         ClientRequest = true;
     } catch(const boost::property_tree::ptree_error){
         ClientRequest = false;
+
+        std::cout << "Nie ma requestu" << std::endl;
     }
 
     deserialized = true;
@@ -67,6 +69,7 @@ std::string MessageHandle::getClientName() {
 }
 
 boost::property_tree::ptree MessageHandle::getClientRequest() {
+    if(!deserialized)deserializeClientRequest();
     if(!ClientRequest) throw ClientMessageException();
 
     return ClientRequest_;

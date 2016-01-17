@@ -13,10 +13,13 @@ boost::property_tree::ptree GameResponseSerializer::serializeResponse(std::strin
     switch(Status){
         case status::FAILURE :
             result.put_child("status", boost::property_tree::ptree("FAILURE"));
+            break;
         case status::SUCCESS :
             result.put_child("status", boost::property_tree::ptree("SUCCESS"));
+            break;
         default:
             result.put_child("status", boost::property_tree::ptree("UNKNOWN"));
+            break;
     }
 
     result.add_child("data", data);

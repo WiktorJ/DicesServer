@@ -36,8 +36,8 @@ public class ClientMock {
         });
         t.start();
         Scanner scanner = new Scanner(System.in);
-        Path pathToJson = Paths.get(ClientMock.class.getClassLoader().getResource("JSON").toURI());
-        System.out.println(pathToJson);
+        //Path pathToJson = Paths.get(ClientMock.class.getClassLoader().getResource("JSON").toURI());
+        //System.out.println(pathToJson);
 
 
         while (!finishFlag) {
@@ -47,13 +47,13 @@ public class ClientMock {
                 finishFlag = true;
                 connector.removeClient(test);
             }
-            String json = new String(Files.readAllBytes(pathToJson));
+            //String json = new String(Files.readAllBytes(pathToJson));
             switch (s) {
                 case "m":
-                    test.requestMove(json);
+                    //test.requestMove(json);
                     break;
                 case "c":
-                    test.requestCreate(json);
+                    test.requestCreate("");
                     break;
                 case "j":
                     System.out.println("Podaj GameId");

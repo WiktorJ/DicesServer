@@ -21,10 +21,13 @@ boost::property_tree::ptree ConnectorResponseSerializer::serializeResponse(std::
     switch(status_){
         case status::FAILURE :
             result.put_child("status", boost::property_tree::ptree("FAILURE"));
+            break;
         case status::SUCCESS :
             result.put_child("status", boost::property_tree::ptree("SUCCESS"));
+            break;
         default:
             result.put_child("status", boost::property_tree::ptree("UNKNOWN"));
+            break;
     }
 
     return result;

@@ -71,7 +71,8 @@ void ClientServer::addClientEndpoint(string clientAddress) {
 }
 
 
-ClientServer::ClientServer(WaitingRoom* waitingRoom) : Logger("ClientServer"){
+ClientServer::ClientServer(WaitingRoom* waitingRoom) : Logger("ClientServer"), Mutex(new boost::mutex){
+
     this->waitingRoom = waitingRoom;
 }
 
