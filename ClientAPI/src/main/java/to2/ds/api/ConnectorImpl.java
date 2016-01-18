@@ -18,7 +18,6 @@ import java.util.UUID;
 public class ConnectorImpl implements Connector {
 
     private Session session = null;
-    private Deserializer deserializer = new Deserializer();
 
     public void setClientAddress(String clientAddress) {
         this.clientAddress = clientAddress;
@@ -59,14 +58,22 @@ public class ConnectorImpl implements Connector {
 
     @OnMessage
     public void onMessage(String json)  {
-        System.out.println(json);
+        try {
+            Deserializer.ResponseType responseType = Deserializer.getResponseType(json);
+            switch (responseType) {
+                case clientInfo:
+                    ClientMessageTuple client = Deserializer.deserializeUser(json, clientList);
+                    client.getClient().stateUpdateAndNotify(client.getJSON());
+                    break;
+                case connectorInfo:
+                    System.out.println(Deserializer.ResponseType.connectorInfo + " " +json);
+            }
+        } catch (UnexistingClientException e) {
+            e.printStackTrace(); //TODO This has to be handled on client site!
+        } catch (WrongJSONFormatException e) {
+            e.printStackTrace(); //TODO This too
+        }
 
-//        try {
-//            ClientMessageTuple client = deserializer.deserializeUser(json, clientList);
-//            client.getClient().stateUpdateAndNotify(client.getJSON());
-//        } catch (UnexistingClientException e) {
-//            e.printStackTrace(); //TODO This has to be handled on client site!
-//        }
     } // {client: clientID, messageWithType: {type: activeGames/gameState, state: {..}}}
 
     @OnClose

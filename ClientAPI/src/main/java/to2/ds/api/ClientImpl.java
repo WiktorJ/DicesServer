@@ -18,7 +18,8 @@ import java.util.concurrent.TimeUnit;
 public class ClientImpl implements Client {
 
     private BlockingQueue<String> statesQueue = new LinkedBlockingQueue<>();
-    private BlockingQueue<String> activeGamesQueue= new LinkedBlockingQueue<>();
+    private BlockingQueue<String> activeGamesQueue = new LinkedBlockingQueue<>();
+    private BlockingQueue<String> serverResponsesQueue = new LinkedBlockingQueue<>();
 
     private final Map<String, Queue> myMap;
 
@@ -40,8 +41,8 @@ public class ClientImpl implements Client {
         JSONObject json = new JSONObject().put("clientID", socket.getClientAddress()).put("type", "request").put("request", new JSONObject().put("clientName", nickname).put("request", new JSONObject().put("command", "activeGames").put("data", "")));
 
         socket.sendMessage(json.toString());
-        //return activeGamesQueue.take(); //TODO timeout exception
-        return "";
+        return activeGamesQueue.take(); //TODO timeout exception
+//        return "";
     }
 
     public void requestCreate(String JSON) throws IOException {
@@ -121,11 +122,14 @@ public class ClientImpl implements Client {
     }
 
 
-    public void stateUpdateAndNotify(String message) {
-        JSONObject jsonObject = new JSONObject(message);
-        System.out.println(message);
-        Queue queue = myMap.get(jsonObject.get("command"));
-        queue.add(message);
+    public void stateUpdateAndNotify(JSONObject message) {
+        System.out.println("IN UPDATE JSON: " + message);
+        Queue queue = myMap.get(message.getString("command"));
+        if(queue == null) {
+            serverResponsesQueue.add(message.toString());
+        } else {
+            queue.add(message.get("data").toString());
+        }
     }
 
     public String getId() {

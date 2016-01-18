@@ -16,23 +16,41 @@ JConfig::JConfig() {
 
 //    std::cout << "Write jar path" << std::endl;
 //    std::cin >> JARPath;
-    JARPath = "//home/wg/Github/DicesServer/ControllersContainer/target/classes/.:/home/wg/Github/DicesServer/ControllersContainer/target/lib/json-20151123.jar";
+//    JARPath = "//home/wg/Github/DicesServer/ControllersContainer/target/classes/.:/home/wg/Github/DicesServer/ControllersContainer/target/lib/json-20151123.jar";
+//    JARPath = "//home/wiktor/ClionProjects/DicesServer/ControllersContainer/target/classes";
+    JARPath = "//home/wiktor/Documents/Dice.jar";
 
-//    std::cout << "Write observer package" << std::endl;
+////    std::cout << "Write observer package" << std::endl;
+////    std::cin >> ObserverPackage;
+//    ObserverPackage  = "to2/ds/game/controllers/Observer";
+//
+////    std::cout << "Write observerImpl package" << std::endl;
+////    std::cin >> ObserverPackage;
+//    ObserverImplPackage  = "to2/ds/game/controllers/ObserverImpl";
+//
+////    std::cout << "Write factory package" << std::endl;
+////    std::cin >> FactoryPackage;
+//    FactoryPackage = "to2/ds/game/controllers/MockedGameFactory";
+//
+////    std::cout << "Write controller package" << std::endl;
+////    std::cin >> ControllerPackage;
+//    ControllerPackage = "to2/ds/game/controllers/MockedGameController";
+
+    std::cout << "Write observer package" << std::endl;
 //    std::cin >> ObserverPackage;
-    ObserverPackage  = "to2/ds/game/controllers/Observer";
+    ObserverPackage  = "dice/controller/Observer";
 
-//    std::cout << "Write observerImpl package" << std::endl;
+    std::cout << "Write observerImpl package" << std::endl;
 //    std::cin >> ObserverPackage;
-    ObserverImplPackage  = "to2/ds/game/controllers/ObserverImpl";
+    ObserverImplPackage  = "dice/controller/ObserverImpl";
 
-//    std::cout << "Write factory package" << std::endl;
+    std::cout << "Write factory package" << std::endl;
 //    std::cin >> FactoryPackage;
-    FactoryPackage = "to2/ds/game/controllers/MockedGameFactory";
+    FactoryPackage = "dice/controller/factory/GameFactory";
 
-//    std::cout << "Write controller package" << std::endl;
+    std::cout << "Write controller package" << std::endl;
 //    std::cin >> ControllerPackage;
-    ControllerPackage = "to2/ds/game/controllers/MockedGameController";
+    ControllerPackage = "dice/controller/GameController";
 
     test();
 }
