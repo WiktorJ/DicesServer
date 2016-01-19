@@ -15,13 +15,14 @@ import java.util.UUID;
 public interface Connector {
 
     Client addClient(String nickname) throws URISyntaxException, IOException;
+    
     static Connector connect(String ip, Integer port) throws IOException, DeploymentException, URISyntaxException {
         ConnectorImpl connector = new ConnectorImpl();
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
 //            URI uri = new URI(null, null, ip, port, null, null, null);
         String clientAddres = UUID.randomUUID().toString();
-        URI uri = new URI("ws://localhost:9020?" + clientAddres);
-//        URI uri = new URI("ws://" + ip + ":" + port + "?" + clientAddres);
+//        URI uri = new URI("ws://localhost:9020?" + clientAddres);
+        URI uri = new URI("ws://" + ip + ":" + port + "?" + clientAddres);
 //        URI uri = new URI("ws://localhost:9021/web/echo" + clientAddres);
         Session session = container.connectToServer(connector, uri);
         connector.setSession(session);
