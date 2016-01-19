@@ -10,6 +10,8 @@ import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by wiktor on 07.12.15.
@@ -18,6 +20,8 @@ import java.util.UUID;
 public class ConnectorImpl implements Connector {
 
     private Session session = null;
+
+    private BlockingQueue<String> serverResponsesQueue = new LinkedBlockingQueue<>();
 
     public void setClientAddress(String clientAddress) {
         this.clientAddress = clientAddress;
@@ -66,6 +70,7 @@ public class ConnectorImpl implements Connector {
                     client.getClient().stateUpdateAndNotify(client.getJSON());
                     break;
                 case connectorInfo:
+                    serverResponsesQueue.add(json);
                     System.out.println(Deserializer.ResponseType.connectorInfo + " " +json);
             }
         } catch (UnexistingClientException e) {

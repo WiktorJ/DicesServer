@@ -31,20 +31,21 @@ void Observer::listen() {
             } catch (const boost::property_tree::ptree_error &exception){
                 Logger.log("Could not get the json deserialization for observer" + ss.str());
 
-                continue;
+                command = "";
             }
             if(command == "removePlayer"){
                 std::string username;
                 try {
                      username = ObsCmdDeserializer::deserializeNick(json);
+
+                     Clients.sendDataToPlayer(username, GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("CONTROLLER ASKED FOR REMOVAL")));
+
+                     Clients.removeClient(username);
                 } catch (const boost::property_tree::ptree_error &exception){
                     Logger.log("Could not get nickname for removal");
 
-                    continue;
-                }
-                Clients.sendDataToPlayer(username, GameResponseSerializer::serializeResponse(command, status::SUCCESS, boost::property_tree::ptree("CONTROLLER ASKED FOR REMOVAL")));
 
-                Clients.removeClient(username);
+                }
             } else if(command == "stateUpdated"){
                 Clients.sendData(GameResponseSerializer::serializeResponse(command, status::SUCCESS, json));
             } else {

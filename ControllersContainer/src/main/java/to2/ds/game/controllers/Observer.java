@@ -12,7 +12,7 @@ public interface Observer {
 
     //private String state;
 
-    public void stateUpdated(JSONObject state) throws InterruptedException;   //docelowo stateUpdated(GameState state)
+    public void stateUpdated(String state) throws InterruptedException;   //docelowo stateUpdated(GameState state)
     public void gameEnded() throws InterruptedException;
     public void removePlayer(String nickname) throws InterruptedException;
 

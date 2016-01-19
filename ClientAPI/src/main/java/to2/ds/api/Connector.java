@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface Connector {
 
     Client addClient(String nickname) throws URISyntaxException, IOException;
-    
+
     static Connector connect(String ip, Integer port) throws IOException, DeploymentException, URISyntaxException {
         ConnectorImpl connector = new ConnectorImpl();
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();

@@ -27,6 +27,8 @@ bool ConnectionServer:: init(int port) {
     server.set_close_handler(websocketpp::lib::bind(&ConnectionServer::on_close, this, websocketpp::lib::placeholders::_1));
     server.set_message_handler(websocketpp::lib::bind(&ConnectionServer::on_message, this, websocketpp::lib::placeholders::_1, websocketpp::lib::placeholders::_2));
     try {
+//        boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::tcp::v4(), port);
+//        server.listen(endpoint);
         server.listen(port);
     } catch (websocketpp::exception const &e) {
         Logger.log("error in ConnectionServer:init(1)");

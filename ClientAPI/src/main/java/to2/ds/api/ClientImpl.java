@@ -34,6 +34,7 @@ public class ClientImpl implements Client {
         Map<String, Queue> aMap = new HashMap<>();
         aMap.put("activeGames", activeGamesQueue);
         aMap.put("gameState", statesQueue);
+        aMap.put("removePlayer", statesQueue);
         myMap = Collections.unmodifiableMap(aMap);
     }
 

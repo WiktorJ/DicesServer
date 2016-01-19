@@ -14,10 +14,10 @@ JConfig &JConfig::getInstance() {
 JConfig::JConfig() {
     Set = false;
 
-//    std::cout << "Write jar path" << std::endl;
-//    std::cin >> JARPath;
-//    JARPath = "//home/wg/Github/DicesServer/ControllersContainer/target/classes/.:/home/wg/Github/DicesServer/ControllersContainer/target/lib/json-20151123.jar";
-//    JARPath = "//home/wiktor/ClionProjects/DicesServer/ControllersContainer/target/classes";
+////    std::cout << "Write jar path" << std::endl;
+////    std::cin >> JARPath;
+////    JARPath = "//home/wg/Github/DicesServer/ControllersContainer/target/classes/.:/home/wg/Github/DicesServer/ControllersContainer/target/lib/json-20151123.jar";
+//    JARPath = "//home/wiktor/ClionProjects/DicesServer/ControllersContainer/target/ControllersContainer-1.0-SNAPSHOT.jar";
     JARPath = "//home/wiktor/Documents/Dice.jar";
 
 ////    std::cout << "Write observer package" << std::endl;
@@ -29,12 +29,13 @@ JConfig::JConfig() {
 //    ObserverImplPackage  = "to2/ds/game/controllers/ObserverImpl";
 //
 ////    std::cout << "Write factory package" << std::endl;
-////    std::cin >> FactoryPackage;
+////    std:: cin >> FactoryPackage;
 //    FactoryPackage = "to2/ds/game/controllers/MockedGameFactory";
 //
 ////    std::cout << "Write controller package" << std::endl;
 ////    std::cin >> ControllerPackage;
 //    ControllerPackage = "to2/ds/game/controllers/MockedGameController";
+
 
     std::cout << "Write observer package" << std::endl;
 //    std::cin >> ObserverPackage;
@@ -51,7 +52,6 @@ JConfig::JConfig() {
     std::cout << "Write controller package" << std::endl;
 //    std::cin >> ControllerPackage;
     ControllerPackage = "dice/controller/GameController";
-
     test();
 }
 

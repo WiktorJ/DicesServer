@@ -23,7 +23,7 @@ public class ObserverImpl implements Observer{
     }
 
     @Override
-    public synchronized void stateUpdated(JSONObject state) throws InterruptedException {
+    public synchronized void stateUpdated(String state) throws InterruptedException {
         while(otherOperation){
             try{
                 wait();
@@ -33,7 +33,7 @@ public class ObserverImpl implements Observer{
         //doing sth
         this.state = new JSONObject();
         this.state.put("command", "stateUpdated");
-        this.state.put("data", state.toString());
+        this.state.put("data", state);
         otherOperation = true;
         notifyAll();
 

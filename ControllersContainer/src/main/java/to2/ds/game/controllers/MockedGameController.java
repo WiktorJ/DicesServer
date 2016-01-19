@@ -14,7 +14,7 @@ public class MockedGameController implements Runnable {
 
     private final int UPDATES_INTERVAL = 1000; //ms
     private final int UPDATE_COUNT = 3;
-    private int clientCount= 1;
+    private int clientCount= 2;
 
     public MockedGameController() {
     }
@@ -34,7 +34,8 @@ public class MockedGameController implements Runnable {
     }
 
     public void removePlayer(String json){
-        String a = "";
+        System.out.println("Player removed\n"+json);
+        clientCount++;
     }
 
     public void addPlayer(String json) {
@@ -67,7 +68,7 @@ public class MockedGameController implements Runnable {
     public void run() {
         try {
             for (int i = 0; i < UPDATE_COUNT; i++) {
-                observer.stateUpdated(new JSONObject("{\n"+
+                observer.stateUpdated("{\n"+
                         " \"pointsToWin\": 4,\n"+
                         " \"playerInfos\": [\n"+
                         " {\n"+
@@ -92,7 +93,7 @@ public class MockedGameController implements Runnable {
                         " \"currentPlayer\": null,\n"+
                         " \"roundWinner\": \"player1\",\n"+
                         " \"gameWinner\": null\n"+
-                        "}"));
+                        "}");
                 Thread.sleep(UPDATES_INTERVAL);
             }
             observer.gameEnded();
